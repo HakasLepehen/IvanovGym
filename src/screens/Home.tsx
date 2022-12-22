@@ -5,7 +5,7 @@ import { ClientPushBtn } from '../components/client-push_btn/ClientPushBtn';
 
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AddClientModal } from '../components/popups-and-modals/AddClientModal';
+import { AddClientModal } from '../components/popups-and-modals/addClient/AddClientModal';
 
 const windowHeight = Dimensions.get('screen').height;
 
@@ -13,6 +13,7 @@ export const Home: React.FC<any> = () => {
   const [isVisible, setIsVisible] = useState(false);
   const openAddClientModal = () => setIsVisible(true);
   const closeAddClientModal = () => setIsVisible(false);
+  const saveAddClientModal = (data) => console.log(data);
 
   return (
     <View style={styles.wrapper}>
@@ -20,7 +21,7 @@ export const Home: React.FC<any> = () => {
         <ClientList />
       </ScrollView>
       <ClientPushBtn actionHandler={ openAddClientModal } />
-      <AddClientModal visible={ isVisible } hide={closeAddClientModal} />
+      <AddClientModal visible={ isVisible } hide={closeAddClientModal} save={saveAddClientModal} />
     </View>
   );
 };
