@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
 
-export const ClientForm = (state) => {
+export const ClientForm = ({ isEdit, onChange }) => {
   const [fullName, setFullName] = useState<string>('');
   const [age, setAge] = useState<string>();
   const [targetOfTrainee, setTargetOfTrainee] = useState('');
@@ -13,7 +13,19 @@ export const ClientForm = (state) => {
   const [food, setFood] = useState('');
   const [activity, setActivity] = useState('');
 
-  state = [fullName]
+  useEffect(() => {
+    onChange({
+      fullName: fullName,
+      age: age,
+      target: targetOfTrainee,
+      limits: limitations,
+      experience: experience,
+      sleep: sleep,
+      pharma: pharma,
+      food: food,
+      activity: activity
+    })
+  }, [ fullName, age, targetOfTrainee, limitations, experience, sleep, pharma, food, activity ])
 
   return (
     <View style={styles.outerWrapper}>

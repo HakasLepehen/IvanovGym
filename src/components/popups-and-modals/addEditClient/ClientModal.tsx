@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Modal, Portal, Text } from 'react-native-paper';
 import { ClientForm } from '../../client-form/ClientForm';
 
-export const AddClientModal = ({ visible, hide, save }) => {
-  const [state, setState] = useState([])
+export const ClientModal = ({ visible, hide, save, isEdit }) => {
+  const [clientData, setClientData] = useState<any>({})
   const containerStyle = {
     backgroundColor: 'white',
     padding: 10,
@@ -23,11 +23,11 @@ export const AddClientModal = ({ visible, hide, save }) => {
           <Text variant='titleLarge'>Введите данные нового клиента</Text>
         </View>
         <View style={styles.formContainer}>
-          <ClientForm state={state} />
+          <ClientForm onChange={setClientData} isEdit={isEdit} />
         </View>
         <View style={styles.bottomContainer}>
           <Button
-            onPress={() => save(state)}
+            onPress={() => save(clientData)}
             mode="contained"
             compact={false}
             uppercase={true}

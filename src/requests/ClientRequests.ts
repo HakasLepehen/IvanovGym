@@ -1,3 +1,4 @@
+import { IClient } from '../interfaces/Client';
 import { supabase } from './../supaBaseClient';
 
 /**
@@ -26,3 +27,13 @@ export const getClient = async (id) => {
     alert('Ошибка получения клиента!');
   }
 };
+
+export const addClient = async (data: IClient) => {
+  try {
+    const { error } = await supabase
+      .from('clients')
+      .insert(data);
+  } catch (error) {
+    console.log(error)
+  }
+}

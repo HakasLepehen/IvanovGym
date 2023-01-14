@@ -3,17 +3,18 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { ClientList } from '../components/client-list/ClientList';
 import { ClientPushBtn } from '../components/client-push_btn/ClientPushBtn';
 
-import { Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AddClientModal } from '../components/popups-and-modals/addClient/AddClientModal';
+import { ClientModal } from '../components/popups-and-modals/addEditClient/ClientModal';
+import { addClient, getClients } from '../requests/ClientRequests';
 
-const windowHeight = Dimensions.get('screen').height;
-
-export const Home: React.FC<any> = () => {
+export const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const openAddClientModal = () => setIsVisible(true);
-  const closeAddClientModal = () => setIsVisible(false);
-  const saveAddClientModal = (data) => console.log(data);
+  const closeAddClientModal = async () => setIsVisible(false);
+  const saveAddClientModal = async (data) => {
+    await addClient(data);
+    await closeAddClientModal();
+    // await getClients();
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -21,7 +22,12 @@ export const Home: React.FC<any> = () => {
         <ClientList />
       </ScrollView>
       <ClientPushBtn actionHandler={ openAddClientModal } />
-      <AddClientModal visible={ isVisible } hide={closeAddClientModal} save={saveAddClientModal} />
+      <ClientModal
+        visible={isVisible}
+        hide={closeAddClientModal}
+        save={saveAddClientModal}
+        isEdit={true}
+      />
     </View>
   );
 };

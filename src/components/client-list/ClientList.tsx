@@ -10,9 +10,11 @@ interface IClient {
 
 export const ClientList: React.FC = () => {
   const [clients, setClients] = useState<IClient[]>([]);
+  console.log('загружен компонент');
 
   useEffect(() => {
     getClients(['id', 'fullName'], setClients);
+    console.log('загружен список клиентов');
   }, []);
 
   return (
