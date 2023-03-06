@@ -7,11 +7,11 @@ import { supabase } from './../supaBaseClient';
  * // get array of clients and store data into state
  * getClients(args: Array<string>, useState);
  */
-export const getClients = async (args: Array<string>, cb: Function) => {
+export const getClientsRequest = async (args: Array<string>) => {
   const params = args.join(', ');
   try {
     const { data } = await supabase.from('clients').select(params);
-    cb(data);
+    return await data;
   } catch (error) {
     alert('We have error!');
     console.log('Error: ', error);

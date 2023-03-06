@@ -1,10 +1,12 @@
-import React from 'react';
-import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home } from './screens/Home';
-import { ClientPage } from './screens/ClientPage';
+import React from 'react';
+import { MD3LightTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from 'react-redux';
 
+import { ClientPage } from './screens/ClientPage';
+import { Home } from './screens/Home';
+import store from './store/store';
 
 const Stack = createNativeStackNavigator();
 const theme = {
@@ -20,14 +22,16 @@ const theme = {
 
 const App = () => {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="ClientPage" component={ClientPage} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <Provider store={ store }>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="ClientPage" component={ClientPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
 };
 

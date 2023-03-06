@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { getClients } from '../../requests/ClientRequests';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import { getClients } from '../../store/slices/clientSlice';
+import { RootState } from '../../store/store';
 import { ClientLabel } from '../client-label/ClientLabel';
 
 interface IClient {
-  id: number;
+  id: string;
   fullName: string;
 }
 
 export const ClientList: React.FC = () => {
-  const [clients, setClients] = useState<IClient[]>([]);
-  console.log('загружен компонент');
+  const clients: IClient[] = useSelector((state: RootState) => state.clientReducer.clients);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getClients(['id', 'fullName'], setClients);
-    console.log('загружен список клиентов');
-  }, []);
+    dispatch(getClients());
+  }, [clients]);
 
   return (
-    <View style={{flex: 1}}>
-      {clients.map((client) => {
-        return <ClientLabel { ...client } key={ client.id } />;
+    <View style={{ flex: 1 }}>
+      {clients.map((client: IClient) => {
+        return <ClientLabel {...client} key={client.id} />;
       })}
     </View>
   );

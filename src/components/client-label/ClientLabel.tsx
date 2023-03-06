@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { List, TouchableRipple } from 'react-native-paper';
 
 type Client = {
-  id: number;
+  id: string;
   fullName: string;
 };
 
@@ -22,7 +22,7 @@ export const ClientLabel: React.FC<Client> = ({ id, fullName }: Client) => {
       <TouchableRipple
         onPress={() =>
           navigation.navigate('ClientPage', {
-            id: id,
+            id: parseInt(id),
             fullName: fullName,
           })
         }

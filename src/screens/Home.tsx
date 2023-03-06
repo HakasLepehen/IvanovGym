@@ -4,7 +4,7 @@ import { ClientList } from '../components/client-list/ClientList';
 import { ClientPushBtn } from '../components/client-push_btn/ClientPushBtn';
 
 import { ClientModal } from '../components/popups-and-modals/addEditClient/ClientModal';
-import { addClient, getClients } from '../requests/ClientRequests';
+import { addClient } from '../requests/ClientRequests';
 
 export const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
