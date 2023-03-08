@@ -17,7 +17,6 @@ interface IClient {
 export const ClientList: React.FC = () => {
   const clients: IClient[] = useSelector((state: RootState) => state.clientReducer.clients);
   const isLoadingState = useSelector((state: RootState) => state.clientReducer.clientsIsLoading);
-  const isLoading = true;
   const dispatch = useDispatch();
 
   useEffect(() => {

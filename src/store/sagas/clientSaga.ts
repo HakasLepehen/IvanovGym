@@ -1,3 +1,5 @@
+import { IClient } from './../../interfaces/Client';
+import { addClient } from './../../requests/ClientRequests';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getClientsRequest } from '../../requests/ClientRequests';
 import { getClientsFailure, getClientsSuccess } from '../slices/clientSlice';
@@ -12,13 +14,15 @@ function* workGetClientsFetch() {
   }
 }
 
-function* workAddClient() {
-  console.log('adding client!')
+function* workAddClient(data) {
+  const { payload } = data;
+  yield addClient(payload);
+  yield workGetClientsFetch();
 }
 
 function* clientSaga() {
   yield takeEvery('clientSlice/getClients', workGetClientsFetch);
-  yield takeEvery('clientSlice/addClients', workAddClient);
+  yield takeEvery('clientSlice/addClient', workAddClient);
 }
 
 export default clientSaga;

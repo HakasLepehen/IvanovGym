@@ -26,14 +26,8 @@ const clientSlice = createSlice({
     getClientsFailure: (state: IUserState) => {
       state.clientsIsLoading = false;
     },
-    addClients: (state: IUserState) => {
+    addClient: (state: IUserState) => {
       state.clientsIsLoading = true;
-    },
-    addClientsSuccess: (state: IUserState, action: PayloadAction<IClient>) => {
-      state.clients = [...state.clients, action.payload]
-    },
-    addClientsFailure: (state: IUserState) => {
-      state.clientsIsLoading = false;
     },
   }
 });
@@ -44,9 +38,7 @@ export const {
   getClients,
   getClientsSuccess,
   getClientsFailure,
-  addClients,
-  addClientsSuccess,
-  addClientsFailure
+  addClient,
 } = clientSlice.actions;
 
 // export {reducer};
