@@ -12,8 +12,13 @@ function* workGetClientsFetch() {
   }
 }
 
+function* workAddClient() {
+  console.log('adding client!')
+}
+
 function* clientSaga() {
-  yield takeEvery('clientSlice/getClients', workGetClientsFetch)
+  yield takeEvery('clientSlice/getClients', workGetClientsFetch);
+  yield takeEvery('clientSlice/addClients', workAddClient);
 }
 
 export default clientSaga;
