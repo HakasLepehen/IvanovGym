@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { StyleSheet, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Button, MD2Colors, Text } from 'react-native-paper';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
@@ -24,18 +25,68 @@ export const ClientList: React.FC = () => {
   }, []);
 
   return (
-    <View style={{flex: 1}}>
+    <>
       {
         isLoadingState
           ? (
-            <Loader size={'large'} color={MD2Colors.grey900} />
+            <View style={{ flex: 1 }}>
+              <Loader size={'large'} color={MD2Colors.grey900} />
+            </View>
           )
           : (
-            clients.map((client: IClient) => {
-              return <ClientLabel {...client} key={client.id} />;
-            })
+            <SwipeListView
+              data={clients}
+              renderItem={(data: any) => (
+                <TouchableHighlight
+                  onPress={() => console.log('You touched me')}
+                  style={styles.rowFront}
+                  underlayColor={'red'}
+                >
+                  <ClientLabel {...data.item} key={data.id} />
+                </TouchableHighlight>
+              )}
+              renderHiddenItem={(data) => (
+                <View style={styles.rowBack}>
+                  <Button
+                    icon="pencil"
+                    mode="contained"
+                    compact={true}
+                    onPress={() => console.log(data)}
+                  >
+                    EDIT
+                  </Button>
+                  <Button
+                    icon="bucket"
+                    mode="contained"
+                    compact={true}
+                    buttonColor={MD2Colors.red600}
+                  >
+                    REMOVE
+                  </Button>
+                </View>
+              )}
+              rightOpenValue={-200}
+            />
           )
       }
-    </View>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  rowFront: {
+    backgroundColor: '#CCC',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    height: 50,
+  },
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignSelf: 'flex-end',
+    width: 200
+  }
+})

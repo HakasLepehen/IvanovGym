@@ -8,8 +8,9 @@ type Client = {
   fullName: string;
 };
 
-export const ClientLabel: React.FC<Client> = ({ id, fullName }: Client) => {
+export const ClientLabel: React.FC<Client> = ({ id, fullName }: any ) => {
   const navigation = useNavigation();
+  // console.log(data)
 
   return (
     <View

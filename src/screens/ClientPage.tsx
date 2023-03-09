@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { IClient } from '../interfaces/Client';
 import { getClient } from '../requests/ClientRequests';
 
@@ -26,7 +27,6 @@ export const ClientPage = ({ route }) => {
   useEffect(() => {
     const client = getClient(id);
     client.then((data) => setClient(data));
-    console.log(route);
   }, []);
 
   if (client) {

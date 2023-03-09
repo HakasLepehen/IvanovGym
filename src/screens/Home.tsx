@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+
 import { ClientList } from '../components/client-list/ClientList';
 import { ClientPushBtn } from '../components/client-push_btn/ClientPushBtn';
-
 import { ClientModal } from '../components/popups-and-modals/addEditClient/ClientModal';
 import { addClient } from '../store/slices/clientSlice';
 
@@ -19,9 +19,7 @@ export const Home: React.FC = () => {
 
   return (
     <View style={styles.wrapper}>
-      <ScrollView style={styles.scrollView}>
-        <ClientList />
-      </ScrollView>
+      <ClientList />
       <ClientPushBtn actionHandler={openAddClientModal} />
       <ClientModal
         visible={isVisible}
