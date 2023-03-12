@@ -1,8 +1,9 @@
-import { IClient } from './../../interfaces/Client';
-import { addClient } from './../../requests/ClientRequests';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { put, takeEvery } from 'redux-saga/effects';
-import { getClientsRequest } from '../../requests/ClientRequests';
-import { getClientsFailure, getClientsSuccess } from '../slices/clientSlice';
+
+import { deleteClient, getClientsRequest } from '../../requests/ClientRequests';
+import { deleteClientFailure, deleteClientSuccess, getClientsFailure, getClientsSuccess } from '../slices/clientSlice';
+import { addClient } from './../../requests/ClientRequests';
 
 function* workGetClientsFetch() {
   try {
@@ -11,6 +12,16 @@ function* workGetClientsFetch() {
   } catch (error) {
     yield getClientsFailure();
     yield console.log(error);
+  }
+}
+
+function* workRemoveClient(data: PayloadAction<number>) {
+  try {
+    yield deleteClient(data.payload);
+    yield put(deleteClientSuccess(data.payload));
+  } catch (err) {
+    yield deleteClientFailure();
+    yield console.log(err);
   }
 }
 
@@ -23,6 +34,7 @@ function* workAddClient(data) {
 function* clientSaga() {
   yield takeEvery('clientSlice/getClients', workGetClientsFetch);
   yield takeEvery('clientSlice/addClient', workAddClient);
+  yield takeEvery('clientSlice/deleteClient', workRemoveClient);
 }
 
 export default clientSaga;

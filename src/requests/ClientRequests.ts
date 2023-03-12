@@ -37,3 +37,15 @@ export const addClient = async (data: IClient) => {
     console.log(error)
   }
 }
+
+export const deleteClient = async (id: number) => {
+  try {
+    return await supabase
+      .from('clients')
+      .delete()
+      .eq('id', id)
+  } catch (error) {
+    console.log(error);
+    alert('Ошибка удаления клиента!');
+  }
+}

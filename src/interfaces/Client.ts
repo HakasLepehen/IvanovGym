@@ -1,5 +1,5 @@
 export interface IClient {
-  id: string;
+  id: number;
   fullName: string;
   avatar?: URL;
   age?: number;

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import { ActivityIndicator, Button, MD2Colors, Text } from 'react-native-paper';
+import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
-import { getClients } from '../../store/slices/clientSlice';
+import { deleteClient, getClients } from '../../store/slices/clientSlice';
 import { RootState } from '../../store/store';
 import { ClientLabel } from '../client-label/ClientLabel';
 import { Loader } from '../loader/Loader';
 
 interface IClient {
-  id: string;
+  id: number;
   fullName: string;
 }
 
@@ -19,6 +20,9 @@ export const ClientList: React.FC = () => {
   const clients: IClient[] = useSelector((state: RootState) => state.clientReducer.clients);
   const isLoadingState = useSelector((state: RootState) => state.clientReducer.clientsIsLoading);
   const dispatch = useDispatch();
+  const removeClient = (id: any) => {
+    dispatch(deleteClient(id))
+  }
 
   useEffect(() => {
     dispatch(getClients());
@@ -38,9 +42,7 @@ export const ClientList: React.FC = () => {
               data={clients}
               renderItem={(data: any) => (
                 <TouchableHighlight
-                  onPress={() => console.log('You touched me')}
                   style={styles.rowFront}
-                  underlayColor={'red'}
                 >
                   <ClientLabel {...data.item} key={data.id} />
                 </TouchableHighlight>
@@ -60,6 +62,7 @@ export const ClientList: React.FC = () => {
                     mode="contained"
                     compact={true}
                     buttonColor={MD2Colors.red600}
+                    onPress={() => removeClient(data.item.id)}
                   >
                     REMOVE
                   </Button>
@@ -75,14 +78,13 @@ export const ClientList: React.FC = () => {
 
 const styles = StyleSheet.create({
   rowFront: {
-    backgroundColor: '#CCC',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+    backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     height: 50,
   },
   rowBack: {
     alignItems: 'center',
+    backgroundColor: '#f2f2f2',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
