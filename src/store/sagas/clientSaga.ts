@@ -2,7 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { put, takeEvery } from 'redux-saga/effects';
 
 import { deleteClient, getClientsRequest } from '../../requests/ClientRequests';
-import { deleteClientFailure, deleteClientSuccess, getClientsFailure, getClientsSuccess } from '../slices/clientSlice';
+import { deleteClientFailure, deleteClientSuccess, getClientsFailure, getClientsSuccess, updateClientSuccess } from '../slices/clientSlice';
 import { addClient } from './../../requests/ClientRequests';
 
 function* workGetClientsFetch() {
@@ -31,10 +31,17 @@ function* workAddClient(data) {
   yield workGetClientsFetch();
 }
 
+function* workUpdateClient(data) {
+  // const { payload } = data;
+  yield console.log(data);
+  yield put(updateClientSuccess());
+}
+
 function* clientSaga() {
   yield takeEvery('clientSlice/getClients', workGetClientsFetch);
   yield takeEvery('clientSlice/addClient', workAddClient);
   yield takeEvery('clientSlice/deleteClient', workRemoveClient);
+  yield takeEvery('clientSlice/updateClient', workUpdateClient);
 }
 
 export default clientSaga;

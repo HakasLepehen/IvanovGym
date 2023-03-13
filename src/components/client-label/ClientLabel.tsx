@@ -24,6 +24,7 @@ export const ClientLabel: React.FC<Client> = ({ id, fullName }: any ) => {
           navigation.navigate('ClientPage', {
             id: parseInt(id),
             fullName: fullName,
+            isEdit: false
           })
         }
       >

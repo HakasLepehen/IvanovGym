@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
-import { ActivityIndicator, Button, MD2Colors, Text } from 'react-native-paper';
-import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { Button, MD2Colors, Text } from 'react-native-paper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ interface IClient {
 export const ClientList: React.FC = () => {
   const clients: IClient[] = useSelector((state: RootState) => state.clientReducer.clients);
   const isLoadingState = useSelector((state: RootState) => state.clientReducer.clientsIsLoading);
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const removeClient = (id: any) => {
     dispatch(deleteClient(id))
@@ -53,7 +54,13 @@ export const ClientList: React.FC = () => {
                     icon="pencil"
                     mode="contained"
                     compact={true}
-                    onPress={() => console.log(data)}
+                    onPress={() => {
+                      navigation.navigate('ClientPage', {
+                        id: data.item.id,
+                        fullName: data.item.fullName,
+                        isEdit: true
+                      })
+                    }}
                   >
                     EDIT
                   </Button>

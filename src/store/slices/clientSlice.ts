@@ -1,6 +1,5 @@
+import { IClient } from './../../interfaces/Client';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import { IClient } from '../../interfaces/Client';
 
 export interface IUserState {
   clients: IClient[];
@@ -31,7 +30,6 @@ const clientSlice = createSlice({
     deleteClient: (state: IUserState, action: PayloadAction<number>) => { state.clientsIsLoading = true; },
 
     deleteClientSuccess: (state: IUserState, action: PayloadAction<number>) => {
-      console.log('it works!');
       state.clientsIsLoading = false;
       state.clients = state.clients.filter(el => {
         return el.id != action.payload
@@ -39,6 +37,14 @@ const clientSlice = createSlice({
     },
 
     deleteClientFailure: (state: IUserState) => { state.clientsIsLoading = true; },
+
+    updateClient: (state: IUserState, action: PayloadAction<IClient>) => { state.clientsIsLoading = true; },
+
+    updateClientSuccess: (state: IUserState) => {
+      state.clientsIsLoading = false;
+    },
+
+    updateClientFailure: (state: IUserState) => { state.clientsIsLoading = false; }
   }
 });
 
@@ -51,7 +57,10 @@ export const {
   addClient,
   deleteClient,
   deleteClientSuccess,
-  deleteClientFailure
+  deleteClientFailure,
+  updateClient,
+  updateClientSuccess,
+  updateClientFailure
 } = clientSlice.actions;
 
 // export {reducer};

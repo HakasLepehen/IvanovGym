@@ -25,7 +25,7 @@ export const Home: React.FC = () => {
         visible={isVisible}
         hide={closeAddClientModal}
         save={saveAddClientModal}
-        isEdit={true}
+        isEdit={false}
       />
     </View>
   );
