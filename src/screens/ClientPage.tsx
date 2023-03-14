@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
+import { updateClientInfo } from '../store/slices/clientSlice';
 
 import { ClientForm } from '../components/client-form/ClientForm';
 import { IClient } from '../interfaces/Client';
 import { getClient } from '../requests/ClientRequests';
 
 export type Client = {
-  id: string;
+  id: number;
   fullName: string;
   avatar?: URL;
   age?: string;
@@ -26,9 +27,7 @@ export const ClientPage = ({ route }) => {
   const [client, setClient] = useState<IClient>(null);
   const { id, fullName, isEdit } = route.params;
   const dispatch = useDispatch();
-  const updateClient = (data: Client) => {
-    dispatch(updateClient(data))
-  }
+  const updateClient = (data: IClient) => dispatch(updateClientInfo(data));
 
   useEffect(() => {
     const client = getClient(id);
@@ -37,7 +36,6 @@ export const ClientPage = ({ route }) => {
 
   if (client) {
     if (isEdit) {
-      console.log(client)
       return (
         <>
           <ClientForm onChange={setClient} isEdit={isEdit} data={client} />

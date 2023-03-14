@@ -50,12 +50,12 @@ export const deleteClient = async (id: number) => {
   }
 }
 
-export const updateClient = async (body: IClient, id: number): Promise<void> => {
+export const updateClient = async (body: IClient, id: number): Promise<any> => {
   try {
-    const { data, error } = await supabase
+    return await supabase
       .from('clients')
       .update({ ...body })
-      .eq('id', id )
+      .eq('id', id)
   } catch (error) {
     alert('Не удалось обновить информацию о клиенте')
     console.log(error)

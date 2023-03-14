@@ -38,10 +38,16 @@ const clientSlice = createSlice({
 
     deleteClientFailure: (state: IUserState) => { state.clientsIsLoading = true; },
 
-    updateClient: (state: IUserState, action: PayloadAction<IClient>) => { state.clientsIsLoading = true; },
+    updateClientInfo: (state: IUserState, action: PayloadAction<IClient>) => { state.clientsIsLoading = true; },
 
-    updateClientSuccess: (state: IUserState) => {
+    updateClientSuccess: (state: IUserState, action: PayloadAction<IClient>) => {
       state.clientsIsLoading = false;
+      state.clients = state.clients.map(el => {
+        if (action.payload.id == el.id) {
+          el = action.payload
+        }
+        return el;
+      })
     },
 
     updateClientFailure: (state: IUserState) => { state.clientsIsLoading = false; }
@@ -58,7 +64,7 @@ export const {
   deleteClient,
   deleteClientSuccess,
   deleteClientFailure,
-  updateClient,
+  updateClientInfo,
   updateClientSuccess,
   updateClientFailure
 } = clientSlice.actions;

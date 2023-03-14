@@ -17,6 +17,7 @@ export const ClientForm = ({ isEdit, onChange, data}) => {
 
   useEffect(() => {
     onChange({
+      id: data.id,
       fullName: fullName,
       age: age,
       target: targetOfTrainee,
