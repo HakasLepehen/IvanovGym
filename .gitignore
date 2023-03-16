@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 .env
 .prettierrc
+src/supaBaseClient.ts
 
 # macOS
 .DS_Store
