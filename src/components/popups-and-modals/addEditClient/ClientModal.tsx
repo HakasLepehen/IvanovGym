@@ -23,7 +23,7 @@ export const ClientModal = ({ visible, hide, save, isEdit }) => {
           <Text variant='titleLarge'>Введите данные нового клиента</Text>
         </View>
         <View style={styles.formContainer}>
-          <ClientForm onChange={setClientData} isEdit={isEdit} />
+          <ClientForm onChange={setClientData} isEdit={isEdit} data={null} />
         </View>
         <View style={styles.bottomContainer}>
           <Button

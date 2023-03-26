@@ -1,31 +1,34 @@
+
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
-import { Text, TextInput } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper';
 
-export const ClientForm = ({ isEdit, onChange }) => {
-  const [fullName, setFullName] = useState<string>('');
-  const [age, setAge] = useState<string>();
-  const [targetOfTrainee, setTargetOfTrainee] = useState('');
-  const [limitations, setLimitations] = useState('');
-  const [experience, setExperience] = useState('');
-  const [sleep, setSleep] = useState('');
-  const [pharma, setPharma] = useState('');
-  const [food, setFood] = useState('');
-  const [activity, setActivity] = useState('');
+
+export const ClientForm = ({ isEdit, onChange, data}) => {
+  const [fullName, setFullName] = useState<string>(data?.fullName || '');
+  const [age, setAge] = useState<string>(data?.age || '');
+  const [targetOfTrainee, setTargetOfTrainee] = useState(data?.targetOfTrainee || '');
+  const [limits, setLimits] = useState(data?.limits || '');
+  const [experience, setExperience] = useState(data?.experience || '');
+  const [sleep, setSleep] = useState(data?.sleep || '');
+  const [pharma, setPharma] = useState(data?.pharma || '');
+  const [food, setFood] = useState(data?.food || '');
+  const [activity, setActivity] = useState(data?.activity || '');
 
   useEffect(() => {
     onChange({
+      id: data.id,
       fullName: fullName,
       age: age,
       target: targetOfTrainee,
-      limits: limitations,
+      limits: limits,
       experience: experience,
       sleep: sleep,
       pharma: pharma,
       food: food,
       activity: activity
     })
-  }, [ fullName, age, targetOfTrainee, limitations, experience, sleep, pharma, food, activity ])
+  }, [ fullName, age, targetOfTrainee, limits, experience, sleep, pharma, food, activity ])
 
   return (
     <View style={styles.outerWrapper}>
@@ -62,8 +65,8 @@ export const ClientForm = ({ isEdit, onChange }) => {
             style={styles.labelItem}
             mode='outlined'
             label={'Ограничения:'}
-            value={limitations}
-            onChangeText={text => setLimitations(text)}
+            value={limits}
+            onChangeText={text => setLimits(text)}
           />
 
           <TextInput

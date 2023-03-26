@@ -8,7 +8,7 @@ type Client = {
   fullName: string;
 };
 
-export const ClientLabel: React.FC<Client> = ({ id, fullName }: Client) => {
+export const ClientLabel: React.FC<Client> = ({ id, fullName }: any ) => {
   const navigation = useNavigation();
 
   return (
@@ -24,6 +24,7 @@ export const ClientLabel: React.FC<Client> = ({ id, fullName }: Client) => {
           navigation.navigate('ClientPage', {
             id: parseInt(id),
             fullName: fullName,
+            isEdit: false
           })
         }
       >
@@ -34,4 +35,5 @@ export const ClientLabel: React.FC<Client> = ({ id, fullName }: Client) => {
       </TouchableRipple>
     </View>
   );
+  
 };

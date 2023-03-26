@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { updateClientInfo } from '../store/slices/clientSlice';
+
+import { ClientForm } from '../components/client-form/ClientForm';
 import { IClient } from '../interfaces/Client';
 import { getClient } from '../requests/ClientRequests';
 
-type Client = {
-  id: string;
+export type Client = {
+  id: number;
   fullName: string;
   avatar?: URL;
-  age?: number;
+  age?: string;
   results?: Array<URL>;
   target?: string;
-  limitations?: Array<string>;
+  limits?: Array<string>;
   experience?: string;
   sleep?: string;
   food?: string;
@@ -21,15 +25,36 @@ type Client = {
 
 export const ClientPage = ({ route }) => {
   const [client, setClient] = useState<IClient>(null);
-  const { id, fullName } = route.params;
+  const { id, fullName, isEdit } = route.params;
+  const dispatch = useDispatch();
+  const updateClient = (data: IClient) => dispatch(updateClientInfo(data));
 
   useEffect(() => {
     const client = getClient(id);
     client.then((data) => setClient(data));
-    console.log(route);
   }, []);
 
   if (client) {
+    if (isEdit) {
+      return (
+        <>
+          <ClientForm onChange={setClient} isEdit={isEdit} data={client} />
+
+          <Button
+            mode="contained"
+            onPress={() => updateClient(client)}
+            compact={true}
+            disabled={!isEdit}
+            style={{
+              paddingVertical: 20,
+              borderRadius: 0
+            }}
+          >
+            Сохранить
+          </Button>
+        </>
+      )
+    }
     return (
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
@@ -37,10 +62,10 @@ export const ClientPage = ({ route }) => {
             <Text variant="bodyLarge">Тут будет однажды фото</Text>
             <Text variant="headlineSmall">{client.fullName}</Text>
           </View>
-            <View style={styles.labelItem}>
-              <Text variant="headlineSmall">Возраст:</Text>
-              <Text variant="bodyLarge">{client.age}</Text>
-            </View>
+          <View style={styles.labelItem}>
+            <Text variant="headlineSmall">Возраст:</Text>
+            <Text variant="bodyLarge">{client.age}</Text>
+          </View>
 
           <View style={styles.labelItem}>
             <Text variant="headlineSmall">Цель занятий: </Text>
@@ -49,7 +74,7 @@ export const ClientPage = ({ route }) => {
 
           <View style={styles.labelItem}>
             <Text variant="headlineSmall">Ограничения:</Text>
-            <Text variant="bodyLarge">{client.limitations}</Text>
+            <Text variant="bodyLarge">{client.limits}</Text>
           </View>
 
           <View style={styles.labelItem}>
@@ -119,6 +144,7 @@ export const ClientPage = ({ route }) => {
       </ScrollView>
     );
   }
+
 
   return (
     <View style={styles.container}>

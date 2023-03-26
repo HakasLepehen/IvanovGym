@@ -1,4 +1,4 @@
-import { IClient } from '../interfaces/Client';
+import { IClient } from './../interfaces/Client';
 import { supabase } from './../supaBaseClient';
 
 /**
@@ -34,6 +34,30 @@ export const addClient = async (data: IClient) => {
       .from('clients')
       .insert(data);
   } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deleteClient = async (id: number) => {
+  try {
+    return await supabase
+      .from('clients')
+      .delete()
+      .eq('id', id)
+  } catch (error) {
+    console.log(error);
+    alert('Ошибка удаления клиента!');
+  }
+}
+
+export const updateClient = async (body: IClient, id: number): Promise<any> => {
+  try {
+    return await supabase
+      .from('clients')
+      .update({ ...body })
+      .eq('id', id)
+  } catch (error) {
+    alert('Не удалось обновить информацию о клиенте')
     console.log(error)
   }
 }
