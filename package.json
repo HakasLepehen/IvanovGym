@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.0.0",
+    "@angular/cdk": "^15.2.4",
     "@angular/common": "^15.0.0",
     "@angular/compiler": "^15.0.0",
     "@angular/core": "^15.0.0",
@@ -24,6 +25,12 @@
     "@ngrx/router-store": "^15.4.0",
     "@ngrx/store": "^15.4.0",
     "@ngrx/store-devtools": "^15.4.0",
+    "@supabase/supabase-js": "^2.12.1",
+    "@taiga-ui/cdk": "^3.21.0",
+    "@taiga-ui/core": "^3.21.0",
+    "@taiga-ui/icons": "^3.21.0",
+    "@taiga-ui/kit": "^3.21.0",
+    "@taiga-ui/styles": "^3.21.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -40,6 +47,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "prettier": "^2.8.7",
     "typescript": "~4.8.2"
   }
 }

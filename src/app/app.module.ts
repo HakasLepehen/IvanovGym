@@ -1,3 +1,4 @@
+import { TuiRootModule, TuiDialogModule, TuiAlertModule } from '@taiga-ui/core';
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -7,20 +8,25 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserModule } from './modules/user/user.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
-    StoreRouterConnectingModule.forRoot()
+    StoreRouterConnectingModule.forRoot(),
+    BrowserAnimationsModule,
+    UserModule,
+    TuiRootModule,
+    TuiDialogModule,
+    TuiAlertModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
