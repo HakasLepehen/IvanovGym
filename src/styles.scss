@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@taiga-ui/core/styles/taiga-ui-local.scss';
 
 * {
   box-sizing: border-box;
@@ -10,5 +11,24 @@ body {
 body {
   margin: 0;
   padding: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.container {
+  padding: 0 1em;
+}
+
+
+// Styles for desktop START
+@media (min-width: 992px) {
+
+  body {
+    font-size: 16px;
+  }
+
+  .container {
+    margin: 0 auto;
+    max-width: 960px;
+  }
+}
+
+// Styles for desktop END

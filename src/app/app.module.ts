@@ -1,4 +1,3 @@
-import { TuiRootModule, TuiDialogModule, TuiAlertModule } from '@taiga-ui/core';
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -10,6 +9,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { TaigaModule } from './modules/taiga/taiga.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,10 +22,9 @@ import { UserModule } from './modules/user/user.module';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot(),
     BrowserAnimationsModule,
+    TaigaModule,
     UserModule,
-    TuiRootModule,
-    TuiDialogModule,
-    TuiAlertModule,
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

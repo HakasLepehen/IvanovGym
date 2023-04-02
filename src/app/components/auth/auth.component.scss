@@ -1,0 +1,7 @@
+.auth_form.tui-form__row {
+  display: flex;
+
+  & > label {
+    width: 90px;
+  }
+}
