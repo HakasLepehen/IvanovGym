@@ -11,12 +11,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TaigaModule } from './modules/taiga/taiga.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

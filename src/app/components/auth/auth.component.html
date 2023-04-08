@@ -1,24 +1,29 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" required>
-  <!-- <div class="tui-col_8"> -->
-  <div class="container">
-    <div class="auth_form tui-form__row">
-      <label for="login" class="form_label tui-text_body-l-2 tui-text_body-xl">Логин: </label>
-      <input formControlName="login" id="login" type="text">
-      <!-- <div *ngIf="login?.invalid && (login?.dirty || login?.touched)">
-            <small *ngIf="login?.errors?.['required']">
-              Name is required.
-            </small>
-            <small *ngIf="login?.errors?.['email']">
-              Name is required.
-            </small>
-          </div> -->
-    </div>
+  <div class="tui-col_8">
+    <div class="container">
+      <div class="auth_form tui-form__row">
+        <!-- <label for="login" class="form_label tui-text_body-l-2 tui-text_body-xl">Логин: </label> -->
+        <!-- <input formControlName="login" id="login" type="text"> -->
+        <tui-input formControlName="login" class="b-form" tuiTextfieldSize="m">
+          Введите e-mail
+          <input tuiTextfield type="email" />
+        </tui-input>
+        <tui-error formControlName="login" [error]="[] | tuiFieldError | async"></tui-error>
+        <!-- <div *ngIf="login?.invalid && (login?.dirty || login?.touched)">
+          <small *ngIf="login?.errors?.['required']">
+            Name is required.
+          </small>
+          <small *ngIf="login?.errors?.['email']">
+            Name is required.
+          </small>
+        </div> -->
+      </div>
 
-    <div class="auth_form tui-form__row">
-      <label for="password" class="form_label tui-text_body-l-2 tui-text_body-xl">Пароль: </label>
-      <input formControlName="password" type="text">
+      <!-- <div class="auth_form tui-form__row">
+        <label for="password" class="form_label tui-text_body-l-2 tui-text_body-xl">Пароль: </label>
+        <input formControlName="password" type="text">
+      </div> -->
+      <button type="submit" [disabled]="!loginForm.valid">Submit</button>
     </div>
-    <button type="submit" [disabled]="!loginForm.valid">Submit</button>
-    <!-- </div> -->
   </div>
 </form>

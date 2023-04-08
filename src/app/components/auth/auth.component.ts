@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent implements OnInit {
-  loginForm = this.fb.group({
-    login: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
-  })
+  readonly loginForm = this.fb.group({
+    login: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     console.log(this.loginForm);
