@@ -1,12 +1,27 @@
+form {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
 .auth_form.tui-form__row {
   display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 30px;
+  flex: 1;
 
   & > label {
     width: 90px;
   }
 }
 
-.success {
-  position: relative;
-  color: var(--tui-success-fill);
+tui-error {
+  bottom: -20px;
+  position: absolute;
+}
+
+button {
+  margin-top: 50px;
 }
