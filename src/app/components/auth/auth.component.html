@@ -19,8 +19,6 @@
         <tui-error formControlName='password' [error]='[] | tuiFieldError | async'></tui-error>
       </div>
 
-<!--      <button type='submit' [disabled]='!loginForm.valid'>Submit</button>-->
-
     </div>
   </div>
   <button
@@ -30,6 +28,24 @@
     shape='rounded'
     [disabled]='!loginForm.valid'
   >
-    Button
+    Зарегистрироваться
+  </button>
+  <button
+    tuiButton
+    type='button'
+    size='m'
+    shape='rounded'
+    (click)='getUser()'
+  >
+    Получить пользователя
+  </button>
+  <button
+    tuiButton
+    type='button'
+    size='m'
+    shape='rounded'
+    (click)='signIn()'
+  >
+    Войти
   </button>
 </form>

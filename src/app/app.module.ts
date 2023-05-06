@@ -12,15 +12,24 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TaigaModule } from './modules/taiga/taiga.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { counterReducer } from './reducers/counter.reducer';
+import { CounterComponent } from './components/counter/counter.component';
+import { authReducer } from './store/reducers/auth.reducer';
+import { rootReducer } from './store/reducers/root.reducer';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CounterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(...rootReducer),
+    // Instrumentation must be imported after importing StoreModule (config is optional)
+    StoreDevtoolsModule.instrument({
+      maxAge: 5,
+    }),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot(),
     BrowserAnimationsModule,
@@ -29,6 +38,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AuthModule,
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
