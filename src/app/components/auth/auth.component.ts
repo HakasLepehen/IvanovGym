@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { selectToken } from '../../store/selectors/auth.selector';
 
 @Component({
   selector: 'app-auth',
@@ -13,10 +15,12 @@ export class AuthComponent implements OnInit {
     login: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   });
+  token$: any = '';
 
   constructor(
     private fb: FormBuilder,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private store: Store
   ) {
   }
 
@@ -44,7 +48,7 @@ export class AuthComponent implements OnInit {
   }
 
   signIn() {
-    this.authService.signIn(this.loginForm.value.login, this.loginForm.value.password);
+    this.token$ = this.store.select(selectToken);
   }
 
   get login() {
@@ -54,6 +58,4 @@ export class AuthComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-
-
 }

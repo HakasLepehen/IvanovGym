@@ -17,9 +17,11 @@ import { counterReducer } from './reducers/counter.reducer';
 import { CounterComponent } from './components/counter/counter.component';
 import { authReducer } from './store/reducers/auth.reducer';
 import { rootReducer } from './store/reducers/root.reducer';
+import { MainComponent } from './pages/main/main.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent],
+  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -3,9 +3,10 @@ import { AuthSession, createClient, SupabaseClient, UserResponse } from '@supaba
 import { ENV } from '../../environment/environment';
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { options } from '../optionsSupaBase';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { setToken } from '../store/actions/auth.action';
+import { tokenSelector } from '../store/selectors/auth.selector';
 
 type User = {
   access_token: string;
@@ -22,6 +23,7 @@ export class AuthService {
   private supabase: SupabaseClient;
   _session: AuthSession | null = null;
   private _token$!: Observable<string>;
+  private token$: any;
   private authUrl = '/auth/v1';
   headers = new HttpHeaders()
     .set('content-type', 'application/json')
@@ -34,7 +36,6 @@ export class AuthService {
   ) {
     this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey);
     this._token$ = store.select('token');
-    console.log(this._token$);
   }
 
   signUp(login: string, password: string) {
@@ -64,8 +65,8 @@ export class AuthService {
       password: password
     }, this.options)
       .subscribe((response: any) => {
-        this.store.dispatch(setToken({ token: response.access_token } ));
-        console.log(response);
-      });
+        this.store.dispatch(setToken({ token: response.access_token }));
+      })
+
   }
 }
