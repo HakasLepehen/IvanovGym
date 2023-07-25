@@ -20,7 +20,8 @@ type User = {
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  private _token$ = this._store.pipe(select('token'));
+  private _token$: any;
+  private token!: string;
   private authUrl = '/auth/v1';
   headers = new HttpHeaders()
     .set('content-type', 'application/json')
@@ -33,6 +34,12 @@ export class AuthService {
     private _router: Router
   ) {
     this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey);
+    this._token$ = this._store
+      .pipe(select('token'))
+      .subscribe(val => {
+        console.log('вот что получили в полях класса: ', val)
+        this.token = val;
+      })
   }
 
   signUp(login: string, password: string) {
