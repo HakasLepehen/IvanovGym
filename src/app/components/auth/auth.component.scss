@@ -1,8 +1,26 @@
-form {
+.container {
   align-items: center;
   display: flex;
   height: 100vh;
+  justify-content: center;
+}
+
+.auth_wrapper {
+  width: 500px;
+}
+
+.auth_title {
+  text-align: center;
+}
+
+form {
+  align-items: center;
+  display: flex;
   flex-direction: column;
+
+  .button_block {
+    padding: 0 1.25rem;
+  }
 }
 
 .auth_form.tui-form__row {
@@ -23,5 +41,6 @@ tui-error {
 }
 
 button {
-  margin-top: 50px;
+  margin-top: 30px;
+  width: 100%;
 }

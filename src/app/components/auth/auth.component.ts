@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
-import { selectToken } from '../../store/selectors/auth.selector';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -16,39 +16,42 @@ export class AuthComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   });
   token$: any = '';
+  location: any;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private readonly authService: AuthService,
-    private store: Store
+    private store: Store,
+    private router: ActivatedRoute
   ) {
+    [this.location] = router.snapshot.url;
+
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+
+  get isLoginPage(): boolean {
+    return this.location.path == 'login';
+  }
+
+  get goToPage() {
+    return this.isLoginPage ? '/signup' : '/login';
   }
 
   onSubmit() {
+    this.isLoading = true;
     try {
       const email: string = this.loginForm.value.login as string;
       const password: string = this.loginForm.value.password as string;
-      this.authService.signUp(email, password);
-
-      alert('Аккаунт создан!');
+      return this.isLoginPage ? this.authService.signIn(email, password) : this.authService.signUp(email, password);
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
+        this.isLoading = false;
       }
     }
-  }
-
-  getUser() {
-    const email: string = this.loginForm.value.login as string;
-    const password: string = this.loginForm.value.password as string;
-    this.authService.getUser(email, password);
-  }
-
-  signIn() {
-    this.token$ = this.store.select(selectToken);
   }
 
   get login() {

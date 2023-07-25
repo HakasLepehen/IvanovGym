@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AuthSession, createClient, SupabaseClient, UserResponse } from '@supabase/supabase-js';
 import { ENV } from '../../environment/environment';
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
-import { options } from '../optionsSupaBase';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { setToken } from '../store/actions/auth.action';
-import { tokenSelector } from '../store/selectors/auth.selector';
+import { Router } from '@angular/router';
 
 type User = {
   access_token: string;
@@ -21,9 +20,7 @@ type User = {
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  _session: AuthSession | null = null;
-  private _token$!: Observable<string>;
-  private token$: any;
+  private _token$ = this._store.pipe(select('token'));
   private authUrl = '/auth/v1';
   headers = new HttpHeaders()
     .set('content-type', 'application/json')
@@ -32,10 +29,10 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<{ token: string }>
+    private _store: Store<{ token: string }>,
+    private _router: Router
   ) {
     this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey);
-    this._token$ = store.select('token');
   }
 
   signUp(login: string, password: string) {
@@ -55,8 +52,13 @@ export class AuthService {
       password: password
     }, this.options)
       .subscribe((event: any) => {
-        if (event) console.log(event);
-      });
+          if (event) {
+            this._store.dispatch(setToken({ token: event.access_token }));
+            this._router.navigate(['/'])
+          }
+        }
+      )
+    ;
   }
 
   getUser(login: string | any, password: string | any) {
@@ -65,8 +67,17 @@ export class AuthService {
       password: password
     }, this.options)
       .subscribe((response: any) => {
-        this.store.dispatch(setToken({ token: response.access_token }));
-      })
+        this._store.dispatch(setToken({ token: response.access_token }));
+      });
 
+  }
+
+  /**
+   * @returns true - if we have token in state.
+   * Only http error 403 will tell us state of authentification
+   */
+  get isLoggedIn(): boolean {
+    console.log('sвводим токен из хранилища ', this._token$);
+    return !!this._token$;
   }
 }
