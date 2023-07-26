@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --main-bg-color: #1c1c1e;
+  --primary-color: #d0fd3e;
+  --text-color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  //font-size: 10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--text-color);
+  color: var(--main-bg-color);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 0 2em;
+}
+
+
+// Styles for desktop START
+@media (min-width: 992px) {
+
+  body {
+    font-size: 16px;
+  }
+
+  .container {
+    margin: 0 auto;
+    max-width: 960px;
+  }
+}
+
+// Styles for desktop END
