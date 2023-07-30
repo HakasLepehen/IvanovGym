@@ -1,1 +1,16 @@
-<p>main works!</p>
+<div class='main_block'>
+  <div class='container main_block__title'>
+    <h3>Чем займемся?</h3>
+  </div>
+  <div class='main_block__content'>
+    <div class='container'>
+      <ul class='content__list'>
+        <li *ngFor='let linkItem of content'>
+          <a class='content__item' [href]='linkItem.routeLink'>
+            {{linkItem.title}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

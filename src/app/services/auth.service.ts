@@ -3,9 +3,9 @@ import { AuthSession, createClient, SupabaseClient, UserResponse } from '@supaba
 import { ENV } from '../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { setToken } from '../store/actions/auth.action';
 import { Router } from '@angular/router';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 type User = {
   access_token: string;
@@ -20,8 +20,9 @@ type User = {
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  private _token$: any;
-  private token!: string;
+  private tokenSubject: BehaviorSubject<string | null>;
+  private token$: Observable<any | null>;
+  private isLogin: boolean = false;
   private authUrl = '/auth/v1';
   headers = new HttpHeaders()
     .set('content-type', 'application/json')
@@ -34,12 +35,8 @@ export class AuthService {
     private _router: Router
   ) {
     this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey);
-    this._token$ = this._store
-      .pipe(select('token'))
-      .subscribe(val => {
-        console.log('вот что получили в полях класса: ', val)
-        this.token = val;
-      })
+    this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
+    this.token$ = this.tokenSubject.asObservable();
   }
 
   signUp(login: string, password: string) {
@@ -53,19 +50,18 @@ export class AuthService {
       });
   }
 
-  signIn(login: string | any, password: string | any): void {
-    this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
+  signIn(login: string | any, password: string | any) {
+    return this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
       email: login,
       password: password
     }, this.options)
-      .subscribe((event: any) => {
-          if (event) {
-            this._store.dispatch(setToken({ token: event.access_token }));
-            this._router.navigate(['/'])
-          }
-        }
+      .pipe(
+        map((response: any) => {
+            localStorage.setItem('token', JSON.stringify(response.access_token));
+            this.tokenSubject.next(response.access_token);
+            return response.access_token
+        })
       )
-    ;
   }
 
   getUser(login: string | any, password: string | any) {
@@ -74,9 +70,17 @@ export class AuthService {
       password: password
     }, this.options)
       .subscribe((response: any) => {
-        this._store.dispatch(setToken({ token: response.access_token }));
+        if (response) {
+          this._store.dispatch(setToken({ token: response.access_token }));
+        }
       });
+  }
 
+  signOut() {
+      // remove user from local storage to log user out
+      localStorage.removeItem('token');
+      this.tokenSubject.next(null);
+      this._router.navigate(['/login']);
   }
 
   /**
@@ -84,7 +88,8 @@ export class AuthService {
    * Only http error 403 will tell us state of authentification
    */
   get isLoggedIn(): boolean {
-    console.log('sвводим токен из хранилища ', this._token$);
-    return !!this._token$;
+    // this._token$.subscribe((val: string) => this.isLogin = !!val);
+    this.token$.subscribe(val => this.isLogin = !!val);
+    return this.isLogin;
   }
 }
