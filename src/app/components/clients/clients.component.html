@@ -1,1 +1,18 @@
-<p>clients works!</p>
+<div class='main_block'>
+  <div class='container main_block__title'>
+    <h3 class='tui-text_h4'>Список клиентов</h3>
+  </div>
+  <div class='main_block__content'>
+    <tui-accordion class='container'>
+        <tui-accordion-item
+          *ngFor='let client of clients'
+          size='m'
+        >
+          {{client.fullName}}
+          <ng-template tuiAccordionItemContent>
+            {{client.fullName}}
+          </ng-template>
+        </tui-accordion-item>
+    </tui-accordion>
+  </div>
+</div>

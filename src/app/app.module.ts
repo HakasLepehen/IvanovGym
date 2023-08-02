@@ -12,11 +12,12 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TaigaModule } from './modules/taiga/taiga.module';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CounterComponent } from './components/counter/counter.component';
 import { rootReducer } from './store/reducers/root.reducer';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { MainInterceptor } from './interceptors/main.interceptor';
 
 @NgModule({
   declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent],
@@ -37,7 +38,13 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     UserModule,
     AuthModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MainInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

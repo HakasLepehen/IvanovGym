@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AuthSession, createClient, SupabaseClient, UserResponse } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ENV } from '../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { setToken } from '../store/actions/auth.action';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
