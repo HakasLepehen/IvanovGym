@@ -25,6 +25,32 @@ body {
   padding: 0 2em;
 }
 
+// START styles for main layout
+
+.main_block {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main_block__title {
+  flex: 0;
+  width: 100%;
+}
+
+.main_block__content {
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.main_block__buttons {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+// END styles for main layout
 
 // Styles for desktop START
 @media (min-width: 992px) {
@@ -40,3 +66,5 @@ body {
 }
 
 // Styles for desktop END
+
+//

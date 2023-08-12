@@ -28,12 +28,10 @@ export class AuthComponent implements OnInit {
     private router: Router
   ) {
     [this.location] = route.snapshot.url;
-
   }
 
   ngOnInit(): void {
   }
-
 
   get isLoginPage(): boolean {
     return this.location.path == 'login';
@@ -43,13 +41,14 @@ export class AuthComponent implements OnInit {
     return this.isLoginPage ? '/signup' : '/login';
   }
 
-  onSubmit() {
+  onSubmit(): any {
     this.isLoading = true;
     const email: string = this.loginForm.value.login as string;
     const password: string = this.loginForm.value.password as string;
-    // return this.isLoginPage ? this.authService.signIn(email, password) : this.authService.signUp(email, password);
+
+    this.error = '';
     if (this.isLoginPage) {
-      this.authService.signIn(email, password)
+      return this.authService.signIn(email, password)
         .pipe(first())
         .subscribe({
           next: () => {
@@ -57,8 +56,14 @@ export class AuthComponent implements OnInit {
             this.router.navigate(['']);
           },
           error: error => {
-            this.error = error;
             this.isLoading = false;
+
+            if (error.error.error === 'invalid_grant') {
+              this.error = 'Неверный логин или пароль';
+            } else {
+              this.error = 'Не удалось авторизоваться';
+            }
+            return;
           }
         });
     }

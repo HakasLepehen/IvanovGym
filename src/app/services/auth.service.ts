@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ENV } from '../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store } from '@ngrx/store';
@@ -19,7 +18,6 @@ type User = {
   providedIn: 'root'
 })
 export class AuthService {
-  private supabase: SupabaseClient;
   private tokenSubject: BehaviorSubject<string | null>;
   private token$: Observable<any | null>;
   private isLogin: boolean = false;
@@ -34,20 +32,8 @@ export class AuthService {
     private _store: Store<{ token: string }>,
     private _router: Router
   ) {
-    this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey);
     this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
     this.token$ = this.tokenSubject.asObservable();
-  }
-
-  signUp(login: string, password: string) {
-    // return this.supabase.auth.signUp({ email: login, password: password });
-    this.http.post(ENV.supabaseUrl + this.authUrl + '/signup', {
-      email: login,
-      password: password
-    }, this.options)
-      .subscribe((event: any) => {
-        if (event) console.log(event);
-      });
   }
 
   signIn(login: string | any, password: string | any) {
@@ -55,13 +41,13 @@ export class AuthService {
       email: login,
       password: password
     }, this.options)
-      .pipe(
-        map((response: any) => {
-            localStorage.setItem('token', JSON.stringify(response.access_token));
-            this.tokenSubject.next(response.access_token);
-            return response.access_token
-        })
-      )
+    .pipe(
+      map((response: any) => {
+          localStorage.setItem('token', JSON.stringify(response.access_token));
+          this.tokenSubject.next(response.access_token);
+          return response.access_token
+      })
+    )
   }
 
   getUser(login: string | any, password: string | any) {
@@ -77,10 +63,10 @@ export class AuthService {
   }
 
   signOut() {
-      // remove user from local storage to log user out
-      localStorage.removeItem('token');
-      this.tokenSubject.next(null);
-      this._router.navigate(['/login']);
+    // remove user from local storage to log user out
+    localStorage.removeItem('token');
+    this.tokenSubject.next(null);
+    this._router.navigate(['/login']);
   }
 
   /**

@@ -7,15 +7,15 @@ import {
   TuiAlertModule,
   TuiTextfieldControllerModule,
   TuiErrorModule,
-  TuiButtonModule
+  TuiButtonModule, TuiLoaderModule
 } from '@taiga-ui/core';
-import { TuiFieldErrorPipeModule, TuiInputModule } from '@taiga-ui/kit';
+import { TuiAccordionModule, TuiFieldErrorPipeModule, TuiInputModule } from '@taiga-ui/kit';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, TuiRootModule, TuiDialogModule, TuiAlertModule, TuiInputModule, TuiErrorModule, TuiFieldErrorPipeModule, TuiButtonModule],
+  imports: [CommonModule, TuiRootModule, TuiDialogModule, TuiAlertModule, TuiInputModule, TuiErrorModule, TuiFieldErrorPipeModule, TuiButtonModule, TuiAccordionModule, TuiLoaderModule],
   providers: [],
-  exports: [CommonModule, TuiRootModule, TuiDialogModule, TuiAlertModule, TuiInputModule, TuiTextfieldControllerModule, TuiErrorModule, TuiFieldErrorPipeModule, TuiButtonModule]
+  exports: [CommonModule, TuiRootModule, TuiDialogModule, TuiAlertModule, TuiInputModule, TuiTextfieldControllerModule, TuiErrorModule, TuiFieldErrorPipeModule, TuiButtonModule, TuiAccordionModule, TuiLoaderModule]
 })
 export class TaigaModule {
 }

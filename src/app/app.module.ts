@@ -45,6 +45,8 @@ import { MainInterceptor } from './interceptors/main.interceptor';
       multi: true
     }
   ],
+  exports: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

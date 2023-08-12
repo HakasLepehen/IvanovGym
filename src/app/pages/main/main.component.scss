@@ -1,21 +1,3 @@
-.main_block {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.main_block__title {
-  flex: 0;
-  width: 100%;
-}
-
-.main_block__content {
-  flex: 1;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  width: 100%;
-}
-
 .content__list li {
   margin-top: 1em;
 }

@@ -58,5 +58,8 @@
         </button>
       </div>
     </form>
+    <div *ngIf='loginForm.valid' class='tui-col_12 tui-form__row'>
+      {{error}}
+    </div>
   </div>
 </div>
