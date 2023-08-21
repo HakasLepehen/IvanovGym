@@ -45,6 +45,9 @@ export class MainInterceptor implements HttpInterceptor {
                 localStorage.removeItem('token');
                 this._router.navigate(['login']);
               }
+              if (error.status === 0) {
+                alert(`не удалось получить данные с сервера: ${error.message}`);
+              }
             }
           }
         ),

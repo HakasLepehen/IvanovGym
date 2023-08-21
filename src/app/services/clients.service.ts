@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { ENV } from '../../environment/environment';
+import { Client } from '../models/client';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,10 @@ export class ClientsService {
 
   getClients() {
     return this._http.get(ENV.supabaseUrl + this.clientsAPIUrl + `?select=*`);
+  }
+
+  addClient(model: Client) {
+    const headers = new HttpHeaders().set('Prefer', 'return=minimal');
+    return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers });
   }
 }
