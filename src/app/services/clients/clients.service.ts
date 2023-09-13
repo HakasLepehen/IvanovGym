@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { ENV } from '../../environment/environment';
-import { Client } from '../models/client';
+import { Observable, Subject } from 'rxjs';
+import { ENV } from '../../../environment/environment';
+import { Client } from '../../models/client';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ClientsService {
   ) {
   }
 
-  getClients() {
+  getClients(): Observable<any> {
     return this._http.get(ENV.supabaseUrl + this.clientsAPIUrl + `?select=*`);
   }
 

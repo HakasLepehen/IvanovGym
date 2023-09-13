@@ -12,7 +12,6 @@
           {{client.fullName}}
           <ng-template tuiAccordionItemContent>
             {{client.fullName}}
-            a
           </ng-template>
         </tui-accordion-item>
       </tui-accordion>
@@ -23,7 +22,7 @@
         size='m'
         appearance='whiteblock-active'
         type='button'
-        (click)='addClient()'
+        (click)='show()'
       >
         Добавить
       </button>

@@ -4,14 +4,19 @@ import { ClientsRoutingModule } from './clients-routing.module';
 import { ClientsComponent } from '../../components/clients/clients.component';
 import { TaigaModule } from '../taiga/taiga.module';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { ClientOpsComponent } from '../../components/client-ops/client-ops.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ClientsRoutingModule,
     TaigaModule,
+    ClientOpsComponent,
   ],
   exports: [],
-  declarations: [ClientsComponent, LoaderComponent],
+  declarations: [
+    ClientsComponent,
+    LoaderComponent
+  ],
 })
 export class ClientsModule { }

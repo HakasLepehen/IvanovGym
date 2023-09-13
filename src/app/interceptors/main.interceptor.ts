@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { finalize, Observable, tap } from 'rxjs';
 import { ENV } from '../../environment/environment';
 import { Router } from '@angular/router';
-import { LoaderService } from '../services/loader.service';
+import { LoaderService } from '../services/loader/loader.service';
 
 @Injectable()
 export class MainInterceptor implements HttpInterceptor {
