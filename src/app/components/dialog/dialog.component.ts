@@ -11,17 +11,16 @@ import { TuiDialogContext } from '@taiga-ui/core';
 export class DialogComponent {
 
   constructor(
-    @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<boolean>,
+    // @Inject(POLYMORPHEUS_CONTEXT)
+    // private readonly context: TuiDialogContext<boolean>,
   ) {
-    console.log('контекст', context);
   }
 
-  ok() {
-    this.context.completeWith(true);
-  }
-
-  cancel() {
-    this.context.completeWith(false);
-  }
+  // ok() {
+  //   this.context.completeWith(true);
+  // }
+  //
+  // cancel() {
+  //   this.context.completeWith(false);
+  // }
 }

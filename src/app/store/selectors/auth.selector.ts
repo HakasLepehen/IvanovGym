@@ -1,5 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { IAuthState, IGlobalState } from '../../interfaces/interfaces';
+import IAuthState from '../../interfaces/auth-state.interface';
+
+import IGlobalState from '../../interfaces/global-state.interface';
 
 export const tokenSelector = createFeatureSelector('auth');
 

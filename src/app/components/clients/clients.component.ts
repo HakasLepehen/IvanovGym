@@ -16,12 +16,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   clients: Client[] = [];
   getClientSubscription!: Subscription;
   addClientSubscription!: Subscription;
-  private readonly dialog = this.dialogs.open(
+  private readonly createClientDialog = this.dialogs.open(
       new PolymorpheusComponent(ClientOperationsComponent, this.injector),
     {
       label: 'Новый клиент',
       data: {
-        client: new Client('новый входящий клиент')
+        client: new Client('Анастасия Доценко'),
+        isEdit: true
       },
       closeable: true
     }
@@ -51,7 +52,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
   };
 
   show(): void {
-    this.dialog.subscribe({
+    this.createClientDialog.subscribe({
       next: () => console.log(),
       complete: () => console.log('completed')
     });
