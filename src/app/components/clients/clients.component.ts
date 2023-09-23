@@ -5,7 +5,7 @@ import { LoaderService } from '../../services/loader/loader.service';
 import { Subscription } from 'rxjs';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusContent, PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { ClientOpsComponent } from '../client-ops/client-ops.component';
+import { ClientOperationsComponent } from '../client-operations/client-operations.component';
 
 @Component({
   selector: 'app-clients',
@@ -17,9 +17,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   getClientSubscription!: Subscription;
   addClientSubscription!: Subscription;
   private readonly dialog = this.dialogs.open(
-      new PolymorpheusComponent(ClientOpsComponent, this.injector),
+      new PolymorpheusComponent(ClientOperationsComponent, this.injector),
     {
-      label: 'Новый клиент'
+      label: 'Новый клиент',
+      data: {
+        client: new Client('новый входящий клиент')
+      },
+      closeable: true
     }
   );
 

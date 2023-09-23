@@ -14,6 +14,7 @@ export class DialogComponent {
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean>,
   ) {
+    console.log('контекст', context);
   }
 
   ok() {
