@@ -16,5 +16,9 @@ export class MainComponent {
       title: 'Управление клиентами',
       routeLink: 'clients'
     },
+    {
+      title: 'Назначение тренировок(пока не работает)',
+      routeLink: 'trainings'
+    }
   ]
 }
