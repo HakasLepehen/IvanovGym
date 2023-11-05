@@ -23,6 +23,6 @@ export class ClientsService {
 
   addClient(model: Client) {
     const headers = new HttpHeaders().set('Prefer', 'return=minimal');
-    return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers });
+    return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers })
   }
 }

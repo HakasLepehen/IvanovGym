@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClientsRoutingModule } from './clients-routing.module';
@@ -16,7 +17,7 @@ import { ClientOperationsComponent } from '../../components/client-operations/cl
   exports: [],
   declarations: [
     ClientsComponent,
-    LoaderComponent
+    LoaderComponent,
   ],
 })
 export class ClientsModule { }
