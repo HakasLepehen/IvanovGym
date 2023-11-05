@@ -71,7 +71,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.clientsService.deleteClient(el.guid)
       .subscribe({
         error: (err) => {
-          alert(err)
+          // alert(err.message)
           console.log(err);
         },
         complete: () => this.getClients()

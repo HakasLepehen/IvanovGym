@@ -43,11 +43,13 @@ export class MainInterceptor implements HttpInterceptor {
             if (error instanceof HttpErrorResponse) {
               if (error.status === 401) {
                 localStorage.removeItem('token');
-                this._router.navigate(['login']);
+                return this._router.navigate(['login']);
               }
               if (error.status === 0) {
-                alert(`не удалось получить данные с сервера: ${error.message}`);
+                return alert(`не удалось получить данные с сервера: ${error.message}`);
               }
+
+              return alert(`Не удалось выполнить запрос: ${error.message}`);
             }
           }
         ),
