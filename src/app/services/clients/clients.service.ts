@@ -25,4 +25,8 @@ export class ClientsService {
     const headers = new HttpHeaders().set('Prefer', 'return=minimal');
     return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers })
   }
+
+  deleteClient(guid: string) {
+    return this._http.delete(ENV.supabaseUrl + this.clientsAPIUrl, {params: {guid: `eq.${guid}`}})
+  }
 }

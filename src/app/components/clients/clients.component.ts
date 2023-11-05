@@ -61,14 +61,21 @@ export class ClientsComponent implements OnInit, OnDestroy {
       });
   }
 
-  editClient(el: any):void {
+  editClient(el: any): void {
     alert('Мы будем редактировать клиента в будущем');
     console.log(el);
   }
 
-  removeClient(el: any):void {
-    alert('Мы будем удалять клиента в будущем');
+  removeClient(el: any): void {
     console.log('Мы будем удалять клиента в будущем', el);
+    this.clientsService.deleteClient(el.guid)
+      .subscribe({
+        error: (err) => {
+          alert(err)
+          console.log(err);
+        },
+        complete: () => this.getClients()
+      });
   }
 
   ngOnDestroy() {
