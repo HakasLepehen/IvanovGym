@@ -12,6 +12,28 @@
           {{client.fullName}}
           <ng-template tuiAccordionItemContent>
             {{client.fullName}}
+            <div class='container-buttons'>
+              <button
+                tuiButton
+                size='m'
+                appearance='whiteblock-active'
+                type='button'
+                shape="rounded"
+                (click)='editClient(client)'
+              >
+                Редактировать
+              </button>
+              <button
+                tuiButton
+                size='m'
+                appearance='whiteblock-active'
+                type='button'
+                shape="rounded"
+                (click)='removeClient(client)'
+              >
+                Удалить
+              </button>
+            </div>
           </ng-template>
         </tui-accordion-item>
       </tui-accordion>

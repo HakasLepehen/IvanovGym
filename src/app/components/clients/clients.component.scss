@@ -5,3 +5,9 @@
 .main_block {
   padding-bottom: 2em;
 }
+
+.container-buttons {
+  display: flex;
+  gap: 1em;
+  justify-content: flex-end;
+}

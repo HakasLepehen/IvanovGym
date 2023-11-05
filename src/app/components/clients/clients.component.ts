@@ -43,16 +43,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.getClients();
   }
 
-  addClient(content: PolymorpheusContent<TuiDialogContext>): void {
-    const client = new Client('asdddd123');
-    console.log(client);
-    // this.addClientSubscription = this.clientsService
-    //   .addClient(client)
-    //   .subscribe(() => {
-    //     this.getClients();
-    //   });
-  }
-
   show(): void {
     this.createClientDialog
       .pipe(takeUntil(this.destroy$))
@@ -69,6 +59,16 @@ export class ClientsComponent implements OnInit, OnDestroy {
       .subscribe((val: any) => {
         this.clients = val;
       });
+  }
+
+  editClient(el: any):void {
+    alert('Мы будем редактировать клиента в будущем');
+    console.log(el);
+  }
+
+  removeClient(el: any):void {
+    alert('Мы будем удалять клиента в будущем');
+    console.log('Мы будем удалять клиента в будущем', el);
   }
 
   ngOnDestroy() {
