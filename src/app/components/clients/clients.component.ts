@@ -2,7 +2,7 @@ import { Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { ClientsService } from '../../services/clients/clients.service';
 import { Client } from '../../models/client';
 import { LoaderService } from '../../services/loader/loader.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusContent, PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
@@ -16,15 +16,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
   clients: Client[] = [];
   getClientSubscription!: Subscription;
   addClientSubscription!: Subscription;
+  destroy$: Subject<any> = new Subject();
   private readonly createClientDialog = this.dialogs.open(
-      new PolymorpheusComponent(ClientOperationsComponent, this.injector),
+    new PolymorpheusComponent(ClientOperationsComponent, this.injector),
     {
       label: 'Новый клиент',
       data: {
-        client: new Client('Анастасия Доценко'),
+        client: new Client(''),
         isEdit: true
       },
-      closeable: true
+      closeable: true,
+      dismissible: false
     }
   );
 
@@ -35,7 +37,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     private readonly injector: Injector,
     @Inject(TuiDialogService) private readonly dialogs: TuiDialogService
   ) {
-  };
+  }
 
   ngOnInit() {
     this.getClients();
@@ -49,13 +51,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
     //   .subscribe(() => {
     //     this.getClients();
     //   });
-  };
+  }
 
   show(): void {
-    this.createClientDialog.subscribe({
-      next: () => console.log(),
-      complete: () => console.log('completed')
-    });
+    this.createClientDialog
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => console.log(),
+        complete: () => {
+          return this.getClients();
+        }
+      });
   }
 
   getClients(): void {
@@ -63,7 +69,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       .subscribe((val: any) => {
         this.clients = val;
       });
-  };
+  }
 
   ngOnDestroy() {
     this.getClientSubscription.unsubscribe();

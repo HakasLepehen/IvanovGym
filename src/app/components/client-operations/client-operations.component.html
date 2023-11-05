@@ -1,3 +1,38 @@
 <app-dialog>
-  <p>{{client.fullName}}</p>
+  <!-- Контент диалогового окна клиента -->
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+    <!-- ФИО клиента -->
+    <div class="tui-form__row">
+      <tui-input formControlName="fullName" tuiTextfieldSize="m">
+        Ф.И.О.
+        <input placeholder="Введите ФИО клиента полностью" tuiTextfield />
+        <span class="tui-required"></span>
+      </tui-input>
+      <tui-error formControlName="fullName" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+    <!-- Возраст -->
+    <div class="tui-form__row">
+      <tui-input-number formControlName="age" tuiTextfieldSize="m">
+        Возраст
+        <input placeholder="Введите возраст" tuiTextfield />
+        <span class="tui-required"></span>
+      </tui-input-number>
+      <tui-error formControlName="age" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+    <!-- Цель -->
+    <div class="tui-form__row">
+      <tui-input formControlName="target" tuiTextfieldSize="m">
+        Цель
+        <input placeholder="Кратко опишите цели клиента" tuiTextfield />
+        <span class="tui-required"></span>
+      </tui-input>
+      <tui-error formControlName="target" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+
+    <div class="tui-form__row">
+      <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='onSubmit()'>
+        Сохранить
+      </button>
+    </div>
+  </form>
 </app-dialog>
