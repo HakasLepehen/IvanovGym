@@ -13,6 +13,7 @@ export class Client {
   pharma?: string;
   activity?: string;
   avatar?: string;
+  id?: number | null;
 
   constructor(
     fullName: string,
@@ -25,6 +26,7 @@ export class Client {
     food?: string,
     pharma?: string,
     activity?: string,
+    id?: number,
     avatar?: string
   ) {
     this.fullName = fullName;
@@ -38,5 +40,6 @@ export class Client {
     this.pharma = pharma || '';
     this.activity = activity || '';
     this.avatar = avatar || '';
+    this.id = id || null
   }
 }

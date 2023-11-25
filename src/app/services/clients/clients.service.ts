@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { Client } from '../../models/client';
+import { supabase } from '../../optionsSupaBase';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +18,54 @@ export class ClientsService {
   ) {
   }
 
-  getClients(): Observable<any> {
-    return this._http.get(ENV.supabaseUrl + this.clientsAPIUrl + `?select=*`);
+  async getClients(): Promise<Client[] | string> {
+    const { data, error } = await supabase
+      .from('clients')
+      .select();
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось получить данные по клиентам, обратитесь к разработчику');
+    }
+    return data;
   }
 
-  addClient(model: Client) {
-    const headers = new HttpHeaders().set('Prefer', 'return=minimal');
-    return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers })
+  async addClient(model: Client) {
+
+    const { data, error } = await supabase
+      .from('clients')
+      .insert([
+        model
+      ])
+      .select();
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось добавить клиента, обратитесь к разработчику');
+    }
   }
 
-  deleteClient(guid: string) {
-    return this._http.delete(ENV.supabaseUrl + this.clientsAPIUrl, {params: {guid: `eq.${guid}`}})
+  async editClient(model: Client) {
+    const { data, error } = await supabase
+      .from('clients')
+      .update(model)
+      .match({ id: model.id })
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
+    }
+  }
+
+  async deleteClient(guid: string) {
+    const { data, error } = await supabase
+      .from('clients')
+      .delete()
+      .eq('guid', guid);
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось удалить клиента, обратитесь к разработчику');
+    }
   }
 }

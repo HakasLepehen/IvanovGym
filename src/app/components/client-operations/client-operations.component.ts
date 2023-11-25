@@ -33,7 +33,7 @@ import { ClientsService } from '../../services/clients/clients.service';
     }
   ],
   templateUrl: './client-operations.component.html',
-  styleUrls: ['./client-operations.component.scss'],
+  styleUrls: ['./client-operations.component.scss']
 })
 export class ClientOperationsComponent implements OnInit {
   public canEdit: boolean = false;
@@ -49,30 +49,39 @@ export class ClientOperationsComponent implements OnInit {
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, IClientDialog>,
     private cs: ClientsService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.canEdit = this.context.data.isEdit;
     this.client = this.context.data.client;
     this.clientForm = new FormGroup({
+      id: new FormControl(this.client.id),
       fullName: new FormControl(this.client.fullName, Validators.required),
       age: new FormControl(this.client.age, Validators.required),
       target: new FormControl(this.client.target, Validators.required),
-      limits: new FormControl(this.client.limits,),
-      experience: new FormControl(this.client.experience,),
-      sleep: new FormControl(this.client.sleep,),
-      food: new FormControl(this.client.food,),
-      pharma: new FormControl(this.client.pharma,),
-      activity: new FormControl(this.client.activity,),
+      limits: new FormControl(this.client.limits),
+      experience: new FormControl(this.client.experience),
+      sleep: new FormControl(this.client.sleep),
+      food: new FormControl(this.client.food),
+      pharma: new FormControl(this.client.pharma),
+      activity: new FormControl(this.client.activity)
     });
   }
 
   onSubmit() {
     console.log('onSubmit', this.clientForm.value);
-     return this.cs.addClient(this.clientForm.value)
-       .subscribe({
-         next: _ => this.context.completeWith(true),
-         error: err => alert(err),
-       })
+    if (!this.canEdit) {
+      return this.cs.addClient(this.clientForm.value)
+        .then(_ => this.context.completeWith(true))
+        .catch((error: string) => {
+          alert(error);
+        });
+    }
+    return this.cs.editClient(this.clientForm.value)
+      .then(_ => this.context.completeWith(true))
+      .catch((error: string) => {
+        alert(error);
+      });
   }
 }

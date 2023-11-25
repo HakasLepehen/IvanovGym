@@ -23,7 +23,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       label: 'Новый клиент',
       data: {
         client: new Client(''),
-        isEdit: true
+        isEdit: false
       },
       closeable: true,
       dismissible: false
@@ -55,27 +55,42 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   getClients(): void {
-    this.getClientSubscription = this.clientsService.getClients()
-      .subscribe((val: any) => {
-        this.clients = val;
-      });
+    this.clientsService.getClients()
+      .then((res: Client[] | string) => {
+        console.log(res);
+        return this.clients = <Client[]>res;
+      })
+      .catch(err => alert(err));
   }
 
   editClient(el: any): void {
-    alert('Мы будем редактировать клиента в будущем');
-    console.log(el);
+    // alert('Мы будем редактировать клиента в будущем');
+    let editClientDialog = this.dialogs.open(
+      new PolymorpheusComponent(ClientOperationsComponent, this.injector),
+      {
+        label: `Редактирование клиента: ${el.fullName}`,
+        data: {
+          client: el,
+          isEdit: true
+        },
+        closeable: true,
+        dismissible: false
+      }
+    );
+
+    editClientDialog.pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => console.log(),
+        complete: () => {
+          return this.getClients();
+        }
+      });
   }
 
   removeClient(el: any): void {
-    console.log('Мы будем удалять клиента в будущем', el);
     this.clientsService.deleteClient(el.guid)
-      .subscribe({
-        error: (err) => {
-          // alert(err.message)
-          console.log(err);
-        },
-        complete: () => this.getClients()
-      });
+      .then(() => this.getClients())
+      .catch(err => alert(err));
   }
 
   ngOnDestroy() {
