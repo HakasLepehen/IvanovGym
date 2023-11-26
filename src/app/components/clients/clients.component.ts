@@ -3,8 +3,8 @@ import { ClientsService } from '../../services/clients/clients.service';
 import { Client } from '../../models/client';
 import { LoaderService } from '../../services/loader/loader.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { PolymorpheusContent, PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
 
 @Component({

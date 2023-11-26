@@ -16,5 +16,9 @@ export class MainComponent {
       title: 'Управление клиентами',
       routeLink: 'clients'
     },
+    {
+      title: 'Планировщик тренировок',
+      routeLink: 'scheduler'
+    },
   ]
 }
