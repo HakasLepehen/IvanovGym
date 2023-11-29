@@ -16,9 +16,17 @@ body {
 body {
   background-color: var(--text-color);
   color: var(--main-bg-color);
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   margin: 0;
   padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .container {
@@ -54,7 +62,6 @@ body {
 
 // Styles for desktop START
 @media (min-width: 992px) {
-
   body {
     font-size: 16px;
   }

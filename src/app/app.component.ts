@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LoaderService } from './services/loader/loader.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,13 @@ export class AppComponent implements OnInit {
   loadingState: boolean = false;
 
   constructor(
-    private loader: LoaderService
+    private loader: LoaderService,
+    private location: Location
   ) {
+  }
+
+  back() {
+    this.location.back();
   }
 
   ngOnInit() {

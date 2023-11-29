@@ -6,22 +6,16 @@ import { Client } from '../../models/client';
 import { supabase } from '../../optionsSupaBase';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ClientsService {
   clients: Subject<any[]> = new Subject<any[]>();
   clientsAPIUrl: string = '/rest/v1/clients';
 
-  constructor(
-    private _http: HttpClient
-  ) {
-  }
+  constructor(private _http: HttpClient) {}
 
   async getClients(): Promise<Client[] | string> {
-    const { data, error } = await supabase
-      .from('clients')
-      .select();
+    const { data, error } = await supabase.from('clients').select();
 
     if (error) {
       console.log(error);
@@ -31,13 +25,9 @@ export class ClientsService {
   }
 
   async addClient(model: Client) {
+    delete model.id;
 
-    const { data, error } = await supabase
-      .from('clients')
-      .insert([
-        model
-      ])
-      .select();
+    const { data, error } = await supabase.from('clients').insert([model]).select();
 
     if (error) {
       console.log(error);
@@ -46,10 +36,7 @@ export class ClientsService {
   }
 
   async editClient(model: Client) {
-    const { data, error } = await supabase
-      .from('clients')
-      .update(model)
-      .match({ id: model.id })
+    const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
 
     if (error) {
       console.log(error);
@@ -58,10 +45,7 @@ export class ClientsService {
   }
 
   async deleteClient(guid: string) {
-    const { data, error } = await supabase
-      .from('clients')
-      .delete()
-      .eq('guid', guid);
+    const { data, error } = await supabase.from('clients').delete().eq('guid', guid);
 
     if (error) {
       console.log(error);
