@@ -20,5 +20,9 @@ export class MainComponent {
       title: 'Планировщик тренировок',
       routeLink: 'scheduler'
     },
+    {
+      title: 'Управление пользователями',
+      routeLink: 'users-management'
+    }
   ]
 }

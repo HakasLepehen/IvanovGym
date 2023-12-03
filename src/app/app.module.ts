@@ -19,9 +19,10 @@ import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MainInterceptor } from './interceptors/main.interceptor';
 import { SchedulerComponent } from './components/scheduler/scheduler.component';
+import { UsersManagementComponent } from './components/users-management/users-management.component';
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, SchedulerComponent],
+  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, SchedulerComponent, UsersManagementComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

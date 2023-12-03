@@ -21,5 +21,8 @@ tui-root {
       color: inherit;
       text-decoration: none;
     }
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

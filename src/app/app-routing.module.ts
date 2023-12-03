@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/scheduler/scheduler.module').then((_) => _.SchedulerModule),
   },
   {
+    path: 'users-management',
+    loadChildren: () => import('./modules/users-management/users-management.module').then(_ => _.UsersManagementModule)
+  },
+  {
     path: '',
     component: MainComponent,
     canActivate: [AuthGuard],

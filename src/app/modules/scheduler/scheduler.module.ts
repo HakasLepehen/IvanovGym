@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaigaModule } from '../taiga/taiga.module';
 import { SchedulerRoutingModule } from './scheduler-routing.module';
+import { TuiCalendarModule } from '@taiga-ui/core';
 
 
 
@@ -10,7 +11,8 @@ import { SchedulerRoutingModule } from './scheduler-routing.module';
   imports: [
     CommonModule,
     SchedulerRoutingModule,
-    TaigaModule
+    TaigaModule,
+    TuiCalendarModule
   ]
 })
 export class SchedulerModule { }
