@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="container-buttons">
+    <button tuiIconButton [size]="'l'" appearance='secondary' type='button' icon="tuiIconPlus" (click)='add(template)'>
+    </button>
+  </div>
+  <tui-scrollbar>
+    <tui-accordion [rounded]="false">
+      <tui-accordion-item class="body-part__item" *ngFor='let part of bodyParts' size='m' [showArrow]="false"
+        [disabled]="true">
+        <div class="body-part__item_wrapper">
+          <span>{{part.part_name}}</span>
+          <button appearance="accent" size="m" tuiIconButton type="button" (click)="delete()" icon="tuiIconTrash2">
+          </button>
+        </div>
+      </tui-accordion-item>
+    </tui-accordion>
+  </tui-scrollbar>
+
+  <app-dialog>
+    <ng-template #template let-observer>
+      <app-dialog>
+        <!-- Контент диалогового окна клиента -->
+        <form [formGroup]="bodyPartForm">
+          <!-- ФИО клиента -->
+          <div class="tui-form__row">
+            <tui-input formControlName="part_name" tuiTextfieldSize="m">
+              Название части тела
+              <input placeholder="Введите название части тела" tuiTextfield />
+            </tui-input>
+          </div>
+          <div class="tui-form__row buttons">
+            <button size="m" tuiButton type="button" (click)="save(observer)">
+              Сохранить
+            </button>
+            <button appearance="accent" size="m" tuiButton type="button" (click)="cancel(observer)">
+              Отмена
+            </button>
+          </div>
+        </form>
+      </app-dialog>
+    </ng-template>
+  </app-dialog>
+</div>

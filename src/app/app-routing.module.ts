@@ -23,8 +23,13 @@ const routes: Routes = [
     loadChildren: () => import('./modules/scheduler/scheduler.module').then((_) => _.SchedulerModule),
   },
   {
+    path: 'exercises',
+    loadChildren: () => import('./modules/exercises/exercises.module').then((_) => _.ExercisesModule),
+  },
+  {
     path: 'users-management',
-    loadChildren: () => import('./modules/users-management/users-management.module').then(_ => _.UsersManagementModule)
+    loadChildren: () =>
+      import('./modules/users-management/users-management.module').then((_) => _.UsersManagementModule),
   },
   {
     path: '',
@@ -35,7 +40,7 @@ const routes: Routes = [
     path: '404',
     component: NotFoundComponent,
   },
-  { path: '**', redirectTo: '404' },
+  // { path: '**', redirectTo: '404' },
 ];
 
 @NgModule({

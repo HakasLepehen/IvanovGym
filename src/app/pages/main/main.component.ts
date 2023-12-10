@@ -23,6 +23,10 @@ export class MainComponent {
     {
       title: 'Управление пользователями',
       routeLink: 'users-management'
+    },
+    {
+      title: 'Упражнения',
+      routeLink: 'exercises'
     }
   ]
 }

@@ -10,7 +10,8 @@ export class SchedulerComponent {
   value: TuiDay | null = null;
 
   onDayClick(day: TuiDay | any): void {
-      this.value = day;
+    this.value = day;
+    console.log(this.value);
   }
 }
 

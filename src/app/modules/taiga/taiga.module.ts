@@ -7,7 +7,7 @@ import {
   TuiAlertModule,
   TuiTextfieldControllerModule,
   TuiErrorModule,
-  TuiButtonModule, TuiLoaderModule, TuiDialogService, TuiScrollbarModule
+  TuiButtonModule, TuiLoaderModule, TuiScrollbarModule, TuiCalendarModule, TuiSvgComponent, TuiSvgModule
 } from '@taiga-ui/core';
 import { TuiAccordionModule, TuiFieldErrorPipeModule, TuiInputModule } from '@taiga-ui/kit';
 import { of } from 'rxjs';
@@ -27,7 +27,9 @@ import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
     TuiAccordionModule,
     TuiLoaderModule,
     TuiDialogModule,
-    TuiScrollbarModule
+    TuiScrollbarModule,
+    TuiCalendarModule,
+    TuiSvgModule
   ],
   providers: [
     {
@@ -48,7 +50,9 @@ import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
     TuiAccordionModule,
     TuiLoaderModule,
     TuiDialogModule,
-    TuiScrollbarModule
+    TuiScrollbarModule,
+    TuiCalendarModule,
+    TuiSvgModule
   ]
 })
 export class TaigaModule {

@@ -58,6 +58,13 @@ h4 {
   margin: 0;
 }
 
+.container-buttons {
+  display: flex;
+  gap: 1em;
+  justify-content: flex-end;
+  padding-top: .5em;
+}
+
 // END styles for main layout
 
 // Styles for desktop START
