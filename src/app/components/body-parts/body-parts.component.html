@@ -9,8 +9,13 @@
         [disabled]="true">
         <div class="body-part__item_wrapper">
           <a routerLink="/">{{part.part_name}}</a>
-          <button appearance="accent" size="m" tuiIconButton type="button" (click)="delete(part.id)" icon="tuiIconTrash2">
-          </button>
+          <div>
+            <button appearance="accent" size="m" tuiIconButton type="button" (click)="editHandler(template, part)"
+            icon="tuiIconEdit2Large"></button>
+            <button appearance="accent" size="m" tuiIconButton type="button" (click)="delete(part.id)"
+              icon="tuiIconTrash2">
+            </button>
+          </div>
         </div>
       </tui-accordion-item>
     </tui-accordion>
@@ -20,7 +25,7 @@
     <ng-template #template let-observer>
       <app-dialog>
         <!-- Контент диалогового окна клиента -->
-        <form [formGroup]="bodyPartForm">
+        <form [formGroup]="bodyPartForm" (ngSubmit)="onSubmit(observer)">
           <!-- ФИО клиента -->
           <div class="tui-form__row">
             <tui-input formControlName="part_name" tuiTextfieldSize="m">
@@ -29,7 +34,7 @@
             </tui-input>
           </div>
           <div class="tui-form__row buttons">
-            <button size="m" tuiButton type="button" (click)="save(observer)">
+            <button size="m" tuiButton type="button" (click)="onSubmit(observer)">
               Сохранить
             </button>
             <button appearance="accent" size="m" tuiButton type="button" (click)="cancel(observer)">

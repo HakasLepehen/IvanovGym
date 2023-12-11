@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiDialogContext } from '@taiga-ui/core';
 import { TuiDialogService } from '@taiga-ui/core/';
 import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus';
+import { Observer } from 'rxjs';
 import { BodyPartsService } from 'src/app/services/body_parts/body-parts.service';
 
 type BodyPart = {
@@ -19,10 +20,12 @@ export class BodyPartsComponent implements OnInit {
   bodyParts: BodyPart[] = [];
   bodyPartForm!: FormGroup;
   bodyPart: BodyPart = { id: null, part_name: null };
+  isEdit: boolean = false;
 
   constructor(private readonly dialogs: TuiDialogService, private bps: BodyPartsService) {}
 
   add(content: PolymorpheusContent<TuiDialogContext>): void {
+    this.isEdit = false;
     this.dialogs
       .open(content, {
         closeable: true,
@@ -36,12 +39,12 @@ export class BodyPartsComponent implements OnInit {
     this.loadData();
 
     this.bodyPartForm = new FormGroup({
-      // id: new FormControl(this.bodyPart.id),
+      id: new FormControl(this.bodyPart.id),
       part_name: new FormControl(this.bodyPart.part_name, Validators.required),
     });
   }
 
-  save(observer: any) {
+  addClient(observer: any) {
     this.bps
       .createBodyPart(this.bodyPartForm.value)
       .then((_) => observer.complete())
@@ -49,6 +52,16 @@ export class BodyPartsComponent implements OnInit {
       .catch((err: string) => {
         alert(err);
         console.log(err);
+      });
+  }
+
+  editBodyPart(observer: any) {
+    this.bps
+      .editBodyPart(this.bodyPartForm.value)
+      .then((_) => observer.complete())
+      .then((_) => this.loadData())
+      .catch((error: string) => {
+        alert(error);
       });
   }
 
@@ -71,5 +84,24 @@ export class BodyPartsComponent implements OnInit {
       .getBodyParts()
       .then((res) => (this.bodyParts = res))
       .catch((err: string) => alert(err));
+  }
+
+  onSubmit(observer: any): void {
+    if (!this.isEdit) {
+      return this.addClient(observer);
+    }
+    return this.editBodyPart(observer);
+  }
+
+  editHandler(content: PolymorpheusContent<TuiDialogContext>, data: BodyPart): void {
+    this.isEdit = true;
+    this.bodyPartForm.setValue(data);
+    this.dialogs
+      .open(content, {
+        closeable: true,
+        dismissible: false,
+        label: 'Редактирование',
+      })
+      .subscribe();
   }
 }
