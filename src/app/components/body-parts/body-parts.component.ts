@@ -52,8 +52,14 @@ export class BodyPartsComponent implements OnInit {
       });
   }
 
-  delete() {
-
+  delete(id: number | null | undefined) {
+    this.bps
+      .removeBodyPart(<number>id)
+      .then((_) => this.loadData())
+      .catch((err: string) => {
+        alert(err);
+        console.log(err);
+      });
   }
 
   cancel(observer: any): void {

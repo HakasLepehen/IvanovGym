@@ -8,8 +8,8 @@
       <tui-accordion-item class="body-part__item" *ngFor='let part of bodyParts' size='m' [showArrow]="false"
         [disabled]="true">
         <div class="body-part__item_wrapper">
-          <span>{{part.part_name}}</span>
-          <button appearance="accent" size="m" tuiIconButton type="button" (click)="delete()" icon="tuiIconTrash2">
+          <a routerLink="/">{{part.part_name}}</a>
+          <button appearance="accent" size="m" tuiIconButton type="button" (click)="delete(part.id)" icon="tuiIconTrash2">
           </button>
         </div>
       </tui-accordion-item>
