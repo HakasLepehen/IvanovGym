@@ -1,27 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Subject, tap } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { Client } from '../../models/client';
 import { supabase } from '../../optionsSupaBase';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientsService {
-  clients: Subject<any[]> = new Subject<any[]>();
+  public clients: Subject<Client[]> = new Subject<Client[]>();
   clientsAPIUrl: string = '/rest/v1/clients';
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient, public loader: LoaderService) {}
 
-  async getClients(): Promise<Client[] | string> {
-    const { data, error } = await supabase.from('clients').select();
-
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось получить данные по клиентам, обратитесь к разработчику');
-    }
-    return data;
+  getClients(): void {
+    this.loader.show();
+    this._http
+      .get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
+      .pipe(
+        tap((val: Client[]) => this.clients.next(val)),
+        tap(() => this.loader.hide())
+      )
+      .subscribe();
   }
 
   async addClient(model: Client) {
@@ -51,5 +53,17 @@ export class ClientsService {
       console.log(error);
       throw new Error('Не удалось удалить клиента, обратитесь к разработчику');
     }
+  }
+
+  showLoader(): void {
+    this.loader.show();
+  }
+
+  hideLoader(): void {
+    this.loader.hide();
+  }
+
+  getLoader(): boolean {
+    return this.loader.getLoading();
   }
 }

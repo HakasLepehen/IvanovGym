@@ -32,7 +32,7 @@ export class MainInterceptor implements HttpInterceptor {
         .set('Authorization', `Bearer ${this.token}`)
     });
 
-    this.loader.show();
+    // this.loader.show();
 
     return next.handle(newReq)
       .pipe(
@@ -53,9 +53,6 @@ export class MainInterceptor implements HttpInterceptor {
             }
           }
         ),
-        finalize(() => {
-          this.loader.hide();
-        })
       )
   }
 }

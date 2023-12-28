@@ -4,18 +4,18 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LoaderService {
-  private loading: boolean = false;
+  private _loading: boolean = false;
   constructor() {}
 
-  show() {
-    this.loading = true;
+  show(): void {
+    this._loading = true;
   }
 
-  hide() {
-    this.loading = false;
+  hide(): void {
+    this._loading = false;
   }
 
   getLoading(): boolean {
-    return this.loading;
+    return this._loading;
   }
 }

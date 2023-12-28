@@ -1,4 +1,4 @@
-<div class='container' *ngIf='!loader.getLoading()'>
+<div class='container' *ngIf="!loader; else load">
   <div class='main_block'>
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
@@ -97,6 +97,6 @@
     </div>
   </div>
 </div>
-<div *ngIf='loader.getLoading()'>
+<ng-template #load>
   <app-loader></app-loader>
-</div>
+</ng-template>
