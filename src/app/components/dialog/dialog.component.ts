@@ -6,15 +6,13 @@ import { TuiDialogContext } from '@taiga-ui/core';
   selector: 'app-dialog',
   standalone: true,
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+  styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<boolean>,
-  ) {
-  }
+    readonly context: TuiDialogContext<boolean>
+  ) {}
 
   ok() {
     this.context.completeWith(true);

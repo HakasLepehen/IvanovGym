@@ -1,7 +1,7 @@
 import { SchedulerComponent } from './../../components/scheduler/scheduler.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BodyPartsComponent } from 'src/app/components/body-parts/body-parts.component';
+import { MuscleGroupComponent } from 'src/app/components/muscle-group/muscle-group.component';
 import { ExercisesComponent } from 'src/app/components/exercises/exercises.component';
 
 const routes: Routes = [
@@ -10,9 +10,9 @@ const routes: Routes = [
     component: ExercisesComponent,
   },
   {
-    path: 'body_parts',
-    component: BodyPartsComponent
-  }
+    path: 'muscle_group',
+    component: MuscleGroupComponent,
+  },
 ];
 
 @NgModule({

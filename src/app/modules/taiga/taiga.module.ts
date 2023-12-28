@@ -52,7 +52,7 @@ import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
     TuiDialogModule,
     TuiScrollbarModule,
     TuiCalendarModule,
-    TuiSvgModule
+    TuiSvgModule,
   ]
 })
 export class TaigaModule {

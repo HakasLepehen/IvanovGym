@@ -1,9 +1,28 @@
 <div class="container">
+  <!-- <youtube-player videoId="y6KFpetPpxE"></youtube-player> -->
   <div class="container-buttons">
-    <button tuiIconButton [size]="'l'" appearance='secondary' type='button' icon="tuiIconPlusLarge" (click)='show()'>
+    <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
+      [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
     </button>
-    <button tuiButton routerLink="./body_parts" [size]="'l'" appearance='secondary' type='button'>
-      Части тела
+    <button tuiButton routerLink="./muscle_group" [size]="'l'" appearance='secondary' type='button'>
+      Группы мышц
     </button>
   </div>
+
+
+  <tui-expand [expanded]="expandedBlock">
+    <ng-template tuiExpandContent>
+      <form *ngIf="expandedBlock" [formGroup]="exForm" (ngSubmit)="onSubmit()">
+        <!-- Наименование упражнения -->
+        <div class="tui-form__row">
+          <tui-input formControlName="fullName" tuiTextfieldSize="m">
+            Наименование упражнения
+            <input placeholder="Введите ФИО клиента полностью" tuiTextfield />
+            <span class="tui-required"></span>
+          </tui-input>
+          <tui-error formControlName="fullName" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
+      </form>
+    </ng-template>
+  </tui-expand>
 </div>

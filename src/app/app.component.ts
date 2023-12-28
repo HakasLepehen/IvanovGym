@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 export class AppComponent implements OnInit {
   title = 'IvanovGym';
   loadingState: boolean = false;
+  apiLoaded: boolean = false;
 
   constructor(
     private loader: LoaderService,

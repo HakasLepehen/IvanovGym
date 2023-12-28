@@ -18,10 +18,10 @@ import { rootReducer } from './store/reducers/root.reducer';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MainInterceptor } from './interceptors/main.interceptor';
-import { BodyPartsComponent } from './components/body-parts/body-parts.component';
+
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, BodyPartsComponent],
+  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -39,6 +39,7 @@ import { BodyPartsComponent } from './components/body-parts/body-parts.component
     TaigaModule,
     UserModule,
     AuthModule,
+
   ],
   providers: [
     {
