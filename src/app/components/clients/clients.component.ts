@@ -51,12 +51,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   show(): void {
-    this.createClientDialog.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => console.log(),
-      complete: () => {
-        return this.getClients();
-      },
-    });
+    this.clientsService.openModal();
+    // this.createClientDialog.pipe(takeUntil(this.destroy$)).subscribe({
+    //   next: () => console.log(),
+    //   complete: () => {
+    //     return this.getClients();
+    //   },
+    // });
   }
 
   getClients(): void {

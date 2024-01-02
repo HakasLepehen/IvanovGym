@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject, tap } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { Client } from '../../models/client';
 import { supabase } from '../../optionsSupaBase';
 import { LoaderService } from '../loader/loader.service';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { ClientOperationsComponent } from 'src/app/components/client-operations/client-operations.component';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +16,12 @@ export class ClientsService {
   public clients: Subject<Client[]> = new Subject<Client[]>();
   clientsAPIUrl: string = '/rest/v1/clients';
 
-  constructor(private _http: HttpClient, public loader: LoaderService) {}
+  constructor(
+    private _http: HttpClient,
+    public loader: LoaderService,
+    private readonly dialogs: TuiDialogService,
+    private readonly injector: Injector
+  ) {}
 
   getClients(): void {
     this.loader.show();
@@ -24,6 +32,20 @@ export class ClientsService {
         tap(() => this.loader.hide())
       )
       .subscribe();
+  }
+
+  openModal(): void {
+    this.dialogs
+      .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
+        label: 'Новый клиент',
+        data: {
+          client: new Client(''),
+          isEdit: false,
+        },
+        closeable: true,
+        dismissible: false,
+      })
+      .subscribe( () => this.getClients());
   }
 
   async addClient(model: Client) {
