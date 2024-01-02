@@ -1,17 +1,28 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  TuiRootModule,
-  TuiDialogModule,
-  TuiAlertModule,
-  TuiTextfieldControllerModule,
-  TuiErrorModule,
-  TuiButtonModule, TuiLoaderModule, TuiScrollbarModule, TuiCalendarModule, TuiSvgComponent, TuiSvgModule
-} from '@taiga-ui/core';
-import { TuiAccordionModule, TuiFieldErrorPipeModule, TuiInputModule } from '@taiga-ui/kit';
-import { of } from 'rxjs';
 import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
+import {
+  TuiAlertModule,
+  TuiButtonModule,
+  TuiCalendarModule,
+  TuiDataListModule,
+  TuiDialogModule,
+  TuiErrorModule,
+  TuiLoaderModule,
+  TuiRootModule,
+  TuiScrollbarModule,
+  TuiSvgModule,
+  TuiTextfieldControllerModule,
+} from '@taiga-ui/core';
+import {
+  TuiAccordionModule,
+  TuiDataListWrapperModule,
+  TuiFieldErrorPipeModule,
+  TuiInputModule,
+  TuiSelectModule,
+} from '@taiga-ui/kit';
+import { of } from 'rxjs';
 
 @NgModule({
   declarations: [],
@@ -29,7 +40,10 @@ import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
     TuiDialogModule,
     TuiScrollbarModule,
     TuiCalendarModule,
-    TuiSvgModule
+    TuiSvgModule,
+    TuiSelectModule,
+    TuiDataListModule,
+    TuiDataListWrapperModule,
   ],
   providers: [
     {
@@ -53,7 +67,9 @@ import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
     TuiScrollbarModule,
     TuiCalendarModule,
     TuiSvgModule,
-  ]
+    TuiSelectModule,
+    TuiDataListModule,
+    TuiDataListWrapperModule,
+  ],
 })
-export class TaigaModule {
-}
+export class TaigaModule {}

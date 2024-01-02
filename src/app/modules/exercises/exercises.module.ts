@@ -7,7 +7,6 @@ import { TuiExpandModule } from '@taiga-ui/core';
 import { MuscleGroupComponent } from 'src/app/components/muscle-group/muscle-group.component';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 @NgModule({
   declarations: [ExercisesComponent, MuscleGroupComponent],
   imports: [
