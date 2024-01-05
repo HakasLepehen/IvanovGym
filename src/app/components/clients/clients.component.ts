@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { ClientsService } from '../../services/clients/clients.service';
 import { Client } from '../../models/client';
 import { Observable, Subject, Subscription, takeUntil, tap } from 'rxjs';
@@ -12,10 +12,8 @@ import { ClientOperationsComponent } from '../client-operations/client-operation
   styleUrls: ['./clients.component.scss'],
   // changeDetection: ChangeDetectionStrategy.Default
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent implements OnInit, OnDestroy {
   clients$!: Subject<Client[]>;
-  // clients$!: Observable<Client[]>;
-
 
   constructor(
     private clientsService: ClientsService,
@@ -47,5 +45,9 @@ export class ClientsComponent implements OnInit {
       .deleteClient(el.guid)
       .then(() => this.getClients())
       .catch((err) => alert(err));
+  }
+
+  ngOnDestroy(): void {
+    this.clientsService.destroy$.next(true);
   }
 }

@@ -16,6 +16,7 @@ export class ClientsService {
   private _clients$: Subject<Client[]> = new Subject();
   clientsAPIUrl: string = '/rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private _http: HttpClient,
@@ -28,10 +29,11 @@ export class ClientsService {
 
   getClients(): void {
     this.showLoader();
-    this._http.get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
+    this._http
+      .get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
       .pipe(
         tap((res: Client[]) => this._clients$.next(res)),
-        tap(),
+        takeUntil(this.destroy$)
       )
       .subscribe(() => this.hideLoader());
   }
@@ -51,6 +53,7 @@ export class ClientsService {
         closeable: true,
         dismissible: false,
       })
+      .pipe(takeUntil(this.destroy$));
   }
 
   async addClient(model: Client) {
