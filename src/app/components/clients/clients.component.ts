@@ -18,7 +18,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
   constructor(
     private clientsService: ClientsService,
     @Inject(TuiDialogService) private readonly dialogs: TuiDialogService
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit() {
     this.clients$ = this.clientsService.loadClients();
