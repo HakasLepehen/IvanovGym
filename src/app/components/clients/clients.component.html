@@ -1,4 +1,4 @@
-<div class='container'>
+<div class='container' *ngIf="clients$ | async as clients; else load">
   <div class='main_block'>
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
@@ -6,7 +6,7 @@
     <div class='main_block__content'>
       <tui-accordion class=''>
         <tui-accordion-item
-          *ngFor='let client of clients$ | async'
+          *ngFor='let client of clients'
           size='m'
         >
           {{client.fullName}}

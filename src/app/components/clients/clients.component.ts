@@ -24,7 +24,6 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit() {
     this.clients$ = this.clientsService.loadClients();
-    // this.clients$ = this.clients.asObservable();
   }
 
   get loader() {
@@ -40,7 +39,7 @@ export class ClientsComponent implements OnInit {
   }
 
   editClient(el: Client): void {
-    this.clientsService.openModal(el);
+    this.clientsService.openModal(el).subscribe(() => this.getClients());
   }
 
   removeClient(el: any): void {
