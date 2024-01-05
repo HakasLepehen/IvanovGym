@@ -1,4 +1,4 @@
-<div class='container' *ngIf="!loader; else load">
+<div class='container'>
   <div class='main_block'>
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
@@ -6,7 +6,7 @@
     <div class='main_block__content'>
       <tui-accordion class=''>
         <tui-accordion-item
-          *ngFor='let client of clients'
+          *ngFor='let client of clients$ | async'
           size='m'
         >
           {{client.fullName}}
@@ -85,13 +85,7 @@
       </tui-accordion>
     </div>
     <div class='main_block__buttons'>
-      <button
-        tuiButton
-        size='m'
-        appearance='whiteblock-active'
-        type='button'
-        (click)='show()'
-      >
+      <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='addClient()'>
         Добавить
       </button>
     </div>

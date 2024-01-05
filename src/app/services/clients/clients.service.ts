@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, tap } from 'rxjs';
+import { Observable, Subject, takeUntil, tap, finalize } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { Client } from '../../models/client';
 import { supabase } from '../../optionsSupaBase';
@@ -13,39 +13,44 @@ import { ClientOperationsComponent } from 'src/app/components/client-operations/
   providedIn: 'root',
 })
 export class ClientsService {
-  public clients: Subject<Client[]> = new Subject<Client[]>();
+  private _clients$: Subject<Client[]> = new Subject();
   clientsAPIUrl: string = '/rest/v1/clients';
+  sub$: Subject<boolean> = new Subject();
 
   constructor(
     private _http: HttpClient,
     public loader: LoaderService,
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector
-  ) {}
-
-  getClients(): void {
-    this.loader.show();
-    this._http
-      .get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
-      .pipe(
-        tap((val: Client[]) => this.clients.next(val)),
-        tap(() => this.loader.hide())
-      )
-      .subscribe();
+  ) {
+    this.getClients();
   }
 
-  openModal(): void {
-    this.dialogs
+  getClients(): void {
+    this.showLoader();
+    this._http.get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
+      .pipe(
+        tap((res: Client[]) => this._clients$.next(res)),
+        tap(),
+      )
+      .subscribe(() => this.hideLoader());
+  }
+
+  loadClients(): Subject<Client[]> {
+    return this._clients$;
+  }
+
+  openModal(el?: Client): Observable<any> {
+    return this.dialogs
       .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-        label: 'Новый клиент',
+        label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
         data: {
-          client: new Client(''),
-          isEdit: false,
+          client: el ? el : new Client(''),
+          isEdit: !!el,
         },
         closeable: true,
         dismissible: false,
       })
-      .subscribe( () => this.getClients());
   }
 
   async addClient(model: Client) {

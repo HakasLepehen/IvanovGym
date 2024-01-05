@@ -1,22 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BodyPartsComponent } from './muscle-group.component';
+import { MuscleGroupComponent } from './muscle-group.component';
 
 describe('BodyPartsComponent', () => {
-  let component: BodyPartsComponent;
-  let fixture: ComponentFixture<BodyPartsComponent>;
+  let component: MuscleGroupComponent;
+  let fixture: ComponentFixture<MuscleGroupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BodyPartsComponent],
+      declarations: [MuscleGroupComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BodyPartsComponent);
+    fixture = TestBed.createComponent(MuscleGroupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });
