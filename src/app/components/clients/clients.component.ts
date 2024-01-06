@@ -1,22 +1,22 @@
-import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
-import { ClientsService } from '../../services/clients/clients.service';
-import { IClient } from '../../interfaces/client';
-import { Observable, Subject, Subscription, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { ClientOperationsComponent } from '../client-operations/client-operations.component';
+import { Subject } from 'rxjs';
+import { IClient } from '../../interfaces/client';
+import { ClientsService } from '../../services/clients/clients.service';
+import { ClientsConfigService } from './clients-config.service';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientsComponent implements OnInit, OnDestroy {
   clients$!: Subject<IClient[]>;
 
   constructor(
     private clientsService: ClientsService,
+    private clientsConfigService: ClientsConfigService,
     @Inject(TuiDialogService) private readonly dialogs: TuiDialogService
   ) {}
 
@@ -25,11 +25,12 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   get loader() {
-    return this.clientsService.getLoader();
+    return this.clientsConfigService.getLoader();
   }
 
   addClient(): void {
-    this.clientsService.openModal().subscribe(() => this.getClients());
+    // this.clientsService.openModal().subscribe(() => this.getClients());
+    this.clientsConfigService.openModal();
   }
 
   getClients(): void {
@@ -37,7 +38,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   editClient(el: IClient): void {
-    this.clientsService.openModal(el).subscribe(() => this.getClients());
+    // this.clientsService.openModal(el).subscribe(() => this.getClients());
+    this.clientsConfigService.openModal(el);
   }
 
   removeClient(el: any): void {
