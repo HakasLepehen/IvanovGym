@@ -1,4 +1,4 @@
-import IAuthState from './auth-state.interface';
+import IAuthState from './auth-state';
 
 export default interface IGlobalState {
   auth: IAuthState;

@@ -1,9 +1,9 @@
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
-import { Client } from '../../models/client';
+import { IClient } from '../../interfaces/client';
 import { DialogComponent } from '../dialog/dialog.component';
 import { TuiButtonModule, TuiDialogContext, TuiDialogService, TuiErrorModule } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
-import IClientDialog from '../../interfaces/client-dialog.interface';
+import IClientDialog from '../../interfaces/client-dialog';
 import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInputNumberModule } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
@@ -39,7 +39,7 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 })
 export class ClientOperationsComponent implements OnInit {
   public canEdit: boolean = false;
-  public client!: Client;
+  public client!: IClient;
 
   clientForm!: FormGroup;
 

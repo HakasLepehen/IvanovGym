@@ -1,10 +1,10 @@
-import { Exercise } from './../../models/exercise';
+import { IExercise } from '../../interfaces/exercise';
 import { ExercisesService } from './../../services/exercises/exercises.service';
 import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
 import { delay, of, tap } from 'rxjs';
-import { ExecutionVariant } from 'src/app/models/execution_variant';
+import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
 import { BodyPart } from 'src/app/modules/body_part/body_part';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
 
@@ -42,15 +42,20 @@ export class ExercisesComponent implements OnInit, OnDestroy {
 
   show(): void {
     this.expandedBlock = !this.expandedBlock;
-    const model = new Exercise('', []);
+    const model: IExercise = {
+      exercise_name: '',
+      exec_var: []
+    };
     if (this.expandedBlock) {
       this.exForm = new FormGroup({
         exercise_name: new FormControl(model.exercise_name, [Validators.required]),
         muscle_groups_id: new FormControl(model.muscle_groups_id),
-        exec_var: new FormControl()
+        exec_var: new FormControl(),
       });
     }
-    const exec = new ExecutionVariant('Упражнение');
+    const exec: IExecutionVariant = {
+      name: 'Новое упражнение',
+    };
   }
 
   // readonly stringify = (val: BodyPart): string => `${val.part_name}`

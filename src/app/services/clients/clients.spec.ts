@@ -15,7 +15,7 @@ describe('ClientService', () => {
   it('should be a work', () => {
     service = TestBed.inject(ClientsService);
     expect(service.getClients()).toBeInstanceOf(Observable);
-  })
+  });
 });
 
 // describe('client\'s service should: ', () => {
