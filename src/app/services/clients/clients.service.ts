@@ -2,18 +2,19 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, takeUntil, tap, finalize } from 'rxjs';
 import { ENV } from '../../../environment/environment';
-import { Client } from '../../models/client';
+import { IClient } from '../../interfaces/client';
 import { supabase } from '../../optionsSupaBase';
 import { LoaderService } from '../loader/loader.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { ClientOperationsComponent } from 'src/app/components/client-operations/client-operations.component';
+import IClientDialog from 'src/app/interfaces/client-dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientsService {
-  private _clients$: Subject<Client[]> = new Subject();
+  private _clients$: Subject<IClient[]> = new Subject();
   clientsAPIUrl: string = '/rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -30,24 +31,28 @@ export class ClientsService {
   getClients(): void {
     this.showLoader();
     this._http
-      .get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
+      .get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
       .pipe(
-        tap((res: Client[]) => this._clients$.next(res)),
+        tap((res: IClient[]) => this._clients$.next(res)),
         takeUntil(this.destroy$)
       )
       .subscribe(() => this.hideLoader());
   }
 
-  loadClients(): Subject<Client[]> {
+  loadClients(): Subject<IClient[]> {
     return this._clients$;
   }
 
-  openModal(el?: Client): Observable<any> {
+  openModal(el?: IClient): Observable<any> {
     return this.dialogs
       .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
         label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
         data: {
-          client: el ? el : new Client(''),
+          client: el ? el : {
+            fullName: '',
+            created_at: new Date(),
+            age: 0,
+          },
           isEdit: !!el,
         },
         closeable: true,
@@ -56,7 +61,7 @@ export class ClientsService {
       .pipe(takeUntil(this.destroy$));
   }
 
-  async addClient(model: Client) {
+  async addClient(model: IClient) {
     delete model.id;
 
     const { data, error } = await supabase.from('clients').insert([model]).select();
@@ -67,7 +72,7 @@ export class ClientsService {
     }
   }
 
-  async editClient(model: Client) {
+  async editClient(model: IClient) {
     const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
 
     if (error) {
