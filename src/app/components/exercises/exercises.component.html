@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="container-buttons">
+    <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
+      [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
+    </button>
+    <button tuiButton routerLink="./muscle_group" [size]="'l'" appearance='secondary' type='button'>
+      Группы мышц
+    </button>
+  </div>
+
+
+  <tui-expand [expanded]="expandedBlock">
+    <ng-template tuiExpandContent>
+      <form *ngIf="expandedBlock" [formGroup]="exForm" (ngSubmit)="onSubmit()">
+        <!-- Наименование упражнения -->
+        <div class="tui-form__row">
+          <tui-input formControlName="exercise_name" tuiTextfieldSize="m">
+            Наименование упражнения
+            <input tuiTextfield />
+            <span class="tui-required"></span>
+          </tui-input>
+          <tui-error formControlName="exercise_name" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
+
+        <div class="tui-form__row">
+          <tui-select formControlName="muscle_groups_id" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
+            [valueContent]="stringify(body_parts)">
+            Выберите группу мышц
+            <ng-template tuiDataList>
+              <tui-data-list *ngIf="body_parts; else loading">
+                <button *ngFor="let item of body_parts" tuiOption [value]="item.id">
+                  {{ item.part_name }}
+                </button>
+              </tui-data-list>
+            </ng-template>
+            <ng-template #loading>
+              <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
+            </ng-template>
+          </tui-select>
+        </div>
+      </form>
+      <button tuiButton (click)="click($event)">клик</button>
+    </ng-template>
+  </tui-expand>
+</div>

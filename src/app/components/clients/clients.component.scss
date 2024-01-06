@@ -6,8 +6,21 @@
   padding-bottom: 2em;
 }
 
-.container-buttons {
-  display: flex;
-  gap: 1em;
-  justify-content: flex-end;
+.content__wrapper {
+  & :nth-child(n) {
+    padding-top: .25em;
+
+    & hr {
+      padding-top: 1px;
+    }
+  }
+}
+
+.content__label {
+  color: #7f7f7f;
+  font-size: .8em;
+}
+
+.content__text {
+  margin: 0;
 }

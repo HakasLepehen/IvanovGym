@@ -17,8 +17,16 @@ export class MainComponent {
       routeLink: 'clients'
     },
     {
-      title: 'Назначение тренировок(пока не работает)',
-      routeLink: 'trainings'
+      title: 'Планировщик тренировок',
+      routeLink: 'scheduler'
+    },
+    {
+      title: 'Управление пользователями',
+      routeLink: 'users-management'
+    },
+    {
+      title: 'Упражнения',
+      routeLink: 'exercises'
     }
   ]
 }

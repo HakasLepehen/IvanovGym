@@ -8,11 +8,13 @@ import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInputNumberModule } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
 import { ClientsService } from '../../services/clients/clients.service';
+import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 
 @Component({
   selector: 'app-client-operations',
   standalone: true,
   imports: [
+    TaigaModule,
     DialogComponent,
     TuiButtonModule,
     FormsModule,
@@ -21,16 +23,16 @@ import { ClientsService } from '../../services/clients/clients.service';
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     AsyncPipe,
-    TuiInputNumberModule
+    TuiInputNumberModule,
   ],
   providers: [
     TuiDialogService,
     {
       provide: TUI_VALIDATION_ERRORS,
       useValue: {
-        required: 'Это поле является обязательным и не должно быть пустым'
-      }
-    }
+        required: 'Это поле является обязательным и не должно быть пустым',
+      },
+    },
   ],
   templateUrl: './client-operations.component.html',
   styleUrls: ['./client-operations.component.scss'],
@@ -55,24 +57,34 @@ export class ClientOperationsComponent implements OnInit {
     this.canEdit = this.context.data.isEdit;
     this.client = this.context.data.client;
     this.clientForm = new FormGroup({
+      id: new FormControl(this.client.id),
       fullName: new FormControl(this.client.fullName, Validators.required),
       age: new FormControl(this.client.age, Validators.required),
       target: new FormControl(this.client.target, Validators.required),
-      limits: new FormControl(this.client.limits,),
-      experience: new FormControl(this.client.experience,),
-      sleep: new FormControl(this.client.sleep,),
-      food: new FormControl(this.client.food,),
-      pharma: new FormControl(this.client.pharma,),
-      activity: new FormControl(this.client.activity,),
+      limits: new FormControl(this.client.limits),
+      experience: new FormControl(this.client.experience),
+      sleep: new FormControl(this.client.sleep),
+      food: new FormControl(this.client.food),
+      pharma: new FormControl(this.client.pharma),
+      activity: new FormControl(this.client.activity),
     });
   }
 
   onSubmit() {
     console.log('onSubmit', this.clientForm.value);
-     return this.cs.addClient(this.clientForm.value)
-       .subscribe({
-         next: _ => this.context.completeWith(true),
-         error: err => alert(err),
-       })
+    if (!this.canEdit) {
+      return this.cs
+        .addClient(this.clientForm.value)
+        .then((_) => this.context.completeWith(true))
+        .catch((error: string) => {
+          alert(error);
+        });
+    }
+    return this.cs
+      .editClient(this.clientForm.value)
+      .then((_) => this.context.completeWith(true))
+      .catch((error: string) => {
+        alert(error);
+      });
   }
 }

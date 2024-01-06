@@ -8,31 +8,43 @@ import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   {
     path: 'login',
-    component: AuthComponent
+    component: AuthComponent,
   },
   {
     path: 'signup',
-    component: AuthComponent
+    component: AuthComponent,
   },
   {
     path: 'clients',
-    loadChildren: () => import('./modules/clients/clients.module').then(m => m.ClientsModule)
+    loadChildren: () => import('./modules/clients/clients.module').then((_) => _.ClientsModule),
+  },
+  {
+    path: 'scheduler',
+    loadChildren: () => import('./modules/scheduler/scheduler.module').then((_) => _.SchedulerModule),
+  },
+  {
+    path: 'exercises',
+    loadChildren: () => import('./modules/exercises/exercises.module').then((_) => _.ExercisesModule),
+  },
+  {
+    path: 'users-management',
+    loadChildren: () =>
+      import('./modules/users-management/users-management.module').then((_) => _.UsersManagementModule),
   },
   {
     path: '',
     component: MainComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: '404',
-    component: NotFoundComponent
+    component: NotFoundComponent,
   },
-  { path: '**', redirectTo: '404' }
+  // { path: '**', redirectTo: '404' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

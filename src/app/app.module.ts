@@ -19,6 +19,7 @@ import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MainInterceptor } from './interceptors/main.interceptor';
 
+
 @NgModule({
   declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent],
   imports: [
@@ -30,26 +31,25 @@ import { MainInterceptor } from './interceptors/main.interceptor';
     StoreModule.forRoot(...rootReducer),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
-      maxAge: 5
+      maxAge: 5,
     }),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot(),
     BrowserAnimationsModule,
     TaigaModule,
     UserModule,
-    AuthModule
+    AuthModule,
+
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MainInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  exports: [
-  ],
-  bootstrap: [AppComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -1,32 +1,99 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Injectable, Injector } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject, takeUntil, tap, finalize } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { Client } from '../../models/client';
+import { supabase } from '../../optionsSupaBase';
+import { LoaderService } from '../loader/loader.service';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { ClientOperationsComponent } from 'src/app/components/client-operations/client-operations.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ClientsService {
-  clients: Subject<any[]> = new Subject<any[]>();
+  private _clients$: Subject<Client[]> = new Subject();
   clientsAPIUrl: string = '/rest/v1/clients';
+  sub$: Subject<boolean> = new Subject();
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    public loader: LoaderService,
+    private readonly dialogs: TuiDialogService,
+    private readonly injector: Injector
   ) {
+    this.getClients();
   }
 
-  getClients(): Observable<any> {
-    return this._http.get(ENV.supabaseUrl + this.clientsAPIUrl + `?select=*`);
+  getClients(): void {
+    this.showLoader();
+    this._http
+      .get<Client[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
+      .pipe(
+        tap((res: Client[]) => this._clients$.next(res)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.hideLoader());
   }
 
-  addClient(model: Client) {
-    const headers = new HttpHeaders().set('Prefer', 'return=minimal');
-    return this._http.post(ENV.supabaseUrl + this.clientsAPIUrl, model, { headers: headers })
+  loadClients(): Subject<Client[]> {
+    return this._clients$;
   }
 
-  deleteClient(guid: string) {
-    return this._http.delete(ENV.supabaseUrl + this.clientsAPIUrl, {params: {guid: `eq.${guid}`}})
+  openModal(el?: Client): Observable<any> {
+    return this.dialogs
+      .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
+        label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
+        data: {
+          client: el ? el : new Client(''),
+          isEdit: !!el,
+        },
+        closeable: true,
+        dismissible: false,
+      })
+      .pipe(takeUntil(this.destroy$));
+  }
+
+  async addClient(model: Client) {
+    delete model.id;
+
+    const { data, error } = await supabase.from('clients').insert([model]).select();
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось добавить клиента, обратитесь к разработчику');
+    }
+  }
+
+  async editClient(model: Client) {
+    const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
+    }
+  }
+
+  async deleteClient(guid: string) {
+    const { data, error } = await supabase.from('clients').delete().eq('guid', guid);
+
+    if (error) {
+      console.log(error);
+      throw new Error('Не удалось удалить клиента, обратитесь к разработчику');
+    }
+  }
+
+  showLoader(): void {
+    this.loader.show();
+  }
+
+  hideLoader(): void {
+    this.loader.hide();
+  }
+
+  getLoader(): boolean {
+    return this.loader.getLoading();
   }
 }

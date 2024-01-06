@@ -6,3 +6,23 @@
 tui-root {
   height: inherit;
 }
+
+.nav-menu {
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1em;
+  font-size: 1.1em;
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+    &:active {
+      color: inherit;
+      text-decoration: none;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

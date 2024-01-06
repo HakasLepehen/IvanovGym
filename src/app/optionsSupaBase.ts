@@ -1,3 +1,6 @@
+import { ENV } from '../environment/environment';
+import { createClient } from '@supabase/supabase-js';
+
 export const options = {
   db: {
     schema: 'public',
@@ -9,4 +12,4 @@ export const options = {
   },
 }
 
-// export const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, options);
+export const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, options);
