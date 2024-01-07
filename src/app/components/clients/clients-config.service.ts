@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { ChangeDetectorRef, Injectable, Injector } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { Subject, takeUntil } from 'rxjs';
@@ -12,17 +12,25 @@ import { ClientOperationsComponent } from '../client-operations/client-operation
 })
 export class ClientsConfigService {
   clients: IClient[] = [];
+  onLoad$: Subject<boolean> = this.cs.onLoad;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public loader: LoaderService,
     private readonly cs: ClientsService,
     private readonly dialogs: TuiDialogService,
-    private readonly injector: Injector
+    private readonly injector: Injector,
+    private cd: ChangeDetectorRef,
   ) {
     // this.cs.clients$.subscribe((value) => {
     //   this.clients = value;
     // });
+    this.onLoad$.subscribe((val: boolean) => {
+      if (val) {
+        this.getClients();
+        
+      }
+    })
   }
 
   /**

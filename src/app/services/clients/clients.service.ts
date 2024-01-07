@@ -12,6 +12,8 @@ import { LoaderService } from '../loader/loader.service';
 })
 export class ClientsService {
   private _clients$: Subject<IClient[]> = new Subject();
+  //if 'true' - we need to reload clients
+  public onLoad: Subject<boolean> = new Subject();
   clientsAPIUrl: string = '/rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -23,6 +25,7 @@ export class ClientsService {
     private readonly injector: Injector
   ) {
     this.getClients();
+    this.onLoad.next(false);
   }
 
   getClients(): void {
@@ -33,7 +36,7 @@ export class ClientsService {
         tap((res: IClient[]) => this._clients$.next(res)),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe()
     // .subscribe(() => this.hideLoader());
   }
 
