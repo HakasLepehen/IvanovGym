@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Subject, tap, takeUntil } from 'rxjs';
 import { BodyPart } from 'src/app/modules/body_part/body_part';
 import { LoaderService } from '../loader/loader.service';
-import { IClient } from 'src/app/interfaces/client';
 import { ENV } from 'src/environment/environment';
 
 @Injectable({
