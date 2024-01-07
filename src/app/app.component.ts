@@ -9,7 +9,6 @@ import { Location } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   title = 'IvanovGym';
-  loadingState: boolean = false;
   apiLoaded: boolean = false;
 
   constructor(
@@ -23,6 +22,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadingState = this.loader.getLoading();
   }
 }

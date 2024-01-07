@@ -1,19 +1,27 @@
-import { HttpClient } from '@angular/common/http';
+import { IClient } from 'src/app/interfaces/client';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil, tap, finalize, Observable } from 'rxjs';
 import { ENV } from '../../../environment/environment';
-import { IClient } from '../../interfaces/client';
 import { supabase } from '../../optionsSupaBase';
 import { LoaderService } from '../loader/loader.service';
+
+const options = {
+  headers: {
+    apikey: ENV.supabaseKey,
+    Authorization: `Bearer ${ENV.supabaseKey}`,
+    ContentType: 'application/json',
+    Prefer: 'return-minimal',
+  },
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientsService {
-  private _clients$: Subject<IClient[]> = new Subject();
-  //if 'true' - we need to reload clients
-  public onLoad: Subject<boolean> = new Subject();
+  public clients$: Subject<IClient[]> = new Subject();
+  public onLoad: Subject<boolean> = new Subject<boolean>();
   clientsAPIUrl: string = '/rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -28,20 +36,15 @@ export class ClientsService {
     this.onLoad.next(false);
   }
 
-  getClients(): void {
+  getClients(): Observable<IClient[]> {
     // this.showLoader();
-    this._http
+    return this._http
       .get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
       .pipe(
-        tap((res: IClient[]) => this._clients$.next(res)),
+        tap((res: IClient[]) => this.clients$.next(res)),
         takeUntil(this.destroy$)
       )
-      .subscribe()
     // .subscribe(() => this.hideLoader());
-  }
-
-  loadClients(): Subject<IClient[]> {
-    return this._clients$;
   }
 
   // openModal(el?: IClient): Observable<any> {
@@ -62,15 +65,31 @@ export class ClientsService {
   //     .pipe(takeUntil(this.destroy$));
   // }
 
-  async addClient(model: IClient) {
+  // async addClient(model: IClient) {
+  //   delete model.id;
+
+  //   const { data, error } = await supabase.from('clients').insert([model]).select();
+
+  //   if (error) {
+  //     console.log(error);
+  //     throw new Error('Не удалось добавить клиента, обратитесь к разработчику');
+  //   }
+  // }
+
+  createClient(model: IClient) {
+    //TODO: Хотелось бы определить какой тип тут указывать
+
     delete model.id;
 
-    const { data, error } = await supabase.from('clients').insert([model]).select();
-
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось добавить клиента, обратитесь к разработчику');
-    }
+    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options)
+      // .subscribe({
+      //   error: (err: any) => {
+      //     console.log(err);
+      //     this.refreshData();
+      //     throw new Error('Не удалось создать клиента, обратитесь к разработчику');
+      //   },
+      //   complete: () => this.refreshData()
+    // })
   }
 
   async editClient(model: IClient) {
