@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { IClient } from '../../interfaces/client';
 import { ClientsService } from '../../services/clients/clients.service';
 import { ClientsConfigService } from './clients-config.service';
@@ -30,12 +30,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // get loader() {
-  //   return this.clientsConfigService.getLoader();
-  // }
-
   addClient(): void {
-    // this.clientsService.openModal().subscribe(() => this.getClients());
     this.clientsConfigService.openModal();
   }
 
@@ -44,7 +39,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   editClient(el: IClient): void {
-    // this.clientsService.openModal(el).subscribe(() => this.getClients());
     this.clientsConfigService.openModal(el);
   }
 
