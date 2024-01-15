@@ -1,3 +1,4 @@
+import { ClientsConfigService } from './../clients/clients-config.service';
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
 import { IClient } from '../../interfaces/client';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -50,7 +51,8 @@ export class ClientOperationsComponent implements OnInit {
     private readonly dialogs: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, IClientDialog>,
-    private cs: ClientsService
+    private cs: ClientsService,
+    private clientConfigService: ClientsConfigService
   ) {}
 
   ngOnInit() {
@@ -73,12 +75,13 @@ export class ClientOperationsComponent implements OnInit {
   onSubmit() {
     console.log('onSubmit', this.clientForm.value);
     if (!this.canEdit) {
-      return this.cs
-        .addClient(this.clientForm.value)
-        .then((_) => this.context.completeWith(true))
-        .catch((error: string) => {
-          alert(error);
-        });
+      // return this.cs
+      //   .addClient(this.clientForm.value)
+      //   .then((_) => this.context.completeWith(true))
+      //   .catch((error: string) => {
+      //     alert(error);
+      //   });
+      return this.clientConfigService.addClient(this.clientForm.value, this.context);
     }
     return this.cs
       .editClient(this.clientForm.value)

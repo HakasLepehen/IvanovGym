@@ -1,14 +1,11 @@
-<div class='container' *ngIf="clients$ | async as clients; else load">
+<div class='container' *ngIf="!isLoading; else load">
   <div class='main_block'>
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
     </div>
     <div class='main_block__content'>
-      <tui-accordion class=''>
-        <tui-accordion-item
-          *ngFor='let client of clients'
-          size='m'
-        >
+      <tui-accordion class='' *ngIf="clients$ | async as clients; else empty">
+        <tui-accordion-item *ngFor='let client of clients' size='m'>
           {{client.fullName}}
           <ng-template tuiAccordionItemContent>
             <ul class='content__wrapper'>
@@ -59,30 +56,21 @@
               </li>
             </ul>
             <div class='container-buttons'>
-              <button
-                tuiButton
-                size='m'
-                appearance='whiteblock-active'
-                type='button'
-                shape='rounded'
-                (click)='editClient(client)'
-              >
+              <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                (click)='editClient(client)'>
                 Редактировать
               </button>
-              <button
-                tuiButton
-                size='m'
-                appearance='whiteblock-active'
-                type='button'
-                shape='rounded'
-                (click)='removeClient(client)'
-              >
+              <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                (click)='removeClient(client)'>
                 Удалить
               </button>
             </div>
           </ng-template>
         </tui-accordion-item>
       </tui-accordion>
+      <ng-template #empty>
+        <h3 style="text-align: center;">Список клиентов пуст</h3>
+      </ng-template>
     </div>
     <div class='main_block__buttons'>
       <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='addClient()'>

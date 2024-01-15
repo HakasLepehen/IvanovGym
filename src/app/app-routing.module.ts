@@ -4,6 +4,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
+import { TestComponent } from './components/test/test.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
     path: 'users-management',
     loadChildren: () =>
       import('./modules/users-management/users-management.module').then((_) => _.UsersManagementModule),
+  },
+  {
+    path: 'test',
+    component: TestComponent
   },
   {
     path: '',
