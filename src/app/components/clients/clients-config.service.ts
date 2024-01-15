@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import { ClientsService } from 'src/app/services/clients/clients.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
@@ -77,8 +77,8 @@ export class ClientsConfigService {
     this.cs.createClient(data).subscribe({
       error: (err: any) => {
         console.log(err);
-        this.refreshData();
         this.loader.hide();
+        this.refreshData();
         alert('Не удалось создать клиента, обратитесь к разработчику');
       },
       complete: () => {
