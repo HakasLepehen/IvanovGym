@@ -38,12 +38,10 @@ export class ClientsService {
 
   getClients(): Observable<IClient[]> {
     // this.showLoader();
-    return this._http
-      .get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
-      .pipe(
-        tap((res: IClient[]) => this.clients$.next(res)),
-        takeUntil(this.destroy$)
-      )
+    return this._http.get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } }).pipe(
+      tap((res: IClient[]) => this.clients$.next(res)),
+      takeUntil(this.destroy$)
+    );
     // .subscribe(() => this.hideLoader());
   }
 
@@ -80,16 +78,17 @@ export class ClientsService {
     //TODO: Хотелось бы определить какой тип тут указывать
 
     delete model.id;
+    options.headers.ContentType = 'application/json';
+    options.headers.Prefer = 'return-minimal';
 
-    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options)
-      // .subscribe({
-      //   error: (err: any) => {
-      //     console.log(err);
-      //     this.refreshData();
-      //     throw new Error('Не удалось создать клиента, обратитесь к разработчику');
-      //   },
-      //   complete: () => this.refreshData()
-    // })
+    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options);
+  }
+
+  removeClient(guid: string): Observable<unknown> {
+    return this._http.delete<Observable<unknown>>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, {
+      ...options.headers,
+      params: { guid: `eq.${guid}` },
+    });
   }
 
   async editClient(model: IClient) {
@@ -98,15 +97,6 @@ export class ClientsService {
     if (error) {
       console.log(error);
       throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
-    }
-  }
-
-  async deleteClient(guid: string) {
-    const { data, error } = await supabase.from('clients').delete().eq('guid', guid);
-
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось удалить клиента, обратитесь к разработчику');
     }
   }
 }

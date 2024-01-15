@@ -74,19 +74,41 @@ export class ClientsConfigService {
 
     //
     this.loader.show();
-    this.cs.createClient(data).subscribe({
-      error: (err: any) => {
-        console.log(err);
-        this.loader.hide();
-        this.refreshData();
-        alert('Не удалось создать клиента, обратитесь к разработчику');
-      },
-      complete: () => {
-        this.loader.hide();
-        context.completeWith(true);
-        this.refreshData();
-      },
-    });
+    this.cs
+      .createClient(data)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err: any) => {
+          console.log(err);
+          this.loader.hide();
+          this.refreshData();
+          alert('Не удалось создать клиента, обратитесь к разработчику');
+        },
+        complete: () => {
+          this.loader.hide();
+          context.completeWith(true);
+          this.refreshData();
+        },
+      });
+  }
+
+  removeClient(guid: string): void {
+    this.loader.show();
+    this.cs
+      .removeClient(guid)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err: any) => {
+          console.log(err);
+          this.loader.hide();
+          this.refreshData();
+          alert('Не удалось создать клиента, обратитесь к разработчику');
+        },
+        complete: () => {
+          this.loader.hide();
+          this.refreshData();
+        },
+      });
   }
 
   // ЭТО МОЖЕТ ПРИГОДИТЬСЯ ЧУТЬ ПОЗЖЕ!!!!

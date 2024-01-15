@@ -1,7 +1,7 @@
+import { IClient } from 'src/app/interfaces/client';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil, tap } from 'rxjs';
-import { IClient } from '../../interfaces/client';
 import { ClientsService } from '../../services/clients/clients.service';
 import { ClientsConfigService } from './clients-config.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
@@ -49,11 +49,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.clientsConfigService.openModal(el);
   }
 
-  removeClient(el: any): void {
-    this.clientsService
-      .deleteClient(el.guid)
-      .then(() => this.getClients())
-      .catch((err) => alert(err));
+  removeClient(el: IClient): void {
+    this.clientsConfigService.removeClient(<string>el.guid)
   }
 
   ngOnDestroy(): void {
