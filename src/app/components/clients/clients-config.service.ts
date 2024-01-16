@@ -3,10 +3,10 @@ import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { Subject, takeUntil } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
+import IClientDialog from 'src/app/interfaces/client-dialog';
 import { ClientsService } from 'src/app/services/clients/clients.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
-import IClientDialog from 'src/app/interfaces/client-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +22,6 @@ export class ClientsConfigService {
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector
   ) {
-    // this.cs.clients$.subscribe((value) => {
-    //   this.clients = value;
-    // });
     this.onLoad$.subscribe((val: boolean) => {
       if (val) {
         this.getClients();
@@ -32,9 +29,6 @@ export class ClientsConfigService {
     });
   }
 
-  /**
-   *  метод возвращающий клиентов
-   **/
   getClients(): void {
     this.loader.show();
     this.cs.getClients().subscribe({
@@ -102,7 +96,7 @@ export class ClientsConfigService {
           console.log(err);
           this.loader.hide();
           this.refreshData();
-          alert('Не удалось создать клиента, обратитесь к разработчику');
+          alert('Не удалось удалить клиента, обратитесь к разработчику');
         },
         complete: () => {
           this.loader.hide();
@@ -111,15 +105,25 @@ export class ClientsConfigService {
       });
   }
 
-  // ЭТО МОЖЕТ ПРИГОДИТЬСЯ ЧУТЬ ПОЗЖЕ!!!!
-
-  // showLoader(): void {
-  //   this.loader.show();
-  // }
-
-  // hideLoader(): void {
-  //   this.loader.hide();
-  // }
+  editClient(model: IClient, context: TuiDialogContext<boolean, IClientDialog>): void {
+    this.loader.show();
+    this.cs
+      .editClient(model)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err: any) => {
+          console.log(err);
+          this.loader.hide();
+          this.refreshData();
+          alert('Не удалось создать клиента, обратитесь к разработчику');
+        },
+        complete: () => {
+          this.loader.hide();
+          context.completeWith(true);
+          this.refreshData();
+        },
+      });
+  }
 
   refreshData() {
     this.onLoad$.next(false);

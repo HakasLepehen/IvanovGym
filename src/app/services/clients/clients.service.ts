@@ -75,7 +75,7 @@ export class ClientsService {
   // }
 
   createClient(model: IClient) {
-    //TODO: Хотелось бы определить какой тип тут указывать
+    //TODO: Хотелось бы определить какой тип тут указывать в качестве возвращаемого
 
     delete model.id;
     options.headers.ContentType = 'application/json';
@@ -91,12 +91,22 @@ export class ClientsService {
     });
   }
 
-  async editClient(model: IClient) {
-    const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
+  editClient(model: IClient): Observable<unknown> {
+    options.headers.ContentType = 'application/json';
+    options.headers.Prefer = 'return-minimal';
 
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
-    }
+    return this._http.patch(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, {
+      ...options.headers,
+      params: { id: `eq.${model.id}` },
+    });
   }
+
+  // async editClient(model: IClient) {
+  //   const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
+
+  //   if (error) {
+  //     console.log(error);
+  //     throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
+  //   }
+  // }
 }
