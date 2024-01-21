@@ -47,35 +47,6 @@ export class ClientsService {
     // .subscribe(() => this.hideLoader());
   }
 
-  // openModal(el?: IClient): Observable<any> {
-  //   return this.dialogs
-  //     .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-  //       label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
-  //       data: {
-  //         client: el ? el : {
-  //           fullName: '',
-  //           created_at: new Date(),
-  //           age: 0,
-  //         },
-  //         isEdit: !!el,
-  //       },
-  //       closeable: true,
-  //       dismissible: false,
-  //     })
-  //     .pipe(takeUntil(this.destroy$));
-  // }
-
-  // async addClient(model: IClient) {
-  //   delete model.id;
-
-  //   const { data, error } = await supabase.from('clients').insert([model]).select();
-
-  //   if (error) {
-  //     console.log(error);
-  //     throw new Error('Не удалось добавить клиента, обратитесь к разработчику');
-  //   }
-  // }
-
   createClient(model: IClient) {
     //TODO: Хотелось бы определить какой тип тут указывать
 
