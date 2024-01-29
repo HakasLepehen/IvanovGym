@@ -1,5 +1,5 @@
 import { IClient } from 'src/app/interfaces/client';
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil, tap, finalize, Observable } from 'rxjs';
@@ -81,17 +81,17 @@ export class ClientsService {
     options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
-    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options);
+    return this._http.post(`${ENV.supabaseUrl}/asd${this.clientsAPIUrl}`, model, options);
   }
 
-  removeClient(guid: string): Observable<unknown> {
-    return this._http.delete<Observable<unknown>>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, {
+  removeClient(guid: string): Observable<Object> {
+    return this._http.delete<Observable<HttpResponse<null>>>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, {
       ...options.headers,
       params: { guid: `eq.${guid}` },
     });
   }
 
-  editClient(model: IClient): Observable<unknown> {
+  editClient(model: IClient): Observable<Object> {
     options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
@@ -100,13 +100,4 @@ export class ClientsService {
       params: { id: `eq.${model.id}` },
     });
   }
-
-  // async editClient(model: IClient) {
-  //   const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
-
-  //   if (error) {
-  //     console.log(error);
-  //     throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
-  //   }
-  // }
 }
