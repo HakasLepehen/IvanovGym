@@ -5,8 +5,9 @@ import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit
 import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
 import { delay, of, tap } from 'rxjs';
-import { BodyPart } from 'src/app/modules/body_part/body_part';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
+import { BodyParts } from 'src/app/enums/body_parts';
+import { ISelectBox } from 'src/app/interfaces/selectbox';
 
 @Component({
   selector: 'app-exercises',
@@ -15,10 +16,10 @@ import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExercisesComponent implements OnInit, OnDestroy {
-  public expandedBlock: boolean = false;
-  public exForm!: FormGroup;
-  public body_parts: Array<BodyPart> = [];
-  public list = [1];
+  expandedBlock: boolean = false;
+  exForm!: FormGroup;
+  body_parts: Array<ISelectBox> = BodyParts;
+  list = [1];
 
   constructor(
     private readonly dialogs: TuiDialogService,
@@ -28,8 +29,6 @@ export class ExercisesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.exService.body_parts.pipe(tap((val) => (this.body_parts = val))).subscribe();
-    this.exService.getBodyParts();
   }
 
   show(): void {
@@ -78,8 +77,8 @@ export class ExercisesComponent implements OnInit, OnDestroy {
   }
 
   @tuiPure
-  stringify(items: readonly any[]): TuiStringHandler<TuiContextWithImplicit<number>> {
-    const map = new Map(items.map(({ id, part_name }) => [id, part_name] as [number, string]));
+  stringify(items: readonly ISelectBox[]): TuiStringHandler<TuiContextWithImplicit<number>> {
+    const map = new Map(items.map(({ id, name }) => [id, name] as [number, string]));
 
     return ({ $implicit }: TuiContextWithImplicit<number>) => map.get($implicit) || '';
   }

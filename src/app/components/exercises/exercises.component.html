@@ -3,9 +3,6 @@
     <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
       [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
     </button>
-    <button tuiButton routerLink="./muscle_group" [size]="'l'" appearance='secondary' type='button'>
-      Группы мышц
-    </button>
   </div>
 
 
@@ -29,7 +26,7 @@
             <ng-template tuiDataList>
               <tui-data-list *ngIf="body_parts; else loading">
                 <button *ngFor="let item of body_parts" tuiOption [value]="item.id">
-                  {{ item.part_name }}
+                  {{ item.name }}
                 </button>
               </tui-data-list>
             </ng-template>
@@ -39,9 +36,9 @@
           </tui-select>
         </div>
 
-        <ng-container *ngFor="let variant of exForm.controls.exec_var.controls; let i = index">
+        <!-- <ng-container *ngFor="let variant of exForm.controls.exec_var.controls; let i = index">
           <div [formGroup]="variant">{{i}}</div>
-        </ng-container>
+        </ng-container> -->
       </form>
       <button tuiButton (click)="click($event)">клик</button>
     </ng-template>
