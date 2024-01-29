@@ -38,6 +38,10 @@
             </ng-template>
           </tui-select>
         </div>
+
+        <ng-container *ngFor="let variant of exForm.controls.exec_var.controls; let i = index">
+          <div [formGroup]="variant">{{i}}</div>
+        </ng-container>
       </form>
       <button tuiButton (click)="click($event)">клик</button>
     </ng-template>

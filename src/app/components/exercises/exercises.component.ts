@@ -1,21 +1,12 @@
+import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { IExercise } from '../../interfaces/exercise';
 import { ExercisesService } from './../../services/exercises/exercises.service';
 import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
 import { delay, of, tap } from 'rxjs';
-import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
 import { BodyPart } from 'src/app/modules/body_part/body_part';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
-
-const ITEMS: readonly any[] = [
-  { id: 42, name: 'John Cleese' },
-  { id: 237, name: 'Eric Idle' },
-  { id: 666, name: 'Michael Palin' },
-  { id: 123, name: 'Terry Gilliam' },
-  { id: 777, name: 'Terry Jones' },
-  { id: 999, name: 'Graham Chapman' },
-];
 
 @Component({
   selector: 'app-exercises',
@@ -24,15 +15,16 @@ const ITEMS: readonly any[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExercisesComponent implements OnInit, OnDestroy {
-  expandedBlock: boolean = false;
-  exForm!: FormGroup;
-  body_parts: Array<BodyPart> = [];
-  list = [1];
+  public expandedBlock: boolean = false;
+  public exForm!: FormGroup;
+  public body_parts: Array<BodyPart> = [];
+  public list = [1];
 
   constructor(
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector,
-    private exService: ExercisesService
+    private exService: ExercisesService,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -47,14 +39,29 @@ export class ExercisesComponent implements OnInit, OnDestroy {
       exec_var: []
     };
     if (this.expandedBlock) {
-      this.exForm = new FormGroup({
-        exercise_name: new FormControl(model.exercise_name, [Validators.required]),
-        muscle_groups_id: new FormControl(model.muscle_groups_id),
-        exec_var: new FormControl(),
-      });
+      // this.exForm = new FormGroup({
+      //   exercise_name: new FormControl(model.exercise_name, [Validators.required]),
+      //   muscle_groups_id: new FormControl(model.muscle_groups_id),
+      //   exec_var:
+      //     new FormControlA([]),
+      // });
+
+      this.exForm = this.formBuilder.group({
+        exercise_name: this.formBuilder.control(model.exercise_name, [Validators.required]),
+        muscle_groups_id: this.formBuilder.control(model.muscle_groups_id),
+        exec_var: this.formBuilder.array([
+          this.formBuilder.group({
+            name: ['', Validators.required],
+            url: [''],
+            comment: ['']
+          }),
+        ])
+      })
     }
     const exec: IExecutionVariant = {
       name: 'Новое упражнение',
+      url: '',
+      comment: '',
     };
   }
 
