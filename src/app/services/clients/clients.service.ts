@@ -1,5 +1,5 @@
 import { IClient } from 'src/app/interfaces/client';
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil, tap, finalize, Observable } from 'rxjs';
@@ -38,46 +38,37 @@ export class ClientsService {
 
   getClients(): Observable<IClient[]> {
     // this.showLoader();
-    return this._http
-      .get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } })
-      .pipe(
-        tap((res: IClient[]) => this.clients$.next(res)),
-        takeUntil(this.destroy$)
-      )
+    return this._http.get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } }).pipe(
+      tap((res: IClient[]) => this.clients$.next(res)),
+      takeUntil(this.destroy$)
+    );
     // .subscribe(() => this.hideLoader());
   }
 
   createClient(model: IClient) {
-    //TODO: Хотелось бы определить какой тип тут указывать
+    //TODO: Хотелось бы определить какой тип тут указывать в качестве возвращаемого
 
     delete model.id;
+    options.headers.ContentType = 'application/json';
+    options.headers.Prefer = 'return-minimal';
 
-    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options)
-      // .subscribe({
-      //   error: (err: any) => {
-      //     console.log(err);
-      //     this.refreshData();
-      //     throw new Error('Не удалось создать клиента, обратитесь к разработчику');
-      //   },
-      //   complete: () => this.refreshData()
-    // })
+    return this._http.post(`${ENV.supabaseUrl}/asd${this.clientsAPIUrl}`, model, options);
   }
 
-  async editClient(model: IClient) {
-    const { data, error } = await supabase.from('clients').update(model).match({ id: model.id });
-
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось отредактировать клиента, обратитесь к разработчику');
-    }
+  removeClient(guid: string): Observable<Object> {
+    return this._http.delete<Observable<HttpResponse<null>>>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, {
+      ...options.headers,
+      params: { guid: `eq.${guid}` },
+    });
   }
 
-  async deleteClient(guid: string) {
-    const { data, error } = await supabase.from('clients').delete().eq('guid', guid);
+  editClient(model: IClient): Observable<Object> {
+    options.headers.ContentType = 'application/json';
+    options.headers.Prefer = 'return-minimal';
 
-    if (error) {
-      console.log(error);
-      throw new Error('Не удалось удалить клиента, обратитесь к разработчику');
-    }
+    return this._http.patch(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, {
+      ...options.headers,
+      params: { id: `eq.${model.id}` },
+    });
   }
 }

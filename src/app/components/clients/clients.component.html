@@ -1,72 +1,72 @@
-<div class='container' *ngIf="!isLoading; else load">
-  <div class='main_block'>
+<div class='container'>
+  <div class='main_block' *ngIf="isLoading === false; else load">
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
     </div>
     <div class='main_block__content'>
-      <tui-accordion class='' *ngIf="clients$ | async as clients; else empty">
-        <tui-accordion-item *ngFor='let client of clients' size='m'>
-          {{client.fullName}}
-          <ng-template tuiAccordionItemContent>
-            <ul class='content__wrapper'>
-              <li>
-                <span class='content__label'>Ф.И.О</span>
-                <p class='content__text'>{{client.fullName}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Возраст</span>
-                <p class='content__text'>{{client.age}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Цель занятий</span>
-                <p class='content__text'>{{client.target}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Ограничения</span>
-                <p class='content__text'>{{client.limits}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Опыт тренировок</span>
-                <p class='content__text'>{{client.experience}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Режим сна и бодрствования</span>
-                <p class='content__text'>{{client.sleep}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Режим питания</span>
-                <p class='content__text'>{{client.food}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Фармакология</span>
-                <p class='content__text'>{{client.pharma}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Повседневная активность</span>
-                <p class='content__text'>{{client.activity}}</p>
-                <hr>
-              </li>
-            </ul>
-            <div class='container-buttons'>
-              <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
-                (click)='editClient(client)'>
-                Редактировать
-              </button>
-              <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
-                (click)='removeClient(client)'>
-                Удалить
-              </button>
-            </div>
-          </ng-template>
-        </tui-accordion-item>
+      <tui-accordion class='' *ngIf="clients; else empty">
+          <tui-accordion-item *ngFor='let client of clients' size='m'>
+            {{client.fullName}}
+            <ng-template tuiAccordionItemContent>
+              <ul class='content__wrapper'>
+                <li>
+                  <span class='content__label'>Ф.И.О</span>
+                  <p class='content__text'>{{client.fullName}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Возраст</span>
+                  <p class='content__text'>{{client.age}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Цель занятий</span>
+                  <p class='content__text'>{{client.target}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Ограничения</span>
+                  <p class='content__text'>{{client.limits}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Опыт тренировок</span>
+                  <p class='content__text'>{{client.experience}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Режим сна и бодрствования</span>
+                  <p class='content__text'>{{client.sleep}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Режим питания</span>
+                  <p class='content__text'>{{client.food}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Фармакология</span>
+                  <p class='content__text'>{{client.pharma}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Повседневная активность</span>
+                  <p class='content__text'>{{client.activity}}</p>
+                  <hr>
+                </li>
+              </ul>
+              <div class='container-buttons'>
+                <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                  (click)='editClient(client)'>
+                  Редактировать
+                </button>
+                <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                  (click)='removeClient(client)'>
+                  Удалить
+                </button>
+              </div>
+            </ng-template>
+          </tui-accordion-item>
       </tui-accordion>
       <ng-template #empty>
         <h3 style="text-align: center;">Список клиентов пуст</h3>
