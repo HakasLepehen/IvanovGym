@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-test',
@@ -7,9 +8,31 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestComponent {
-  aquaticCreatures = ['shark', 'dolphin', 'octopus'];
+  address = this.fb.group({
+    street: [''],
+    city: [''],
+  });
 
-  addAquaticCreature(newAquaticCreature: string) {
-    this.aquaticCreatures.push(newAquaticCreature);
+  profile = this.fb.group({
+    firstName: [''],
+    lastName: [''],
+    aliases: this.fb.array([])
+  });
+
+  constructor(private fb: FormBuilder) {
+
+  }
+
+  get aliases() {
+    return this.profile.get('aliases') as FormArray;
+  }
+
+  add(): void {
+    this.aliases.push(this.fb.control(this.address));
+    console.log(this.aliases);
+  }
+
+  getControl(i: number): any {
+    return this.aliases.at(i);
   }
 }

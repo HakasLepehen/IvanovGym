@@ -1,4 +1,22 @@
-<input #inputAquaticCreature type="text" placeholder="Enter a new creature">
-<button (click)="addAquaticCreature(inputAquaticCreature.value)">Add creature</button>
+<form [formGroup]="profile">
+  <label for="first-name">First Name: </label>
+  <input id="first-name" type="text" formControlName="firstName">
 
-<app-child [data]="aquaticCreatures"></app-child>
+  <label for="last-name">First Name: </label>
+  <input id="last-name" type="text" formControlName="lastName">
+
+
+  <div formArrayName="aliases">
+    <h2>Address</h2>
+    <div *ngFor="let alias of aliases.controls; let i=index">
+      <div>{{aliases.length}}</div>
+      // надо придумать как получать из формгруппы значение
+      <!-- <label for="alias-{{i}}">Alias: </label> -->
+      <!-- <input id="alias-{{i}}" type="text" [formControlName]=""> -->
+      <!-- <label for="city{{i}}">City: </label>
+      <input id="city-{{i}}" type="text" formControlName="alias.address.city"> -->
+    </div>
+  </div>
+</form>
+
+<button type="button" (click)="add()">add</button>
