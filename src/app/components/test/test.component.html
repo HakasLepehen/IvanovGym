@@ -1,22 +1,19 @@
-<form [formGroup]="profile">
-  <label for="first-name">First Name: </label>
+<form [formGroup]="profile" (ngSubmit)="onSubmit()"> <label for="first-name">First Name: </label>
   <input id="first-name" type="text" formControlName="firstName">
-
-  <label for="last-name">First Name: </label>
-  <input id="last-name" type="text" formControlName="lastName">
-
+  <label for="last-name">First Name: </label> <input id="last-name" type="text" formControlName="lastName">
 
   <div formArrayName="aliases">
     <h2>Address</h2>
     <div *ngFor="let alias of aliases.controls; let i=index">
-      <div>{{aliases.length}}</div>
-      // надо придумать как получать из формгруппы значение
-      <!-- <label for="alias-{{i}}">Alias: </label> -->
-      <!-- <input id="alias-{{i}}" type="text" [formControlName]=""> -->
-      <!-- <label for="city{{i}}">City: </label>
-      <input id="city-{{i}}" type="text" formControlName="alias.address.city"> -->
+      <div formGroupName="{{i}}">
+        <label for="street-{{i}}">First Name: </label>
+        <input id="street-{{i}}" type="text" formControlName="street">
+        <label for="city-{{i}}">First Name: </label>
+        <input id="city-{{i}}" type="text" formControlName="city">
+      </div>
     </div>
   </div>
+  <button type="submit" [disabled]="!profile.valid">Submit</button>
 </form>
 
 <button type="button" (click)="add()">add</button>

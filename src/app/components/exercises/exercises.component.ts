@@ -2,7 +2,7 @@ import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { IExercise } from '../../interfaces/exercise';
 import { ExercisesService } from './../../services/exercises/exercises.service';
 import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
 import { delay, of, tap } from 'rxjs';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
@@ -17,7 +17,8 @@ import { ISelectBox } from 'src/app/interfaces/selectbox';
 })
 export class ExercisesComponent implements OnInit, OnDestroy {
   expandedBlock: boolean = false;
-  exForm!: FormGroup;
+  // exForm!: FormGroup;
+  public exForm!: FormGroup;
   body_parts: Array<ISelectBox> = BodyParts;
   list = [1];
 
@@ -26,9 +27,14 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     private readonly injector: Injector,
     private exService: ExercisesService,
     private formBuilder: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.exForm = this.formBuilder.group({
+      exercise_name: this.formBuilder.control('', [Validators.required]),
+      muscle_groups_id: this.formBuilder.control(''),
+      exec_var: this.formBuilder.array([])
+    })
   }
 
   show(): void {
@@ -37,40 +43,38 @@ export class ExercisesComponent implements OnInit, OnDestroy {
       exercise_name: '',
       exec_var: []
     };
-    if (this.expandedBlock) {
-      // this.exForm = new FormGroup({
-      //   exercise_name: new FormControl(model.exercise_name, [Validators.required]),
-      //   muscle_groups_id: new FormControl(model.muscle_groups_id),
-      //   exec_var:
-      //     new FormControlA([]),
-      // });
-
-      this.exForm = this.formBuilder.group({
-        exercise_name: this.formBuilder.control(model.exercise_name, [Validators.required]),
-        muscle_groups_id: this.formBuilder.control(model.muscle_groups_id),
-        exec_var: this.formBuilder.array([
-          this.formBuilder.group({
-            name: ['', Validators.required],
-            url: [''],
-            comment: ['']
-          }),
-        ])
-      })
-    }
-    const exec: IExecutionVariant = {
-      name: 'Новое упражнение',
-      url: '',
-      comment: '',
-    };
+    // if (this.expandedBlock) {
+    //   this.exForm = this.formBuilder.group({
+    //     exercise_name: this.formBuilder.control(model.exercise_name, [Validators.required]),
+    //     muscle_groups_id: this.formBuilder.control(model.muscle_groups_id),
+    //     exec_var: this.formBuilder.array([
+    //     ])
+    //   })
+    // }
+    // const exec: IExecutionVariant = {
+    //   name: 'Новое упражнение',
+    //   url: '',
+    //   comment: '',
+    // };
   }
 
-  // readonly stringify = (val: BodyPart): string => `${val.part_name}`
+  get exec_var() {
+    return this.exForm.get('exec_var') as FormArray;
+  }
 
   click(e: any) {
-    console.log(this.exForm.value);
+    // if (this.expandedBlock) {
+    this.exec_var.push(
+      new FormGroup({
+        name: new FormControl('', Validators.required),
+        url: new FormControl(''),
+        comment: new FormControl('')
+      })
+    )
+    // }
   }
 
-  onSubmit(): void {}
+  onSubmit(): void { }
 
   ngOnDestroy(): void {
     console.log('меня удалили');

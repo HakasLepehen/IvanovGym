@@ -8,10 +8,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestComponent {
-  address = this.fb.group({
-    street: [''],
-    city: [''],
-  });
 
   profile = this.fb.group({
     firstName: [''],
@@ -28,11 +24,18 @@ export class TestComponent {
   }
 
   add(): void {
-    this.aliases.push(this.fb.control(this.address));
+    this.aliases.push(new FormGroup({
+      street: new FormControl(''),
+      city: new FormControl(''),
+    }));
     console.log(this.aliases);
   }
 
   getControl(i: number): any {
     return this.aliases.at(i);
+  }
+
+  onSubmit() {
+    console.log(this.profile.value);
   }
 }
