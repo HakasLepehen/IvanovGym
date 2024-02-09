@@ -1,6 +1,6 @@
 import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { IExercise } from '../../interfaces/exercise';
-import { ExercisesService } from './../../services/exercises/exercises.service';
+import { ExercisesService } from './exercises.service';
 import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
@@ -8,6 +8,7 @@ import { delay, of, tap } from 'rxjs';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
 import { BodyParts } from 'src/app/enums/body_parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { ExercisesConfigService } from './exercises-config.service';
 
 @Component({
   selector: 'app-exercises',
@@ -26,36 +27,21 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector,
     private exService: ExercisesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private exercisesConfigService: ExercisesConfigService
   ) { }
 
   ngOnInit(): void {
     this.exForm = this.formBuilder.group({
+      id: this.formBuilder.control(null),
       exercise_name: this.formBuilder.control('', [Validators.required]),
-      muscle_groups_id: this.formBuilder.control(''),
+      muscle_group: this.formBuilder.control(''),
       exec_var: this.formBuilder.array([])
     })
   }
 
   show(): void {
     this.expandedBlock = !this.expandedBlock;
-    const model: IExercise = {
-      exercise_name: '',
-      exec_var: []
-    };
-    // if (this.expandedBlock) {
-    //   this.exForm = this.formBuilder.group({
-    //     exercise_name: this.formBuilder.control(model.exercise_name, [Validators.required]),
-    //     muscle_groups_id: this.formBuilder.control(model.muscle_groups_id),
-    //     exec_var: this.formBuilder.array([
-    //     ])
-    //   })
-    // }
-    // const exec: IExecutionVariant = {
-    //   name: 'Новое упражнение',
-    //   url: '',
-    //   comment: '',
-    // };
   }
 
   get exec_var() {
@@ -74,7 +60,14 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     // }
   }
 
-  onSubmit(): void { }
+  onSubmit(): void {
+    this.exercisesConfigService.createExercise(
+      {
+        exercise_name: this.exForm.value.exercise_name,
+        muscle_group: this.exForm.value.muscle_group,
+      }
+    )
+  }
 
   ngOnDestroy(): void {
     console.log('меня удалили');
