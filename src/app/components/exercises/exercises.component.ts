@@ -48,8 +48,7 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     return this.exForm.get('exec_var') as FormArray;
   }
 
-  click(e: any) {
-    // if (this.expandedBlock) {
+  click(_: any) {
     this.exec_var.push(
       new FormGroup({
         name: new FormControl('', Validators.required),
@@ -57,16 +56,12 @@ export class ExercisesComponent implements OnInit, OnDestroy {
         comment: new FormControl('')
       })
     )
-    // }
   }
 
   onSubmit(): void {
-    this.exercisesConfigService.createExercise(
-      {
-        exercise_name: this.exForm.value.exercise_name,
-        muscle_group: this.exForm.value.muscle_group,
-      }
-    )
+    this.exercisesConfigService.createExercise(this.exForm.value);
+    this.exForm.reset();
+    this.expandedBlock = false;
   }
 
   ngOnDestroy(): void {
