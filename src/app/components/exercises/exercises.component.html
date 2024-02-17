@@ -74,6 +74,9 @@
       <h3 class='tui-text_h4'>Список клиентов</h3>
     </div>
     <div class='main_block__content'>
+      <ol>
+        <li *ngFor="let item of exercises" style="list-style-type: circle;">{{item.exercise_name}}</li>
+      </ol>
       <!-- <tui-accordion class='' *ngIf="clients; else empty">
           <tui-accordion-item *ngFor='let client of clients' size='m'>
             {{client.fullName}}

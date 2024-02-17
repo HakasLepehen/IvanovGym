@@ -23,9 +23,11 @@ export class ExercisesService {
   private destroy$: Subject<boolean> = new Subject();
   private _exercisesAPIUrl: string = 'rest/v1/exercises';
   private _execVarsAPIUrl: string = 'rest/v1/execution_variants';
+  public onLoad: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _http: HttpClient) {
     this.getExercises();
+    this.onLoad.next(false);
   }
 
   getExercises() {
