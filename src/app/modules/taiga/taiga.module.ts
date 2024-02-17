@@ -9,11 +9,11 @@ import {
   TuiDataListModule,
   TuiDialogModule,
   TuiErrorModule,
-  TuiLoaderModule,
+  TuiNotificationModule,
   TuiRootModule,
   TuiScrollbarModule,
   TuiSvgModule,
-  TuiTextfieldControllerModule,
+  TuiTextfieldControllerModule
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
@@ -36,7 +36,6 @@ import { of } from 'rxjs';
     TuiFieldErrorPipeModule,
     TuiButtonModule,
     TuiAccordionModule,
-    TuiLoaderModule,
     TuiDialogModule,
     TuiScrollbarModule,
     TuiCalendarModule,
@@ -44,6 +43,7 @@ import { of } from 'rxjs';
     TuiSelectModule,
     TuiDataListModule,
     TuiDataListWrapperModule,
+    TuiNotificationModule
   ],
   providers: [
     {
@@ -62,7 +62,6 @@ import { of } from 'rxjs';
     TuiFieldErrorPipeModule,
     TuiButtonModule,
     TuiAccordionModule,
-    TuiLoaderModule,
     TuiDialogModule,
     TuiScrollbarModule,
     TuiCalendarModule,
@@ -70,6 +69,7 @@ import { of } from 'rxjs';
     TuiSelectModule,
     TuiDataListModule,
     TuiDataListWrapperModule,
+    TuiNotificationModule
   ],
 })
 export class TaigaModule {}

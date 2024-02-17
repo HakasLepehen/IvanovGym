@@ -3,9 +3,6 @@
     <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
       [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
     </button>
-    <button tuiButton routerLink="./muscle_group" [size]="'l'" appearance='secondary' type='button'>
-      Группы мышц
-    </button>
   </div>
 
 
@@ -23,23 +20,133 @@
         </div>
 
         <div class="tui-form__row">
-          <tui-select formControlName="muscle_groups_id" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
+          <tui-select formControlName="muscle_group" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
             [valueContent]="stringify(body_parts)">
             Выберите группу мышц
             <ng-template tuiDataList>
-              <tui-data-list *ngIf="body_parts; else loading">
+              <tui-data-list *ngIf="body_parts;">
                 <button *ngFor="let item of body_parts" tuiOption [value]="item.id">
-                  {{ item.part_name }}
+                  {{ item.name }}
                 </button>
               </tui-data-list>
             </ng-template>
-            <ng-template #loading>
-              <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
-            </ng-template>
           </tui-select>
         </div>
+        <div formArrayName="exec_var">
+          <h4>Варианты выполнения</h4>
+          <div class="tui-form__row" *ngFor="let item of exec_var.controls; let i = index">
+            <div formGroupName="{{i}}">
+
+              <!-- НАИМЕНОВАНИЕ ВЫПОЛНЕНИЯ -->
+              <tui-input tuiTextfieldSize="m" formControlName="name" id="name-{{i}}">
+                Название
+                <input tuiTextfield />
+                <span class="tui-required"></span>
+              </tui-input>
+              <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+              <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
+              <tui-input tuiTextfieldSize="m" formControlName="url" id="url-{{i}}">
+                Ссылка на видео
+                <input tuiTextfield />
+                <span class="tui-required"></span>
+              </tui-input>
+              <tui-error formControlName="url" [error]="[] | tuiFieldError | async"></tui-error>
+              <!-- КОММЕНТАРИЙ -->
+              <tui-input tuiTextfieldSize="m" formControlName="comment" id="comment-{{i}}">
+                Комментарий
+                <input tuiTextfield />
+                <span class="tui-required"></span>
+              </tui-input>
+              <tui-error formControlName="comment" [error]="[] | tuiFieldError | async"></tui-error>
+
+            </div>
+          </div>
+        </div>
       </form>
-      <button tuiButton (click)="click($event)">клик</button>
+      <button tuiButton [size]="'m'" (click)="click($event)" type="button">Добавить вариант</button>
     </ng-template>
   </tui-expand>
+  <button *ngIf="expandedBlock" tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>
 </div>
+<div class='container'>
+  <div class='main_block' *ngIf="isLoading === false; else load">
+    <div class='container main_block__title'>
+      <h3 class='tui-text_h4'>Список клиентов</h3>
+    </div>
+    <div class='main_block__content'>
+      <ol>
+        <li *ngFor="let item of exercises" style="list-style-type: circle;">{{item.exercise_name}}</li>
+      </ol>
+      <!-- <tui-accordion class='' *ngIf="clients; else empty">
+          <tui-accordion-item *ngFor='let client of clients' size='m'>
+            {{client.fullName}}
+            <ng-template tuiAccordionItemContent>
+              <ul class='content__wrapper'>
+                <li>
+                  <span class='content__label'>Ф.И.О</span>
+                  <p class='content__text'>{{client.fullName}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Возраст</span>
+                  <p class='content__text'>{{client.age}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Цель занятий</span>
+                  <p class='content__text'>{{client.target}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Ограничения</span>
+                  <p class='content__text'>{{client.limits}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Опыт тренировок</span>
+                  <p class='content__text'>{{client.experience}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Режим сна и бодрствования</span>
+                  <p class='content__text'>{{client.sleep}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Режим питания</span>
+                  <p class='content__text'>{{client.food}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Фармакология</span>
+                  <p class='content__text'>{{client.pharma}}</p>
+                  <hr>
+                </li>
+                <li>
+                  <span class='content__label'>Повседневная активность</span>
+                  <p class='content__text'>{{client.activity}}</p>
+                  <hr>
+                </li>
+              </ul>
+              <div class='container-buttons'>
+                <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                  (click)='editClient(client)'>
+                  Редактировать
+                </button>
+                <button tuiButton size='m' appearance='whiteblock-active' type='button' shape='rounded'
+                  (click)='removeClient(client)'>
+                  Удалить
+                </button>
+              </div>
+            </ng-template>
+          </tui-accordion-item>
+      </tui-accordion>
+      <ng-template #empty>
+        <h3 style="text-align: center;">Список клиентов пуст</h3>
+      </ng-template> -->
+    </div>
+  </div>
+</div>
+<ng-template #load>
+  <app-loader></app-loader>
+</ng-template>

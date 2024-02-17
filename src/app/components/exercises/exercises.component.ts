@@ -1,21 +1,14 @@
-import { IExercise } from '../../interfaces/exercise';
-import { ExercisesService } from './../../services/exercises/exercises.service';
-import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import { IExerciseView } from './../../interfaces/exercise_view';
+import { ExercisesService } from './exercises.service';
+import { Component, Injector, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
-import { delay, of, tap } from 'rxjs';
-import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
-import { BodyPart } from 'src/app/modules/body_part/body_part';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
-
-const ITEMS: readonly any[] = [
-  { id: 42, name: 'John Cleese' },
-  { id: 237, name: 'Eric Idle' },
-  { id: 666, name: 'Michael Palin' },
-  { id: 123, name: 'Terry Gilliam' },
-  { id: 777, name: 'Terry Jones' },
-  { id: 999, name: 'Graham Chapman' },
-];
+import { BodyParts } from 'src/app/enums/body_parts';
+import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { ExercisesConfigService } from './exercises-config.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
+import { take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-exercises',
@@ -24,55 +17,77 @@ const ITEMS: readonly any[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExercisesComponent implements OnInit, OnDestroy {
-  expandedBlock: boolean = false;
-  exForm!: FormGroup;
-  body_parts: Array<BodyPart> = [];
-  list = [1];
+  public expandedBlock: boolean = false;
+  // exForm!: FormGroup;
+  public exForm!: FormGroup;
+  public isLoading = false;
+  public body_parts: Array<ISelectBox> = BodyParts;
+  public exercises: IExerciseView[] = [];
 
   constructor(
-    private readonly dialogs: TuiDialogService,
-    private readonly injector: Injector,
-    private exService: ExercisesService
-  ) {}
+    // private readonly dialogs: TuiDialogService,
+    // private readonly injector: Injector,
+    // private exService: ExercisesService,
+    private changeDetectionRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder,
+    private exercisesConfigService: ExercisesConfigService,
+    private loaderService: LoaderService,
+  ) { }
 
   ngOnInit(): void {
-    this.exService.body_parts.pipe(tap((val) => (this.body_parts = val))).subscribe();
-    this.exService.getBodyParts();
+    this.exercisesConfigService
+      .exercises$
+      .pipe(
+        tap(res => {
+          this.exercises = res;
+          this.changeDetectionRef.markForCheck();
+        })
+      )
+      .subscribe()
+    this.loaderService.getLoading().subscribe(val => {
+      this.isLoading = val;
+      this.changeDetectionRef.markForCheck();
+    });
+
+    this.exForm = this.formBuilder.group({
+      id: this.formBuilder.control(null),
+      exercise_name: this.formBuilder.control('', [Validators.required]),
+      muscle_group: this.formBuilder.control(''),
+      exec_var: this.formBuilder.array([])
+    })
   }
 
   show(): void {
     this.expandedBlock = !this.expandedBlock;
-    const model: IExercise = {
-      exercise_name: '',
-      exec_var: []
-    };
-    if (this.expandedBlock) {
-      this.exForm = new FormGroup({
-        exercise_name: new FormControl(model.exercise_name, [Validators.required]),
-        muscle_groups_id: new FormControl(model.muscle_groups_id),
-        exec_var: new FormControl(),
-      });
-    }
-    const exec: IExecutionVariant = {
-      name: 'Новое упражнение',
-    };
   }
 
-  // readonly stringify = (val: BodyPart): string => `${val.part_name}`
-
-  click(e: any) {
-    console.log(this.exForm.value);
+  get exec_var() {
+    return this.exForm.get('exec_var') as FormArray;
   }
 
-  onSubmit(): void {}
+  click(_: any) {
+    this.exec_var.push(
+      new FormGroup({
+        name: new FormControl('', Validators.required),
+        url: new FormControl(''),
+        comment: new FormControl('')
+      })
+    )
+  }
+
+  public onSubmit(): void {
+    this.exercisesConfigService.createExercise(this.exForm.value);
+    this.exForm.reset();
+    this.expandedBlock = false;
+  }
 
   ngOnDestroy(): void {
     console.log('меня удалили');
   }
 
   @tuiPure
-  stringify(items: readonly any[]): TuiStringHandler<TuiContextWithImplicit<number>> {
-    const map = new Map(items.map(({ id, part_name }) => [id, part_name] as [number, string]));
+  stringify(items: readonly ISelectBox[]): TuiStringHandler<TuiContextWithImplicit<number>> {
+    const map = new Map(items.map(({ id, name }) => [id, name] as [number, string]));
 
     return ({ $implicit }: TuiContextWithImplicit<number>) => map.get($implicit) || '';
   }

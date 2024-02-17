@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ExercisesRoutingModule } from './exercises-routing.module';
 import { ExercisesComponent } from 'src/app/components/exercises/exercises.component';
 import { TuiExpandModule } from '@taiga-ui/core';
-import { MuscleGroupComponent } from 'src/app/components/muscle-group/muscle-group.component';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderModule } from 'src/app/components/loader/loader/loader.module';
 @NgModule({
-  declarations: [ExercisesComponent, MuscleGroupComponent],
+  declarations: [ExercisesComponent],
   imports: [
     CommonModule,
     TaigaModule,
@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TuiExpandModule,
     ReactiveFormsModule,
     FormsModule,
-    // YouTubePlayerModule
+    LoaderModule,
   ],
   // exports: [YouTubePlayerModule]
 })

@@ -52,7 +52,7 @@ export class ClientsService {
     options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
-    return this._http.post(`${ENV.supabaseUrl}/asd${this.clientsAPIUrl}`, model, options);
+    return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options);
   }
 
   removeClient(guid: string): Observable<Object> {

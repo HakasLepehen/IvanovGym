@@ -6,6 +6,7 @@ import { ClientsComponent } from '../../components/clients/clients.component';
 import { TaigaModule } from '../taiga/taiga.module';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { ClientOperationsComponent } from '../../components/client-operations/client-operations.component';
+import { LoaderModule } from 'src/app/components/loader/loader/loader.module';
 
 @NgModule({
   imports: [
@@ -13,12 +14,12 @@ import { ClientOperationsComponent } from '../../components/client-operations/cl
     ClientsRoutingModule,
     TaigaModule,
     ClientOperationsComponent,
-    AsyncPipe
+    AsyncPipe,
+    LoaderModule
   ],
   exports: [],
   declarations: [
     ClientsComponent,
-    LoaderComponent,
   ],
 })
 export class ClientsModule { }
