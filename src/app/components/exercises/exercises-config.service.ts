@@ -3,7 +3,7 @@ import { IExercise } from './../../interfaces/exercise';
 import { Injectable } from '@angular/core';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { ExercisesService } from './exercises.service';
-import { Subject, map, take, tap, catchError, of } from 'rxjs';
+import { Subject, map, take, tap, catchError, of, Observable, forkJoin } from 'rxjs';
 import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
 
 @Injectable({
@@ -62,5 +62,18 @@ export class ExercisesConfigService {
         })
       )
       .subscribe();
+  }
+
+  getExercises(): void  {
+    this.loader.show();
+    const observable: Observable<any> = forkJoin([
+      this.exercisesService.loadExercises(),
+      this.exercisesService.loadExecVars
+    ])
+
+    observable.subscribe(([val1, val2]) => {
+      console.log(val1);
+      console.log(val2);
+    })
   }
 }

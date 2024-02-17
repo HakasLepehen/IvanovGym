@@ -1,14 +1,12 @@
-import { IExecutionVariant } from './../../interfaces/execution_variant';
-import { IExercise } from '../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
-import { Component, Injector, ChangeDetectionStrategy, OnDestroy, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import { Component, Injector, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiDialogService } from '@taiga-ui/core/';
-import { delay, of, tap } from 'rxjs';
 import { TuiContextWithImplicit, tuiPure, TuiStringHandler } from '@taiga-ui/cdk';
 import { BodyParts } from 'src/app/enums/body_parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { ExercisesConfigService } from './exercises-config.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-exercises',
@@ -20,6 +18,7 @@ export class ExercisesComponent implements OnInit, OnDestroy {
   expandedBlock: boolean = false;
   // exForm!: FormGroup;
   public exForm!: FormGroup;
+  public isLoading = false;
   body_parts: Array<ISelectBox> = BodyParts;
   list = [1];
 
@@ -28,10 +27,15 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     private readonly injector: Injector,
     private exService: ExercisesService,
     private formBuilder: FormBuilder,
-    private exercisesConfigService: ExercisesConfigService
+    private exercisesConfigService: ExercisesConfigService,
+    private loaderService: LoaderService,
   ) { }
 
   ngOnInit(): void {
+    this.loaderService.getLoading().subscribe(val => {
+      this.isLoading = val
+    });
+
     this.exForm = this.formBuilder.group({
       id: this.formBuilder.control(null),
       exercise_name: this.formBuilder.control('', [Validators.required]),
@@ -58,7 +62,9 @@ export class ExercisesComponent implements OnInit, OnDestroy {
     )
   }
 
-  onSubmit(): void {
+  public onClose() {}
+
+  public onSubmit(): void {
     this.exercisesConfigService.createExercise(this.exForm.value);
     this.exForm.reset();
     this.expandedBlock = false;

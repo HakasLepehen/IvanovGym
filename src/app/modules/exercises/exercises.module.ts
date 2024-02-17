@@ -6,6 +6,7 @@ import { ExercisesComponent } from 'src/app/components/exercises/exercises.compo
 import { TuiExpandModule } from '@taiga-ui/core';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderModule } from 'src/app/components/loader/loader/loader.module';
 @NgModule({
   declarations: [ExercisesComponent],
   imports: [
@@ -16,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TuiExpandModule,
     ReactiveFormsModule,
     FormsModule,
-    // YouTubePlayerModule
+    LoaderModule,
   ],
   // exports: [YouTubePlayerModule]
 })
