@@ -20,10 +20,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MainInterceptor } from './interceptors/main.interceptor';
 import { TestComponent } from './components/test/test.component';
 import { ChildComponent } from './components/child/child.component';
+import { ExercisesListComponent } from './components/exercises-list/exercises-list.component';
 
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, TestComponent, ChildComponent],
+  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, TestComponent, ChildComponent, ExercisesListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

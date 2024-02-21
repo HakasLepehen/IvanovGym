@@ -4,7 +4,7 @@ import { Observable, Subject, catchError, forkJoin, map, of, take, tap } from 'r
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
 import { IExerciseView } from '../../interfaces/exercise_view';
-import { IExercise } from './../../interfaces/exercise';
+import { IExercise } from '../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { BodyParts } from 'src/app/enums/body_parts';

@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { LoaderService } from 'src/app/components/loader/loader.service';
-import { IExerciseView } from '../../interfaces/exercise_view';
-import { ExercisesConfigService } from './exercises-config.service';
+import { IExerciseView } from '../../../interfaces/exercise_view';
+import { ExercisesConfigService } from '../exercises-config.service';
 
 @Component({
   selector: 'app-exercises',

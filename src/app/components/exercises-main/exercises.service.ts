@@ -1,5 +1,5 @@
-import { IExecutionVariant } from './../../interfaces/execution_variant';
-import { IExercise } from './../../interfaces/exercise';
+import { IExecutionVariant } from '../../interfaces/execution_variant';
+import { IExercise } from '../../interfaces/exercise';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, from } from 'rxjs';
