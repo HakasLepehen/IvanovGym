@@ -5,7 +5,7 @@ import { TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil, tap, finalize, Observable } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { supabase } from '../../optionsSupaBase';
-import { LoaderService } from '../loader/loader.service';
+import { LoaderService } from '../../components/loader/loader.service';
 
 const options = {
   headers: {

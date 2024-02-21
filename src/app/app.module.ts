@@ -54,4 +54,4 @@ import { ChildComponent } from './components/child/child.component';
   exports: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,17 +1,20 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { IExercise } from './../../interfaces/exercise';
-import { IExerciseView } from '../../interfaces/exercise_view';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoaderService } from 'src/app/services/loader/loader.service';
-import { ExercisesService } from './exercises.service';
-import { Subject, map, take, tap, catchError, of, Observable, forkJoin } from 'rxjs';
+import { Observable, Subject, catchError, forkJoin, map, of, take, tap } from 'rxjs';
+import { LoaderService } from 'src/app/components/loader/loader.service';
 import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
+import { IExerciseView } from '../../interfaces/exercise_view';
+import { IExercise } from './../../interfaces/exercise';
+import { ExercisesService } from './exercises.service';
+import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { BodyParts } from 'src/app/enums/body_parts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExercisesConfigService {
   public exercises$: Subject<IExerciseView[]> = new Subject();
+  private body_parts: ISelectBox[] = BodyParts;
   private savingId!: number;
 
   constructor(
@@ -96,5 +99,9 @@ export class ExercisesConfigService {
       .subscribe(_ => {
         this.loader.hide()
       })
+  }
+
+  get bodyParts(): ISelectBox[] {
+    return this.body_parts;
   }
 }

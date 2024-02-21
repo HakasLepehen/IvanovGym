@@ -1,4 +1,4 @@
-import { LoaderComponent } from './../loader.component';
+import { LoaderComponent } from './loader/loader.component';
 import { NgModule } from '@angular/core';
 import { TuiLoaderModule } from '@taiga-ui/core';
 

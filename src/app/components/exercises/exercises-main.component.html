@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="container-buttons">
+    <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
+      [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
+    </button>
+  </div>
+
+</div>
+<div class='container'>
+  <div class='main_block' *ngIf="isLoading === false; else load">
+    <div class='container main_block__title'>
+      <h5 class='tui-text_h4' style="font-size: 1.75em;">Выберите группу мышц</h5>
+    </div>
+    <div class='main_block__content'>
+      <div class='container'>
+        <ul class='content__list'>
+          <li *ngFor='let part of body_parts'>
+            <a class='content__item' routerLink='./{{part.id}}'>
+              {{part.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #load>
+  <app-loader></app-loader>
+</ng-template>

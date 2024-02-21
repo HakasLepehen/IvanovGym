@@ -1,12 +1,16 @@
-import { SchedulerComponent } from './../../components/scheduler/scheduler.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ExercisesComponent } from 'src/app/components/exercises/exercises.component';
+import { ExercisesMainComponent } from 'src/app/components/exercises/exercises-main.component';
+import { TestComponent } from 'src/app/components/test/test.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ExercisesComponent,
+    component: ExercisesMainComponent,
+  },
+  {
+    path: ':part',
+    component: TestComponent
   }
 ];
 
@@ -14,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ExercisesRoutingModule {}
+export class ExercisesRoutingModule { }

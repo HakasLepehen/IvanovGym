@@ -6,7 +6,7 @@ import { Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import IClientDialog from 'src/app/interfaces/client-dialog';
 import { ClientsService } from 'src/app/services/clients/clients.service';
-import { LoaderService } from 'src/app/services/loader/loader.service';
+import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
 
 @Injectable({
