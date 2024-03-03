@@ -7,6 +7,8 @@ import { TuiExpandModule } from '@taiga-ui/core';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from 'src/app/components/loader/loader.module';
+import { ExercisesFormComponent } from 'src/app/components/exercises-form/exercises-form/exercises-form.component';
+import { ExercisesFormModule } from 'src/app/components/exercises-form/exercises-form.module';
 @NgModule({
   declarations: [ExercisesMainComponent],
   imports: [
@@ -18,7 +20,7 @@ import { LoaderModule } from 'src/app/components/loader/loader.module';
     ReactiveFormsModule,
     FormsModule,
     LoaderModule,
+    ExercisesFormModule
   ],
-  // exports: [YouTubePlayerModule]
 })
 export class ExercisesModule { }

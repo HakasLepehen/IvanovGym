@@ -1,28 +1,25 @@
+import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, catchError, forkJoin, map, of, take, tap } from 'rxjs';
+import { Subject, catchError, forkJoin, map, of, take, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
-import { IExecutionVariant } from 'src/app/interfaces/execution_variant';
-import { IExerciseView } from '../../interfaces/exercise_view';
-import { IExercise } from '../../interfaces/exercise';
-import { ExercisesService } from './exercises.service';
-import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { BodyParts } from 'src/app/enums/body_parts';
+import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { IExercise } from './../../interfaces/exercise';
+import { ExercisesService } from './exercises.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExercisesConfigService {
-  public exercises$: Subject<IExerciseView[]> = new Subject();
+  private exercises$: Subject<IExercise[]> = new Subject();
   private body_parts: ISelectBox[] = BodyParts;
   private savingId!: number;
 
   constructor(
     private loader: LoaderService,
     private exercisesService: ExercisesService
-  ) {
-    this.getExercises();
-  }
+  ) { }
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
   createExercise(model: IExercise) {
@@ -67,38 +64,44 @@ export class ExercisesConfigService {
       .subscribe();
   }
 
-  getExercises(): void {
+  loadExercises(body_part: number): void {
     this.loader.show();
-    const observable: Observable<any> = forkJoin([
-      this.exercisesService.loadExercises(),
-    ])
 
-    observable
+    this.exercisesService.loadExercises(body_part)
       .pipe(
         take(1),
-        tap((val: [][]) => {
-          let result: IExerciseView[] = [];
-          val[0].forEach((exercise: IExercise) => {
-            this.exercisesService.loadExecVars(exercise.id as number)
-              .pipe(take(1))
-              .subscribe((res: any) => {
-                res.forEach((exec_var: IExecutionVariant) => {
-                  result.push({
-                    id: <number>exercise.id,
-                    exercise_name: `${exercise.exercise_name} ${exec_var.name}`,
-                    muscle_group: <number>exercise.muscle_group,
-                    comment: exec_var.comment,
-                    url: exec_var.url
-                  })
-                });
-                this.exercises$.next(result);
-              })
-          });
+        tap((res) => {
+          const result: IExercise[] = res as any;
+
+          result.forEach(exercise => {
+            this.loadExecutionVariants(exercise);
+          })
+          this.setExercises(result);
+          this.loader.hide();
         })
       )
-      .subscribe(_ => {
-        this.loader.hide()
-      })
+      .subscribe()
+  }
+
+  loadExecutionVariants(exercise: IExercise): void {
+    this.loader.show();
+
+    this.exercisesService.loadExecVars(<number>exercise.id)
+      .pipe(
+        take(1),
+        // в душе не чаю откуда такая конструкция. Предложил редактор для фикса ошибки [ts2352]
+        tap((res) => exercise.exec_var = res as unknown as Array<IExecutionVariant>
+        )
+      )
+      .subscribe();
+  }
+
+  get exercises(): Subject<IExercise[]> {
+    return this.exercises$;
+  }
+
+  setExercises(val: IExercise[]): void {
+    this.exercises$.next(val);
   }
 
   get bodyParts(): ISelectBox[] {

@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, from } from 'rxjs';
 import { ENV } from 'src/environment/environment';
 import { supabase } from 'src/app/optionsSupaBase';
-import { PostgrestSingleResponse } from '@supabase/postgrest-js/dist/module/types';
 
 const options: any = {
   headers: {
@@ -47,14 +46,25 @@ export class ExercisesService {
     return this._http.post(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, options);
   }
 
-  loadExercises() {
-    delete options.headers.Prefer
-    return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}?select=*`, options);
+  loadExercises(body_part: number) {
+    let params = new HttpParams();
+
+    params = params.append('muscle_group', `eq.${body_part}`);
+    params = params.append('select', `*`);
+    options.params = params;
+    delete options.headers.Prefer;
+    return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, options);
   }
 
   loadExecVars(exerciseId: number) {
-    delete options.headers.Prefer
-    options.headers['Range'] = '0-9';
-    return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}?exercise_id=eq.${exerciseId}&select=*`, options);
+    let params = new HttpParams();
+
+    delete options?.params;
+    delete options.headers.Prefer;
+    params = params.set('exercise_id', `eq.${exerciseId}`);
+    params = params.set('select', `*`);
+    options.params = params;
+
+    return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, options);
   }
 }

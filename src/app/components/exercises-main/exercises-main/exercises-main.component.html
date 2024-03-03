@@ -1,15 +1,10 @@
 <div class="container">
-  <div class="container-buttons">
-    <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
-      [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
-    </button>
-  </div>
-
+  <app-exercises-form></app-exercises-form>
 </div>
 <div class='container'>
   <div class='main_block' *ngIf="isLoading === false; else load">
     <div class='container main_block__title'>
-      <h5 class='tui-text_h4' style="font-size: 1.75em;">Выберите группу мышц</h5>
+      <h5 class='tui-text_h4' class="container__title">Выберите группу мышц</h5>
     </div>
     <div class='main_block__content'>
       <div class='container'>
