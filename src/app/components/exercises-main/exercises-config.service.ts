@@ -1,12 +1,15 @@
-import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Subject, catchError, forkJoin, map, of, take, tap } from 'rxjs';
+import { Injectable, Injector } from '@angular/core';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { Subject, catchError, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body_parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
+import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +18,13 @@ export class ExercisesConfigService {
   private exercises$: Subject<IExercise[]> = new Subject();
   private body_parts: ISelectBox[] = BodyParts;
   private savingId!: number;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private loader: LoaderService,
-    private exercisesService: ExercisesService
+    private exercisesService: ExercisesService,
+    private readonly dialogs: TuiDialogService,
+    private readonly injector: Injector
   ) { }
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
@@ -106,5 +112,26 @@ export class ExercisesConfigService {
 
   get bodyParts(): ISelectBox[] {
     return this.body_parts;
+  }
+
+  openModal(el: IExercise) {
+    this.dialogs
+    .open(new PolymorpheusComponent(ExercisesFormComponent, this.injector), {
+      label: 'Редактирование упражнения:',
+      data: {
+        client: el
+          ? el
+          : {
+            fullName: '',
+            created_at: new Date(),
+            age: 0,
+          },
+        isEdit: !!el,
+      },
+      closeable: true,
+      dismissible: false,
+    })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe();
   }
 }

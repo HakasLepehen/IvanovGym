@@ -5,7 +5,7 @@ import { TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil, tap, finalize, Observable } from 'rxjs';
 import { ENV } from '../../../environment/environment';
 import { supabase } from '../../optionsSupaBase';
-import { LoaderService } from '../../components/loader/loader.service';
+import { LoaderService } from '../loader/loader.service';
 
 const options = {
   headers: {
@@ -37,12 +37,10 @@ export class ClientsService {
   }
 
   getClients(): Observable<IClient[]> {
-    // this.showLoader();
     return this._http.get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } }).pipe(
       tap((res: IClient[]) => this.clients$.next(res)),
       takeUntil(this.destroy$)
     );
-    // .subscribe(() => this.hideLoader());
   }
 
   createClient(model: IClient) {

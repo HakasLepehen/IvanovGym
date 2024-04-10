@@ -8,7 +8,7 @@ import IClientDialog from '../../interfaces/client-dialog';
 import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInputNumberModule } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
-import { ClientsService } from '../../services/clients/clients.service';
+import { ClientsService } from '../clients/clients.service';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 
 @Component({
@@ -53,7 +53,7 @@ export class ClientOperationsComponent implements OnInit {
     private readonly context: TuiDialogContext<boolean, IClientDialog>,
     private cs: ClientsService,
     private clientConfigService: ClientsConfigService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.canEdit = this.context.data.isEdit;

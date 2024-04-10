@@ -1,24 +1,24 @@
 import { LoaderService } from './loader.service';
 
 describe('Checking in loader service', () => {
-  let service: LoaderService;
+  let loader: LoaderService;
 
-  beforeEach(() => service = new LoaderService())
+  beforeEach(() => loader = new LoaderService())
 
-  it('should be hidden', () => {
-    expect(service.getLoading()).toBe(false);
+  it('loader should be hidden', () => {
+    expect(loader.getLoading().getValue()).toBe(false);
   });
 
-  it('should be displayed', () => {
-    service.show();
-    expect(service.getLoading())
+  it('loader should be displayed', () => {
+    loader.show();
+    expect(loader.getLoading().getValue())
       .withContext('Loader component must be show')
       .toBe(true);
   });
 
-  it('should be hide', () => {
-    service.hide();
-    expect(service.getLoading())
+  it('loader should be hide', () => {
+    loader.hide();
+    expect(loader.getLoading().getValue())
       .withContext('Loader component must be hidden')
       .toBe(false);
   });

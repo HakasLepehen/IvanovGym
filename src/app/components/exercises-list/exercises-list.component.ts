@@ -6,16 +6,18 @@ import { Subject, takeUntil, tap } from 'rxjs';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
+import { TuiButtonModule } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-exercises-list',
-  imports: [CommonModule, TuiAccordionModule, ExercisesFormModule],
+  imports: [CommonModule, TuiAccordionModule, ExercisesFormModule, TuiButtonModule],
   standalone: true,
   templateUrl: './exercises-list.component.html',
+  styleUrls: ['./exercises-list.component.scss']
 })
 export class ExercisesListComponent {
   public title: string = '';
-
+  public selectedExercise: IExercise | undefined;
   private unsubscribe$: Subject<void> = new Subject();
 
   constructor(
@@ -46,7 +48,12 @@ export class ExercisesListComponent {
     return this.exerciseConfigService.exercises;
   }
 
+  editExercise(model: any) {
+    this.exerciseConfigService.openModal(model);
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
+    this.exerciseConfigService.destroy$.next(true);
   }
 }
