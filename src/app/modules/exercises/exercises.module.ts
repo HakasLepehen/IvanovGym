@@ -7,8 +7,9 @@ import { TuiExpandModule } from '@taiga-ui/core';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from 'src/app/components/loader/loader.module';
-import { ExercisesFormComponent } from 'src/app/components/exercises-form/exercises-form/exercises-form.component';
 import { ExercisesFormModule } from 'src/app/components/exercises-form/exercises-form.module';
+import { AddingExerciseComponent } from 'src/app/components/adding-exercise/adding-exercise.component';
+
 @NgModule({
   declarations: [ExercisesMainComponent],
   imports: [
@@ -20,7 +21,8 @@ import { ExercisesFormModule } from 'src/app/components/exercises-form/exercises
     ReactiveFormsModule,
     FormsModule,
     LoaderModule,
-    ExercisesFormModule
+    ExercisesFormModule,
+    AddingExerciseComponent
   ],
 })
 export class ExercisesModule { }

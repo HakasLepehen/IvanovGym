@@ -1,5 +1,6 @@
 <div class="container">
-  <app-exercises-form [model]="selectedExercise"></app-exercises-form>
+  <!-- <app-exercises-form [model]="selectedExercise"></app-exercises-form> -->
+  <app-adding-exercise />
   <h5 class='tui-text_h4' class="container__title">Упражнения на {{title}}</h5>
   <ul>
     <li *ngFor="let item of exercises | async">

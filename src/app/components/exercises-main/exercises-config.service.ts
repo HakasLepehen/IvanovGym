@@ -115,11 +115,13 @@ export class ExercisesConfigService {
   }
 
   openModal(el: IExercise) {
+    console.log(el);
+
     this.dialogs
     .open(new PolymorpheusComponent(ExercisesFormComponent, this.injector), {
       label: 'Редактирование упражнения:',
       data: {
-        client: el
+        exercise: el
           ? el
           : {
             fullName: '',

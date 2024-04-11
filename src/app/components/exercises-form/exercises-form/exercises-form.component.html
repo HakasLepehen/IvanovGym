@@ -1,12 +1,5 @@
-<div class="container-buttons">
-  <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
-    [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
-  </button>
-</div>
 
-<tui-expand [expanded]="expandedBlock">
-  <ng-template tuiExpandContent>
-    <form *ngIf="expandedBlock" [formGroup]="exForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="exForm" (ngSubmit)="onSubmit()">
       <!-- Наименование упражнения -->
       <div class="tui-form__row">
         <tui-input formControlName="exercise_name" tuiTextfieldSize="m">
@@ -62,6 +55,5 @@
       </div>
     </form>
     <button tuiButton [size]="'m'" (click)="addVariant($event)" type="button">Добавить вариант</button>
-  </ng-template>
-</tui-expand>
-<button *ngIf="expandedBlock" tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>
+
+<button tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>

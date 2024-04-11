@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { tuiPure, TuiStringHandler, TuiContextWithImplicit } from "@taiga-ui/cdk";
 import { IExercise } from "src/app/interfaces/exercise";
@@ -14,9 +14,9 @@ import { ExercisesConfigService } from "../../exercises-main/exercises-config.se
 export class ExercisesFormComponent {
   @Input()
   public model: IExercise | undefined;
-  public expandedBlock: boolean = false;
   public exForm!: FormGroup;
   public body_parts: Array<ISelectBox> = [];
+  @Output() public formSaved: EventEmitter<void> = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,25 +29,15 @@ export class ExercisesFormComponent {
     this.exForm = this.formBuilder.group({
       id: this.formBuilder.control(null),
       exercise_name: this.formBuilder.control(this.model?.exercise_name, [Validators.required]),
-      muscle_group: this.formBuilder.control(''),
-      exec_var: this.formBuilder.array([])
+      muscle_group: this.formBuilder.control(this.model?.muscle_group),
+      exec_var: this.formBuilder.array(this.model?.exec_var || [])
     })
-  }
-
-  public show(): void {
-    this.expandedBlock = !this.expandedBlock;
-    if (!this.expandedBlock) {
-      this.model = undefined;
-      this.exForm.reset();
-    }
-    console.log(this.model);
-
   }
 
   public onSubmit(): void {
     this.exercisesConfigService.createExercise(this.exForm.value);
     this.exForm.reset();
-    this.expandedBlock = false;
+    this.formSaved.emit();
   }
 
   get exec_var() {

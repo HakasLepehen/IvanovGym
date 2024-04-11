@@ -11,7 +11,6 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 @NgModule({
   declarations: [ExercisesFormComponent],
   imports: [
-    TuiExpandModule,
     FormsModule,
     ReactiveFormsModule,
     TaigaModule

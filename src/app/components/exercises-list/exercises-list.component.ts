@@ -7,10 +7,11 @@ import { ExercisesConfigService } from '../exercises-main/exercises-config.servi
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
 import { TuiButtonModule } from '@taiga-ui/core';
+import { AddingExerciseComponent } from '../adding-exercise/adding-exercise.component';
 
 @Component({
   selector: 'app-exercises-list',
-  imports: [CommonModule, TuiAccordionModule, ExercisesFormModule, TuiButtonModule],
+  imports: [CommonModule, TuiAccordionModule, ExercisesFormModule, TuiButtonModule, AddingExerciseComponent],
   standalone: true,
   templateUrl: './exercises-list.component.html',
   styleUrls: ['./exercises-list.component.scss']
