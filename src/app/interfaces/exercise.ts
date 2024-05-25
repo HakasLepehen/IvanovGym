@@ -6,5 +6,5 @@ export interface IExercise {
   id?: number
   exercise_name: string;
   exec_var?: Array<IExecutionVariant>;
-  muscle_group: number | null;
+  muscle_group: Array<number>;
 }

@@ -22,7 +22,7 @@ const options = {
 export class ClientsService {
   public clients$: Subject<IClient[]> = new Subject();
   public onLoad: Subject<boolean> = new Subject<boolean>();
-  clientsAPIUrl: string = '/rest/v1/clients';
+  clientsAPIUrl: string = 'rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
   destroy$: Subject<boolean> = new Subject<boolean>();
 

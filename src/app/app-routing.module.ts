@@ -4,7 +4,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
-import { TestComponent } from './components/test/test.component';
+import { TestComponent } from './components/test/test/test.component';
 
 const routes: Routes = [
   {

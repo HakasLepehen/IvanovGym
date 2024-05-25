@@ -49,7 +49,7 @@ export class ExercisesService {
   loadExercises(body_part: number) {
     let params = new HttpParams();
 
-    params = params.append('muscle_group', `eq.${body_part}`);
+    params = params.append('muscle_group', `eq.{${body_part}}`);
     params = params.append('select', `*`);
     options.params = params;
     delete options.headers.Prefer;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TuiAccordionModule } from '@taiga-ui/kit';
 import { Subject, takeUntil, tap } from 'rxjs';
@@ -14,7 +14,8 @@ import { AddingExerciseComponent } from '../adding-exercise/adding-exercise.comp
   imports: [CommonModule, TuiAccordionModule, ExercisesFormModule, TuiButtonModule, AddingExerciseComponent],
   standalone: true,
   templateUrl: './exercises-list.component.html',
-  styleUrls: ['./exercises-list.component.scss']
+  styleUrls: ['./exercises-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ExercisesListComponent {
   public title: string = '';

@@ -20,7 +20,7 @@ import {
   TuiDataListWrapperModule,
   TuiFieldErrorPipeModule,
   TuiInputModule,
-  TuiSelectModule,
+  TuiMultiSelectModule,
 } from '@taiga-ui/kit';
 import { of } from 'rxjs';
 
@@ -40,9 +40,10 @@ import { of } from 'rxjs';
     TuiScrollbarModule,
     TuiCalendarModule,
     TuiSvgModule,
-    TuiSelectModule,
+    TuiMultiSelectModule,
     TuiDataListModule,
     TuiDataListWrapperModule,
+    TuiTextfieldControllerModule,
     TuiNotificationModule
   ],
   providers: [
@@ -66,7 +67,7 @@ import { of } from 'rxjs';
     TuiScrollbarModule,
     TuiCalendarModule,
     TuiSvgModule,
-    TuiSelectModule,
+    TuiMultiSelectModule,
     TuiDataListModule,
     TuiDataListWrapperModule,
     TuiNotificationModule

@@ -16,7 +16,6 @@ import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercis
 })
 export class ExercisesConfigService {
   private exercises$: Subject<IExercise[]> = new Subject();
-  private body_parts: ISelectBox[] = BodyParts;
   private savingId!: number;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -111,24 +110,15 @@ export class ExercisesConfigService {
   }
 
   get bodyParts(): ISelectBox[] {
-    return this.body_parts;
+    return BodyParts;
   }
 
   openModal(el: IExercise) {
-    console.log(el);
-
     this.dialogs
     .open(new PolymorpheusComponent(ExercisesFormComponent, this.injector), {
       label: 'Редактирование упражнения:',
       data: {
-        exercise: el
-          ? el
-          : {
-            fullName: '',
-            created_at: new Date(),
-            age: 0,
-          },
-        isEdit: !!el,
+        exercise: el,
       },
       closeable: true,
       dismissible: false,

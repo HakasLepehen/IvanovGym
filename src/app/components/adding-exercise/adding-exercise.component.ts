@@ -15,7 +15,7 @@ export class AddingExerciseComponent {
   public model?: IExercise = {
     exercise_name: '',
     exec_var: [],
-    muscle_group: null,
+    muscle_group: [],
   }
 
   constructor() {}
