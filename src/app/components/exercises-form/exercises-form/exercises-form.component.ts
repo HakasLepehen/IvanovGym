@@ -2,14 +2,14 @@ import { IExecutionVariant } from './../../../interfaces/execution_variant';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { TuiDialogContext } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
-import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, Inject } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, Inject, AfterContentChecked } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { tuiPure, TuiStringHandler, TuiContextWithImplicit, TUI_DEFAULT_MATCHER, tuiIsNumber, TuiHandler } from "@taiga-ui/cdk";
 import { IExercise } from "src/app/interfaces/exercise";
 import { ISelectBox } from "src/app/interfaces/selectbox";
 import { ExercisesConfigService } from "../../exercises-main/exercises-config.service";
 import { tuiItemsHandlersProvider } from '@taiga-ui/kit';
-import { Observable, Subject, map, of, startWith, switchMap } from 'rxjs';
+import { Observable, Subject, debounceTime, fromEvent, map, of, startWith, switchMap, tap, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-exercises-form',
@@ -85,20 +85,21 @@ export class ExercisesFormComponent {
    **/
   public readonly b_parts$ = of(this.exercisesConfigService.bodyParts);
 
-  public readonly body_parts$ = this.search$
+  public body_parts$ = this.search$
     .pipe(
       startWith(''),
       switchMap(search =>
         this.b_parts$.pipe(
-          map(items =>
-            items
+          map(items => {
+            const result = items
               .filter(({ name }) => TUI_DEFAULT_MATCHER(name, search))
               .map(({ id }) => id)
-          ),
+            return result;
+          }),
         ),
       ),
       startWith(null)
-  );
+    );
 
   stringify$: Observable<any>
     = this.b_parts$.pipe(
@@ -121,7 +122,9 @@ export class ExercisesFormComponent {
     return this.exForm.get('exec_var') as FormArray;
   }
 
-
+  onSearch(search: string | null): void {
+    this.search$.next(search || '')
+  }
 
   addVariant(_: any) {
     this.exec_var.push(
@@ -132,11 +135,4 @@ export class ExercisesFormComponent {
       })
     )
   }
-
-  // @tuiPure
-  // stringify(items: readonly ISelectBox[]): TuiStringHandler<TuiContextWithImplicit<number>> {
-  //   const map = new Map(items.map(({ id, name }) => [id, name] as [number, string]));
-
-  //   return ({ $implicit }: TuiContextWithImplicit<number>) => map.get($implicit) || '';
-  // }
 }
