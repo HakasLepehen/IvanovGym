@@ -48,7 +48,7 @@ export class ExercisesFormComponent {
     this.exForm = this.formBuilder.group({
       id: this.formBuilder.control(this.model?.id),
       exercise_name: this.formBuilder.control(this.model?.exercise_name, [Validators.required]),
-      muscle_group: this.formBuilder.control([this.model?.muscle_group]),
+      muscle_group: this.formBuilder.control(this.model?.muscle_group),
       exec_var: this.formBuilder.array([])
     })
 
@@ -80,6 +80,9 @@ export class ExercisesFormComponent {
     })
   }
 
+  /**
+   *  сделал по образу и подобию с версией Тинькофф
+   **/
   public readonly b_parts$ = of(this.exercisesConfigService.bodyParts);
 
   public readonly body_parts$ = this.search$
@@ -95,15 +98,15 @@ export class ExercisesFormComponent {
         ),
       ),
       startWith(null)
-    );
+  );
 
   stringify$: Observable<any>
     = this.b_parts$.pipe(
       map(items => new Map(items.map<[number, string]>(({ id, name }) => [id, name]))),
       startWith(new Map()),
       map(
-        map => ([id]: TuiContextWithImplicit<number>[] | number[]) =>
-          ((typeof id === 'number') ? map.get(id) : map.get(id.$implicit)) || 'Loading',
+        map => (id: TuiContextWithImplicit<number> | number) =>
+          (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
       )
     );
 

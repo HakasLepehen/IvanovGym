@@ -10,19 +10,11 @@
   </div>
 
   <div class="tui-form__row">
-    <tui-multi-select
-    *tuiLet="body_parts$ | async as body_parts"
-        [editable]="true"
-        [stringify]="(stringify$ | async)!"
-        [formControl]="body_parts_control"
-        tuiTextfieldSize="m"
-        [tuiTextfieldLabelOutside]="true">
-        Выберите группу мышц
-      <tui-data-list-wrapper
-          *tuiDataList
-          tuiMultiSelectGroup
-          [items]="body_parts"
-          [itemContent]="(stringify$ | async)!">
+    <tui-multi-select *tuiLet="body_parts$ | async as body_parts" [editable]="true" [stringify]="(stringify$ | async)!"
+      [formControl]="body_parts_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true">
+      Выберите группу мышц
+      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="body_parts"
+      [itemContent]="(stringify$ | async)!">
 
       </tui-data-list-wrapper>
     </tui-multi-select>
