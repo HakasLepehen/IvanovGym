@@ -20,10 +20,6 @@ import { Observable, Subject, debounceTime, fromEvent, map, of, startWith, switc
     tuiItemsHandlersProvider({
       stringify: (item: ISelectBox) => item.name
     }),
-    // {
-    //   provide: POLYMORPHEUS_CONTEXT,
-    //   useExisting: TuiDialogService
-    // }
   ]
 })
 export class ExercisesFormComponent {

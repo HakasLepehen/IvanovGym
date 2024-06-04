@@ -7,8 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiDataListWrapperModule, TuiFieldErrorPipe, TuiFieldErrorPipeModule, TuiMultiSelectModule } from '@taiga-ui/kit';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 import { TuiLetModule } from '@taiga-ui/cdk';
-import { DialogComponent } from "../dialog/dialog.component";
-import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 
 
 
@@ -29,7 +27,6 @@ import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     AsyncPipe,
-    DialogComponent
   ]
 })
 export class ExercisesFormModule { }

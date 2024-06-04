@@ -1,7 +1,6 @@
 import { ClientsConfigService } from './../clients/clients-config.service';
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
 import { IClient } from '../../interfaces/client';
-import { DialogComponent } from '../dialog/dialog.component';
 import { TuiButtonModule, TuiDialogContext, TuiDialogService, TuiErrorModule } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import IClientDialog from '../../interfaces/client-dialog';
@@ -16,7 +15,6 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
   standalone: true,
   imports: [
     TaigaModule,
-    DialogComponent,
     TuiButtonModule,
     FormsModule,
     ReactiveFormsModule,

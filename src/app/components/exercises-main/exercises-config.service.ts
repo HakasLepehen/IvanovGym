@@ -75,8 +75,8 @@ export class ExercisesConfigService {
     this.exercisesService.updateExercise(model)
       .pipe(
         tap(
+          () => this.closeModal(context),
           take(1),
-          () => this.closeModal(context)
         ),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
