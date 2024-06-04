@@ -15,6 +15,7 @@ import { AddingExerciseComponent } from 'src/app/components/adding-exercise/addi
   imports: [
     CommonModule,
     TaigaModule,
+    FormsModule,
     ExercisesRoutingModule,
     DialogComponent,
     TuiExpandModule,

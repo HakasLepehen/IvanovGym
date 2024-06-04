@@ -50,8 +50,12 @@ export class ExercisesListComponent {
     return this.exerciseConfigService.exercises;
   }
 
-  editExercise(model: any) {
-    this.exerciseConfigService.openModal(model);
+  editExercise(model: IExercise) {
+    this.exerciseConfigService.openModal(model, true);
+  }
+
+  deleteExercise(model: IExercise) {
+    this.exerciseConfigService.deleteExercise(model)
   }
 
   ngOnDestroy() {

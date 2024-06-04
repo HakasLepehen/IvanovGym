@@ -1,16 +1,21 @@
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ExercisesFormComponent } from './exercises-form/exercises-form.component';
-import { TuiButtonModule, TuiDataListModule, TuiErrorModule, TuiExpandModule, TuiTextfieldControllerModule } from '@taiga-ui/core';
+import { TuiButtonModule, TuiDataListModule, TuiDialogService, TuiErrorModule, TuiExpandModule, TuiTextfieldControllerModule } from '@taiga-ui/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiDataListWrapperModule, TuiFieldErrorPipe, TuiFieldErrorPipeModule, TuiMultiSelectModule } from '@taiga-ui/kit';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 import { TuiLetModule } from '@taiga-ui/cdk';
+import { DialogComponent } from "../dialog/dialog.component";
+import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 
 
 
 @NgModule({
   declarations: [ExercisesFormComponent],
+  providers: [],
+  exports: [ExercisesFormComponent],
   imports: [
     CommonModule,
     TaigaModule,
@@ -20,11 +25,11 @@ import { TuiLetModule } from '@taiga-ui/cdk';
     TuiDataListWrapperModule,
     TuiMultiSelectModule,
     TuiTextfieldControllerModule,
-		TuiLetModule,
+    TuiLetModule,
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     AsyncPipe,
-  ],
-  exports: [ExercisesFormComponent]
+    DialogComponent
+  ]
 })
 export class ExercisesFormModule { }

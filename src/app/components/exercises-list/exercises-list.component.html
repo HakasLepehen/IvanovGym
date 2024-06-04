@@ -7,7 +7,10 @@
       <div>
         <div class="title__block">
           <h4 class="title">{{item.exercise_name}}</h4>
-          <button (click)="editExercise(item)" tuiIconButton icon="tuiIconEdit2" size='s'></button>
+          <div class="title__block_buttons">
+            <button (click)="editExercise(item)" tuiIconButton icon="tuiIconEdit2" size='s'></button>
+            <button (click)="deleteExercise(item)" tuiIconButton icon="tuiIconTrash" size='s' appearance="accent" type="button"></button>
+          </div>
         </div>
         <div class='main_block__content'>
           <tui-accordion class='' *ngIf="item.exec_var?.length; else empty">

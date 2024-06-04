@@ -1,6 +1,6 @@
 import { IExecutionVariant } from './../../../interfaces/execution_variant';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
-import { TuiDialogContext } from '@taiga-ui/core';
+import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, Inject, AfterContentChecked } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
@@ -19,14 +19,18 @@ import { Observable, Subject, debounceTime, fromEvent, map, of, startWith, switc
   providers: [
     tuiItemsHandlersProvider({
       stringify: (item: ISelectBox) => item.name
-    })
+    }),
+    // {
+    //   provide: POLYMORPHEUS_CONTEXT,
+    //   useExisting: TuiDialogService
+    // }
   ]
 })
 export class ExercisesFormComponent {
   @Input()
   public model: IExercise | undefined;
   public exForm!: FormGroup;
-  // public body_parts: Array<ISelectBox> = [];
+  private isEdit: boolean = false;
   public body_parts_control!: FormControl;
   private readonly search$ = new Subject<string>();
   @Output() public formSaved: EventEmitter<void> = new EventEmitter();
@@ -35,14 +39,13 @@ export class ExercisesFormComponent {
     private formBuilder: FormBuilder,
     @Inject(ExercisesConfigService) private exercisesConfigService: ExercisesConfigService,
     @Inject(POLYMORPHEUS_CONTEXT)
-    private context: TuiDialogContext<any, IExerciseDialog>
+    private context: TuiDialogContext<boolean, IExerciseDialog>
   ) { }
 
   ngOnInit() {
-    // this.body_parts = this.exercisesConfigService.bodyParts;
-
     if (this.context?.data) {
-      this.model = this.context.data.exercise;
+      this.model = this.context.data.model;
+      this.isEdit = this.context.data.isEdit;
     }
 
     this.exForm = this.formBuilder.group({
@@ -55,7 +58,7 @@ export class ExercisesFormComponent {
     this.body_parts_control = this.exForm.get('muscle_group') as FormControl;
 
     // if we create new exercise - create first execution variant
-    if (!this.context?.data.exercise) {
+    if (!this.context?.data?.model) {
       this.exec_var.push(
         new FormGroup({
           id: new FormControl(null),
@@ -112,10 +115,13 @@ export class ExercisesFormComponent {
     );
 
   public onSubmit(): void {
-    // this.exercisesConfigService.createExercise(this.exForm.value);
-    // this.exForm.reset();
-    // this.formSaved.emit();
-    console.log(this.exForm.value);
+    if (!this.isEdit) {
+      this.exercisesConfigService.createExercise(this.exForm.value, this.context);
+    } else {
+      this.exercisesConfigService.editExercise(this.exForm.value, this.context)
+    }
+    this.formSaved.emit();
+    this.exForm.reset();
   }
 
   get exec_var() {

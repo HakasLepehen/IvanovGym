@@ -29,7 +29,6 @@ export class ClientsService {
   constructor(
     private _http: HttpClient,
     public loader: LoaderService,
-    private readonly dialogs: TuiDialogService,
     private readonly injector: Injector
   ) {
     this.getClients();

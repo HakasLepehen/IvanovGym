@@ -1,3 +1,4 @@
+
 <form [formGroup]="exForm" (ngSubmit)="onSubmit()">
   <!-- Наименование упражнения -->
   <div class="tui-form__row">
@@ -45,7 +46,7 @@
           <span class="tui-required"></span>
         </tui-input>
         <tui-error formControlName="comment" [error]="[] | tuiFieldError | async"></tui-error>
-
+        <button tuiIconButton icon="tuiIconTrash" [size]="'m'" (click)="addVariant($event)" type="button"> </button>
       </div>
     </div>
   </div>

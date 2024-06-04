@@ -46,7 +46,7 @@ export class ClientsConfigService {
   openModal(el?: IClient) {
     this.dialogs
       .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-        label: el?.fullName ? `Редактирование клиента: из нового сервиса ${el.fullName}` : 'Новый клиент',
+        label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
         data: {
           client: el
             ? el

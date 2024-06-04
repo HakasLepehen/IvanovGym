@@ -20,6 +20,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MainInterceptor } from './interceptors/main.interceptor';
 import { ChildComponent } from './components/child/child.component';
 import { TestModule } from './components/test/test.module';
+import { TuiDialogService } from '@taiga-ui/core';
+import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 
 
 @NgModule({
@@ -49,6 +51,10 @@ import { TestModule } from './components/test/test.module';
       useClass: MainInterceptor,
       multi: true,
     },
+    {
+      provide: POLYMORPHEUS_CONTEXT,
+      useExisting: TuiDialogService
+    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [],

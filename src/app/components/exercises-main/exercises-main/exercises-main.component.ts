@@ -1,14 +1,21 @@
+import { ExercisesConfigService } from './../exercises-config.service';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { IExerciseView } from '../../../interfaces/exercise_view';
-import { ExercisesConfigService } from '../exercises-config.service';
+import { TuiDialogService } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-exercises',
   templateUrl: './exercises-main.component.html',
   styleUrls: ['./exercises-main.component.scss'],
+  providers: [
+    // {
+    //   provide: POLYMORPHEUS_CONTEXT,
+    //   useExisting: TuiDialogService
+    // }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExercisesMainComponent implements OnInit, OnDestroy {

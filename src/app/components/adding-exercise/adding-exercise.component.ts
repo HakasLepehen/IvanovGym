@@ -1,6 +1,6 @@
 import { IExercise } from 'src/app/interfaces/exercise';
-import { Component, EventEmitter, Output } from '@angular/core';
-import { TuiButtonModule, TuiExpandModule } from '@taiga-ui/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { TuiButtonModule, TuiDialogContext, TuiExpandModule } from '@taiga-ui/core';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
 
 @Component({
@@ -18,7 +18,8 @@ export class AddingExerciseComponent {
     muscle_group: [],
   }
 
-  constructor() {}
+  constructor(
+  ) {}
 
   public show(): void {
     this.expandedBlock = !this.expandedBlock;
