@@ -1,0 +1,10 @@
+.top-container {
+  display: flex;
+
+  & .container-buttons {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 1rem 0;
+    gap: .5em;
+  }
+}
