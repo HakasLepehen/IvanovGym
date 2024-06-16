@@ -1,5 +1,9 @@
 import { authReducer } from './auth.reducer';
+import { exerciseReducer } from './exercise.reducer';
 
 export const rootReducer = [
-  { auth: authReducer },
+  {
+    auth: authReducer,
+    exercise: exerciseReducer
+  },
 ];

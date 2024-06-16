@@ -1,31 +1,30 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreModule } from '@ngrx/store';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { TaigaModule } from './modules/taiga/taiga.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { CounterComponent } from './components/counter/counter.component';
-import { rootReducer } from './store/reducers/root.reducer';
-import { MainComponent } from './pages/main/main.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { MainInterceptor } from './interceptors/main.interceptor';
-import { ChildComponent } from './components/child/child.component';
-import { TestModule } from './components/test/test.module';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ChildComponent } from './components/child/child.component';
+import { TestModule } from './components/test/test.module';
+import { MainInterceptor } from './interceptors/main.interceptor';
+import { AuthModule } from './modules/auth/auth.module';
+import { TaigaModule } from './modules/taiga/taiga.module';
+import { UserModule } from './modules/user/user.module';
+import { MainComponent } from './pages/main/main.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { rootReducer } from './store/reducers/root.reducer';
 
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, MainComponent, NotFoundComponent, ChildComponent],
+  declarations: [AppComponent, MainComponent, NotFoundComponent, ChildComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

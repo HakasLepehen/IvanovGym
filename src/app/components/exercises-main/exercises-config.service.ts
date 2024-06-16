@@ -11,6 +11,8 @@ import { IExercise } from './../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
 import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
+import { Store } from '@ngrx/store';
+import { reload } from 'src/app/store/actions/exercise.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,8 @@ export class ExercisesConfigService {
     private loader: LoaderService,
     private exercisesService: ExercisesService,
     private readonly dialogs: TuiDialogService,
-    private readonly injector: Injector
+    private readonly injector: Injector,
+    private store: Store<{ exercise: {} }>
   ) { }
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
@@ -51,7 +54,7 @@ export class ExercisesConfigService {
         }),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
-        })
+        }),
       )
       .subscribe()
   }
@@ -78,6 +81,9 @@ export class ExercisesConfigService {
           () => this.closeModal(context),
           take(1),
         ),
+        tap(() => {
+          this.store.dispatch(reload())
+        }),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         })
@@ -140,7 +146,10 @@ export class ExercisesConfigService {
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         })
-      ).subscribe();
+      )
+      .subscribe({
+        complete: () => this.store.dispatch(reload())
+      });
   }
 
   loadExercises(body_part: number): void {
@@ -197,7 +206,9 @@ export class ExercisesConfigService {
         dismissible: false,
       })
       .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      .subscribe({
+        complete: () => this.store.dispatch(reload())
+      });
   }
 
   closeModal(context: TuiDialogContext<boolean, IExerciseDialog>): void {

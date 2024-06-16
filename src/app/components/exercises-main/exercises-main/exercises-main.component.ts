@@ -5,6 +5,9 @@ import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { IExerciseView } from '../../../interfaces/exercise_view';
 import { TuiDialogService } from '@taiga-ui/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { reload } from 'src/app/store/actions/exercise.actions';
 
 @Component({
   selector: 'app-exercises',
@@ -28,7 +31,7 @@ export class ExercisesMainComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private exercisesConfigService: ExercisesConfigService,
     private loaderService: LoaderService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.body_parts = this.exercisesConfigService.bodyParts;
