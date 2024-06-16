@@ -1,4 +1,4 @@
-import { SchedulerComponent } from './../../components/scheduler/scheduler.component';
+import { SchedulerComponent } from '../../components/scheduler/scheduler/scheduler.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TuiDay } from '@taiga-ui/cdk';
 import { ITraining } from 'src/app/interfaces/training';
 
 @Component({
@@ -7,6 +8,8 @@ import { ITraining } from 'src/app/interfaces/training';
   styleUrls: ['./training-calendar-list.component.scss']
 })
 export class TrainingCalendarListComponent {
+  @Input()
+  public selectedDay: TuiDay | null = null;
   public content: ITraining[] = [
     {
       clientGIUD: '123',
@@ -18,5 +21,9 @@ export class TrainingCalendarListComponent {
   ];
 
   constructor() {}
+
+  ngOnInit() {
+    console.log(this.selectedDay);
+  }
 
 }
