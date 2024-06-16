@@ -4,7 +4,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
-import { TestComponent } from './components/test/test.component';
+import { TestComponent } from './components/test/test/test.component';
 
 const routes: Routes = [
   {
@@ -26,6 +26,7 @@ const routes: Routes = [
   {
     path: 'exercises',
     loadChildren: () => import('./modules/exercises/exercises.module').then((_) => _.ExercisesModule),
+    canActivateChild: [AuthGuard]
   },
   {
     path: 'users-management',
@@ -52,4 +53,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

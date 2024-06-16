@@ -5,8 +5,8 @@ import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import IClientDialog from 'src/app/interfaces/client-dialog';
-import { ClientsService } from 'src/app/services/clients/clients.service';
-import { LoaderService } from 'src/app/services/loader/loader.service';
+import { ClientsService } from 'src/app/components/clients/clients.service';
+import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
 
 @Injectable({
@@ -46,7 +46,7 @@ export class ClientsConfigService {
   openModal(el?: IClient) {
     this.dialogs
       .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-        label: el?.fullName ? `Редактирование клиента: из нового сервиса ${el.fullName}` : 'Новый клиент',
+        label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
         data: {
           client: el
             ? el

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { LoaderService } from './services/loader/loader.service';
+import { LoaderService } from './components/loader/loader.service';
 import { Location } from '@angular/common';
 
 @Component({

@@ -1,14 +1,13 @@
 import { ClientsConfigService } from './../clients/clients-config.service';
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
 import { IClient } from '../../interfaces/client';
-import { DialogComponent } from '../dialog/dialog.component';
 import { TuiButtonModule, TuiDialogContext, TuiDialogService, TuiErrorModule } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import IClientDialog from '../../interfaces/client-dialog';
 import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInputNumberModule } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
-import { ClientsService } from '../../services/clients/clients.service';
+import { ClientsService } from '../clients/clients.service';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 
 @Component({
@@ -16,7 +15,6 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
   standalone: true,
   imports: [
     TaigaModule,
-    DialogComponent,
     TuiButtonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -53,7 +51,7 @@ export class ClientOperationsComponent implements OnInit {
     private readonly context: TuiDialogContext<boolean, IClientDialog>,
     private cs: ClientsService,
     private clientConfigService: ClientsConfigService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.canEdit = this.context.data.isEdit;

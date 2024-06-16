@@ -1,0 +1,41 @@
+<div class="container">
+  <!-- <app-exercises-form [model]="selectedExercise"></app-exercises-form> -->
+  <!-- <app-adding-exercise /> -->
+  <h5 class='tui-text_h4' class="container__title">Упражнения на {{title}}</h5>
+  <ul>
+    <li *ngFor="let item of exercises | async">
+      <div>
+        <div class="title__block">
+          <h4 class="title">{{item.exercise_name}}</h4>
+          <div class="title__block_buttons">
+            <button (click)="editExercise(item)" tuiIconButton icon="tuiIconEdit2" size='s'></button>
+            <button (click)="deleteExercise(item)" tuiIconButton icon="tuiIconTrash" size='s' appearance="accent" type="button"></button>
+          </div>
+        </div>
+        <div class='main_block__content'>
+          <tui-accordion class='' *ngIf="item.exec_var?.length; else empty">
+            <tui-accordion-item *ngFor='let exec_var of item.exec_var' size='s'>
+              {{exec_var.name}}
+              <ng-template tuiAccordionItemContent>
+                <ul class='content__wrapper'>
+                  <li>
+                    <p class='content__label'>Комментарий</p>
+                    <p class='content__text'>{{exec_var.comment}}</p>
+                    <hr>
+                  </li>
+                  <li>
+                    <a href="{{exec_var.url}}" target="_blank" class='content__text'>Ссылка на ролик</a>
+                    <hr>
+                  </li>
+                </ul>
+              </ng-template>
+            </tui-accordion-item>
+          </tui-accordion>
+          <ng-template #empty>
+            <h3 style="text-align: center;">Вариантов выполнения здесь нет</h3>
+          </ng-template>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

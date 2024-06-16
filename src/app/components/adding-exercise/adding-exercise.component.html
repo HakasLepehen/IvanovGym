@@ -1,0 +1,11 @@
+<div class="container-buttons">
+  <button tuiIconButton [size]="'l'" appearance='secondary' type='button'
+    [icon]="expandedBlock ? 'tuiIconMinusLarge' : 'tuiIconPlusLarge'" (click)='show()'>
+  </button>
+</div>
+
+<tui-expand [expanded]="expandedBlock">
+  <ng-template tuiExpandContent>
+    <app-exercises-form [model]="model" (formSaved)="onSubmit()" />
+  </ng-template>
+</tui-expand>

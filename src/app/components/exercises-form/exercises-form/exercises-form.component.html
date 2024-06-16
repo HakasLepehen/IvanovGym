@@ -1,0 +1,56 @@
+
+<form [formGroup]="exForm" (ngSubmit)="onSubmit()">
+  <!-- Наименование упражнения -->
+  <div class="tui-form__row">
+    <tui-input formControlName="exercise_name" tuiTextfieldSize="m">
+      Наименование упражнения
+      <input tuiTextfield />
+      <span class="tui-required"></span>
+    </tui-input>
+    <tui-error formControlName="exercise_name" [error]="[] | tuiFieldError | async"></tui-error>
+  </div>
+
+  <div class="tui-form__row">
+    <tui-multi-select *tuiLet="body_parts$ | async as body_parts" [editable]="true" [stringify]="(stringify$ | async)!"
+      [formControl]="body_parts_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true" (searchChange)="onSearch($event)">
+      Выберите группу мышц
+      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="body_parts"
+      [itemContent]="(stringify$ | async)!">
+
+      </tui-data-list-wrapper>
+    </tui-multi-select>
+  </div>
+  <div formArrayName="exec_var">
+    <h4>Варианты выполнения</h4>
+    <div class="tui-form__row" *ngFor="let item of exec_var.controls; let i = index">
+      <div formGroupName="{{i}}">
+
+        <!-- НАИМЕНОВАНИЕ ВЫПОЛНЕНИЯ -->
+        <tui-input tuiTextfieldSize="m" formControlName="name" id="name-{{i}}">
+          Название
+          <input tuiTextfield />
+          <span class="tui-required"></span>
+        </tui-input>
+        <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+        <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
+        <tui-input tuiTextfieldSize="m" formControlName="url" id="url-{{i}}">
+          Ссылка на видео
+          <input tuiTextfield />
+          <span class="tui-required"></span>
+        </tui-input>
+        <tui-error formControlName="url" [error]="[] | tuiFieldError | async"></tui-error>
+        <!-- КОММЕНТАРИЙ -->
+        <tui-input tuiTextfieldSize="m" formControlName="comment" id="comment-{{i}}">
+          Комментарий
+          <input tuiTextfield />
+          <span class="tui-required"></span>
+        </tui-input>
+        <tui-error formControlName="comment" [error]="[] | tuiFieldError | async"></tui-error>
+        <button tuiIconButton icon="tuiIconTrash" [size]="'m'" (click)="addVariant($event)" type="button"> </button>
+      </div>
+    </div>
+  </div>
+</form>
+<button tuiButton [size]="'m'" (click)="addVariant($event)" type="button">Добавить вариант</button>
+
+<button tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>

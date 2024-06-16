@@ -31,6 +31,10 @@ h4 {
 
 .container {
   padding: 0 2em;
+
+  & .container__title {
+    font-size: 1.75em;
+  }
 }
 
 // START styles for main layout
@@ -62,7 +66,7 @@ h4 {
   display: flex;
   gap: 1em;
   justify-content: flex-end;
-  padding-top: .5em;
+  padding-top: 0.5em;
 }
 
 // END styles for main layout

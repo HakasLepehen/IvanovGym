@@ -22,14 +22,13 @@ const options = {
 export class ClientsService {
   public clients$: Subject<IClient[]> = new Subject();
   public onLoad: Subject<boolean> = new Subject<boolean>();
-  clientsAPIUrl: string = '/rest/v1/clients';
+  clientsAPIUrl: string = 'rest/v1/clients';
   sub$: Subject<boolean> = new Subject();
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private _http: HttpClient,
     public loader: LoaderService,
-    private readonly dialogs: TuiDialogService,
     private readonly injector: Injector
   ) {
     this.getClients();
@@ -37,12 +36,10 @@ export class ClientsService {
   }
 
   getClients(): Observable<IClient[]> {
-    // this.showLoader();
     return this._http.get<IClient[]>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, { params: { select: '*' } }).pipe(
       tap((res: IClient[]) => this.clients$.next(res)),
       takeUntil(this.destroy$)
     );
-    // .subscribe(() => this.hideLoader());
   }
 
   createClient(model: IClient) {
