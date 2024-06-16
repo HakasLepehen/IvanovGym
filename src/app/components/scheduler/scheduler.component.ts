@@ -7,10 +7,14 @@ import { TuiDay } from '@taiga-ui/cdk';
   styleUrls: ['./scheduler.component.scss']
 })
 export class SchedulerComponent {
-  value: TuiDay | null = null;
+  public value: TuiDay | null = null;
 
-  onDayClick(day: TuiDay | any): void {
+  public onDayClick(day: TuiDay | any): void {
     this.value = day;
+    console.log(this.value);
+  }
+
+  public addTraining() {
     console.log(this.value);
   }
 }

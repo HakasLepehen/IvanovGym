@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaigaModule } from '../taiga/taiga.module';
 import { SchedulerRoutingModule } from './scheduler-routing.module';
-import { TuiCalendarModule } from '@taiga-ui/core';
 import { SchedulerComponent } from 'src/app/components/scheduler/scheduler.component';
+import { TrainingCalendarListComponent } from 'src/app/components/training-calendar-list/training-calendar-list.component';
 
 
 
 @NgModule({
-  declarations: [SchedulerComponent],
+  declarations: [SchedulerComponent, TrainingCalendarListComponent],
   imports: [
     CommonModule,
     SchedulerRoutingModule,

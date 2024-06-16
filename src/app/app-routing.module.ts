@@ -22,6 +22,7 @@ const routes: Routes = [
   {
     path: 'scheduler',
     loadChildren: () => import('./modules/scheduler/scheduler.module').then((_) => _.SchedulerModule),
+    canActivateChild: [AuthGuard]
   },
   {
     path: 'exercises',
