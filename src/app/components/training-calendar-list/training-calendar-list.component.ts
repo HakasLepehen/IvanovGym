@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { TuiDay } from '@taiga-ui/cdk';
+import { TUI_DEFAULT_MATCHER, TuiDay } from '@taiga-ui/cdk';
+import { Subject } from 'rxjs/internal/Subject';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { ITraining } from 'src/app/interfaces/training';
 
 @Component({
@@ -25,5 +27,4 @@ export class TrainingCalendarListComponent {
   ngOnInit() {
     console.log(this.selectedDay);
   }
-
 }

@@ -9,6 +9,10 @@ import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInpu
 import { AsyncPipe } from '@angular/common';
 import { ClientsService } from '../clients/clients.service';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
+import { Subject } from 'rxjs/internal/Subject';
+import { map, startWith, switchMap } from 'rxjs/operators';
+import { TUI_DEFAULT_MATCHER } from '@taiga-ui/cdk/constants/matcher';
+import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-client-operations',
@@ -39,8 +43,10 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 export class ClientOperationsComponent implements OnInit {
   public canEdit: boolean = false;
   public client!: IClient;
+  private readonly search$ = new Subject<string>();
 
   clientForm!: FormGroup;
+
 
   constructor(
     @Inject(Injector)
@@ -68,6 +74,30 @@ export class ClientOperationsComponent implements OnInit {
       pharma: new FormControl(this.client.pharma),
       activity: new FormControl(this.client.activity),
     });
+
+    this.body_parts_control = this.exForm.get('muscle_group') as FormControl;
+  }
+
+  public readonly exercises$ = of({id: 1, name: 'asd'});
+
+  public limits$ = this.search$
+    .pipe(
+      startWith(''),
+      switchMap(search =>
+        this.exercises$.pipe(
+          map((items: any) => {
+            const result = items
+              .filter(({ name }: any) => TUI_DEFAULT_MATCHER(name, search))
+              .map(({ id }: number) => id)
+            return result;
+          }),
+        ),
+      ),
+      startWith(null)
+  );
+
+  onSearch(search: string | null): void {
+    this.search$.next(search || '')
   }
 
   onSubmit() {

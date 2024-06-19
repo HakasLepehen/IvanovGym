@@ -36,6 +36,17 @@
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="limits" [error]="[] | tuiFieldError | async"></tui-error>
+
+      <tui-multi-select *tuiLet="limits$ | async as body_parts" [editable]="true" [stringify]="(stringify$ | async)!"
+      [formControl]="body_parts_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
+      (searchChange)="onSearch($event)">
+      Выберите группу мышц
+      <span class="tui-required"></span>
+      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="body_parts"
+        [itemContent]="(stringify$ | async)!">
+      </tui-data-list-wrapper>
+    </tui-multi-select>
+    <tui-error [formControl]="body_parts_control" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <!-- Опыт тренировок -->
     <div class="tui-form__row">
