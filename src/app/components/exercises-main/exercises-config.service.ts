@@ -35,7 +35,7 @@ export class ExercisesConfigService {
     this.exercisesService.saveExercise({ exercise_name: model.exercise_name, muscle_group: model.muscle_group })
       .pipe(
         take(1),
-        map(res => res.data[0].id),
+        map(res => res[0].id),
         tap(id => {
           if (!id) {
             return alert('Не удалось получить идентификатор упражнения при сохранении варианта выполнения. Обратитесь, пожалуйста, к разработчику');
@@ -127,7 +127,7 @@ export class ExercisesConfigService {
       .pipe(
         take(1),
         catchError((err: HttpErrorResponse) => {
-          return this.handleError(err.message);
+          return this.handleError(`${err.message}`);
         })
       ).subscribe();
   }

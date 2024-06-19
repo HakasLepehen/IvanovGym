@@ -6,7 +6,7 @@ export interface IClient {
   created_at?: Date;
   age?: number;
   target?: string;
-  limits?: string;
+  limits?: number[];
   experience?: string;
   sleep?: string;
   food?: string;

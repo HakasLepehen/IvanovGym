@@ -8,7 +8,7 @@ import { tuiPure, TuiStringHandler, TuiContextWithImplicit, TUI_DEFAULT_MATCHER,
 import { IExercise } from "src/app/interfaces/exercise";
 import { ISelectBox } from "src/app/interfaces/selectbox";
 import { ExercisesConfigService } from "../../exercises-main/exercises-config.service";
-import { tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { TUI_VALIDATION_ERRORS, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { Observable, Subject, debounceTime, fromEvent, map, of, startWith, switchMap, tap, throttleTime } from 'rxjs';
 
 @Component({
@@ -20,6 +20,12 @@ import { Observable, Subject, debounceTime, fromEvent, map, of, startWith, switc
     tuiItemsHandlersProvider({
       stringify: (item: ISelectBox) => item.name
     }),
+    {
+      provide: TUI_VALIDATION_ERRORS,
+      useValue: {
+        required: 'Поле обязательно для заполнения',
+      },
+    },
   ]
 })
 export class ExercisesFormComponent {
@@ -47,7 +53,7 @@ export class ExercisesFormComponent {
     this.exForm = this.formBuilder.group({
       id: this.formBuilder.control(this.model?.id),
       exercise_name: this.formBuilder.control(this.model?.exercise_name, [Validators.required]),
-      muscle_group: this.formBuilder.control(this.model?.muscle_group),
+      muscle_group: this.formBuilder.control(this.model?.muscle_group, [Validators.required]),
       exec_var: this.formBuilder.array([])
     })
 
@@ -58,7 +64,7 @@ export class ExercisesFormComponent {
       this.exec_var.push(
         new FormGroup({
           id: new FormControl(null),
-          name: new FormControl(''),
+          name: new FormControl('', [Validators.required]),
           url: new FormControl(''),
           comment: new FormControl(''),
           exercise_id: new FormControl(null),
@@ -70,7 +76,7 @@ export class ExercisesFormComponent {
       this.exec_var.push(
         new FormGroup({
           id: new FormControl(execution_variant.id),
-          name: new FormControl(execution_variant.name),
+          name: new FormControl(execution_variant.name, [Validators.required]),
           url: new FormControl(execution_variant?.url),
           comment: new FormControl(execution_variant?.comment),
           exercise_id: new FormControl(execution_variant.exercise_id),
@@ -111,13 +117,15 @@ export class ExercisesFormComponent {
     );
 
   public onSubmit(): void {
-    if (!this.isEdit) {
-      this.exercisesConfigService.createExercise(this.exForm.value, this.context);
-    } else {
-      this.exercisesConfigService.editExercise(this.exForm.value, this.context)
+    if (this.exForm.valid) {
+      if (!this.isEdit) {
+        this.exercisesConfigService.createExercise(this.exForm.value, this.context);
+      } else {
+        this.exercisesConfigService.editExercise(this.exForm.value, this.context)
+      }
+      this.formSaved.emit();
+      this.exForm.reset();
     }
-    this.formSaved.emit();
-    this.exForm.reset();
   }
 
   get exec_var() {
@@ -136,5 +144,10 @@ export class ExercisesFormComponent {
         comment: new FormControl('')
       })
     )
+  }
+
+  removeVariant(num: number) {
+    this.exercisesConfigService.deleteExecutionVariant(this.exec_var.at(num).value.id);
+    this.exec_var.removeAt(num);
   }
 }

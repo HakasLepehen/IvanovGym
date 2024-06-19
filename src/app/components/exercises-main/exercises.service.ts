@@ -35,13 +35,9 @@ export class ExercisesService {
 
   saveExercise(model: IExercise): Observable<any> {
     delete model.id;
+    options.headers.prefer = 'return=representation';
 
     return this._http.post(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, model, options)
-    // return from(supabase
-    //   .from('exercises')
-    //   .insert([model])
-    //   .select()
-    // )
   }
 
   saveExecVar(model: IExecutionVariant): Observable<any> {
