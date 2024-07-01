@@ -30,23 +30,16 @@
     </div>
     <!-- Ограничения -->
     <div class="tui-form__row">
-      <tui-input formControlName="limits" tuiTextfieldSize="m">
-        Ограничения
-        <input placeholder="Имеются ли ограничения по состоянию здоровья?" tuiTextfield />
-        <span class="tui-required"></span>
-      </tui-input>
-      <tui-error formControlName="limits" [error]="[] | tuiFieldError | async"></tui-error>
-
-      <tui-multi-select *tuiLet="limits$ | async as body_parts" [editable]="true" [stringify]="(stringify$ | async)!"
-      [formControl]="body_parts_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
+      <tui-multi-select *tuiLet="limits$ | async as exercises" [editable]="true" [stringify]="(stringify$ | async)!"
+      [formControl]="limits_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
       (searchChange)="onSearch($event)">
-      Выберите группу мышц
+      Ограничения
       <span class="tui-required"></span>
-      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="body_parts"
+      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="exercises"
         [itemContent]="(stringify$ | async)!">
       </tui-data-list-wrapper>
     </tui-multi-select>
-    <tui-error [formControl]="body_parts_control" [error]="[] | tuiFieldError | async"></tui-error>
+    <tui-error [formControl]="limits_control" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <!-- Опыт тренировок -->
     <div class="tui-form__row">
