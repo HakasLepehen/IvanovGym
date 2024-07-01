@@ -104,7 +104,6 @@ export class ClientOperationsComponent implements OnInit {
 
   stringify$: Observable<any> = this.exercises$.pipe(
     map(items => new Map(items.map(({ id, exercise_name }) => [id, exercise_name]))),
-    tap(items => items),
     startWith(new Map()),
     map(
       map => (id: TuiContextWithImplicit<number> | number) =>
