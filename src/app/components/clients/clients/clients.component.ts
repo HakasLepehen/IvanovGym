@@ -1,24 +1,28 @@
 import { IClient } from 'src/app/interfaces/client';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { Subject, take, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../clients.service';
 import { ClientsConfigService } from '../clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
+import { ExercisesService } from '../../exercises-main/exercises.service';
+import { ExercisesConfigService } from '../../exercises-main/exercises-config.service';
+import IClientExercise from 'src/app/interfaces/client_exercise';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
-
 })
 export class ClientsComponent implements OnInit, OnDestroy {
   public clients: IClient[] = [];
+  private exercises: IClientExercise[] = [];
   public isLoading = false;
   private unsubscribe$: Subject<void> = new Subject();
 
   constructor(
     private clientsService: ClientsService,
+    private exercisesConfigService: ExercisesConfigService,
     private clientsConfigService: ClientsConfigService,
     private loaderService: LoaderService,
     @Inject(TuiDialogService) private readonly dialogs: TuiDialogService
@@ -26,6 +30,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.clientsConfigService.getClients();
+    this.getExercises();
     this.clientsService.clients$
       .pipe(
         tap(val => this.clients = val),
@@ -35,18 +40,27 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.loaderService.getLoading().subscribe(val => {
       this.isLoading = val
     });
+    this.exercisesConfigService.clientExercises$.pipe(take(1)).subscribe(val => this.exercises = val)
   }
 
   addClient(): void {
-    this.clientsConfigService.openModal();
+    this.clientsConfigService.openModal({client: null, isEdit: false, exercises: this.exercises});
   }
 
   getClients(): void {
     this.clientsService.getClients();
   }
 
+  getExercises() {
+    this.exercisesConfigService.getExercisesForClient()
+  }
+
   editClient(el: IClient): void {
-    this.clientsConfigService.openModal(el);
+    this.clientsConfigService.openModal({
+      client: el,
+      isEdit: true,
+      exercises: this.exercises
+    });
   }
 
   removeClient(el: IClient): void {

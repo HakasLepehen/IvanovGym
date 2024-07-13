@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { Subject, catchError, map, of, take, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body_parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
@@ -13,6 +13,7 @@ import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercis
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { Store } from '@ngrx/store';
 import { reload } from 'src/app/store/actions/exercise.actions';
+import IClientExercise from 'src/app/interfaces/client_exercise';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class ExercisesConfigService {
   private exercises$: Subject<IExercise[]> = new Subject();
   private savingId!: number;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  public clientExercises$: Subject<IClientExercise[]> = new Subject();
 
   constructor(
     private loader: LoaderService,
@@ -152,7 +154,7 @@ export class ExercisesConfigService {
       });
   }
 
-  loadExercises(body_part: number): void {
+  loadExercisesByBodypart(body_part: number): void {
     this.loader.show();
 
     this.exercisesService.loadExercises(body_part)
@@ -218,5 +220,28 @@ export class ExercisesConfigService {
 
   hideLoader(): void {
     this.loader.hide();
+  }
+
+  getExercisesForClient(): void {
+    this.loader.show();
+    forkJoin([this.exercisesService.loadAllExercises(), this.exercisesService.loadAllExecVars()])
+      .pipe(
+        take(1),
+        map(([res1, res2]) => {
+          return (<any>res2).map((exec_var: IExecutionVariant) => {
+            const findEl: IExercise = (<any>res1).find((exercise: IExercise) => exercise.id === exec_var.exercise_id);
+            const clientExercise: IClientExercise = exec_var;
+
+            clientExercise.exercise_fullname = `${findEl.exercise_name} ${exec_var.name}`;
+            clientExercise.body_part_ids = findEl.muscle_group;
+
+            return clientExercise;
+          });
+        }),
+        tap(result => {
+          this.clientExercises$.next(result);
+          this.loader.hide();
+        }),
+      ).subscribe()
   }
 }

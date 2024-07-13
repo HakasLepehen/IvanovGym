@@ -42,12 +42,12 @@ export class ExercisesListComponent {
           }
 
           this.title = this.exerciseConfigService.bodyParts.filter(el => el.id == params['part'])[0].name;
-          this.exerciseConfigService.loadExercises(this.bodyPartId);
+          this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
           return of();
         }),
         tap(() => {
           this.store.select('exercise').subscribe(() => {
-            this.exerciseConfigService.loadExercises(this.bodyPartId)
+            this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId)
           })
         }),
         takeUntil(this.unsubscribe$)

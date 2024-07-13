@@ -4,7 +4,6 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, from } from 'rxjs';
 import { ENV } from 'src/environment/environment';
-import { supabase } from 'src/app/optionsSupaBase';
 
 const options: any = {
   headers: {
@@ -25,12 +24,7 @@ export class ExercisesService {
   public onLoad: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _http: HttpClient) {
-    this.getExercises();
     this.onLoad.next(false);
-  }
-
-  getExercises() {
-    console.log('we are get exercises');
   }
 
   saveExercise(model: IExercise): Observable<any> {
@@ -109,5 +103,31 @@ export class ExercisesService {
       ...options.headers,
       params: params
     })
+  }
+
+  loadAllExercises(): Observable<ArrayBuffer> {
+    let params = new HttpParams();
+
+    params = params.append('select', `*`);
+    options.params = params;
+    delete options.headers.Prefer;
+
+    return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, {
+      ...options.headers,
+      params: params
+    });
+  }
+
+  loadAllExecVars(): Observable<ArrayBuffer> {
+    let params = new HttpParams();
+
+    params = params.append('select', `*`);
+    options.params = params;
+    delete options.headers.Prefer;
+
+    return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, {
+      ...options.headers,
+      params: params
+    });
   }
 }

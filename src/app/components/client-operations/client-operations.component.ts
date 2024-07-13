@@ -1,4 +1,3 @@
-import { IExercise } from 'src/app/interfaces/exercise';
 import { ClientsConfigService } from './../clients/clients-config.service';
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
 import { IClient } from '../../interfaces/client';
@@ -14,8 +13,8 @@ import { Subject } from 'rxjs/internal/Subject';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { TuiContextWithImplicit, tuiIsNumber, TUI_DEFAULT_MATCHER, TuiLetModule } from '@taiga-ui/cdk';
-import { Observable } from 'rxjs';
-import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import IClientExercise from 'src/app/interfaces/client_exercise';
 
 @Component({
   selector: 'app-client-operations',
@@ -49,6 +48,7 @@ export class ClientOperationsComponent implements OnInit {
   public client!: IClient;
   private readonly search$ = new Subject<string>();
   public limits_control!: FormControl;
+  public readonly exercises$: BehaviorSubject<IClientExercise[]> = new BehaviorSubject<IClientExercise[]>([]);
 
   clientForm!: FormGroup;
 
@@ -60,14 +60,13 @@ export class ClientOperationsComponent implements OnInit {
     private readonly dialogs: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, IClientDialog>,
-    private cs: ClientsService,
     private clientConfigService: ClientsConfigService,
-    private exercisesConfigService: ExercisesConfigService,
   ) { }
 
   ngOnInit() {
     this.canEdit = this.context.data.isEdit;
     this.client = this.context.data.client;
+    this.exercises$.next(this.context.data.exercises)
     this.clientForm = new FormGroup({
       id: new FormControl(this.client.id),
       fullName: new FormControl(this.client.fullName, Validators.required),
@@ -83,8 +82,6 @@ export class ClientOperationsComponent implements OnInit {
 
     this.limits_control = this.clientForm.get('limits') as FormControl;
   }
-
-  public readonly exercises$ = this.exercisesConfigService.exercises;
 
   public limits$ = this.search$
     .pipe(
@@ -103,12 +100,12 @@ export class ClientOperationsComponent implements OnInit {
     );
 
   stringify$: Observable<any> = this.exercises$.pipe(
-    map(items => new Map(items.map(({ id, exercise_name }) => [id, exercise_name]))),
+    map(items => new Map(items.map(({ id, exercise_fullname }) => [id, exercise_fullname]))),
     startWith(new Map()),
     map(
       map => (id: TuiContextWithImplicit<number> | number) =>
         (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
-    )
+      )
   )
 
   onSearch(search: string | null): void {

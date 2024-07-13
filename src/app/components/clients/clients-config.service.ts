@@ -8,6 +8,13 @@ import IClientDialog from 'src/app/interfaces/client-dialog';
 import { ClientsService } from 'src/app/components/clients/clients.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
+import IClientExercise from 'src/app/interfaces/client_exercise';
+
+interface ClientProps {
+  client: IClient | null,
+  isEdit: boolean,
+  exercises: IClientExercise[]
+}
 
 @Injectable({
   providedIn: 'root',
@@ -43,19 +50,20 @@ export class ClientsConfigService {
   }
 
   //TODO: не сделана логика обновления списка пользователя
-  openModal(el?: IClient) {
+  openModal(props: ClientProps) {
     this.dialogs
       .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-        label: el?.fullName ? `Редактирование клиента: ${el.fullName}` : 'Новый клиент',
+        label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
         data: {
-          client: el
-            ? el
+          client: props.client
+            ? props.client
             : {
               fullName: '',
               created_at: new Date(),
               age: 0,
             },
-          isEdit: !!el,
+          isEdit: !!props.client,
+          exercises: props.exercises
         },
         closeable: true,
         dismissible: false,
