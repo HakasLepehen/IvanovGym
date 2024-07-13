@@ -14,4 +14,5 @@ export interface IClient {
   activity?: string;
   avatar?: string;
   id?: number | null;
+  limitsNames?: string
 }

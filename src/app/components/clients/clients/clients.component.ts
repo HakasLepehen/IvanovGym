@@ -1,11 +1,9 @@
 import { IClient } from 'src/app/interfaces/client';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { TuiDialogService } from '@taiga-ui/core';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { Subject, combineLatest, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../clients.service';
 import { ClientsConfigService } from '../clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
-import { ExercisesService } from '../../exercises-main/exercises.service';
 import { ExercisesConfigService } from '../../exercises-main/exercises-config.service';
 import IClientExercise from 'src/app/interfaces/client_exercise';
 
@@ -25,22 +23,29 @@ export class ClientsComponent implements OnInit, OnDestroy {
     private exercisesConfigService: ExercisesConfigService,
     private clientsConfigService: ClientsConfigService,
     private loaderService: LoaderService,
-    @Inject(TuiDialogService) private readonly dialogs: TuiDialogService
   ) { }
 
   ngOnInit() {
     this.clientsConfigService.getClients();
     this.getExercises();
-    this.clientsService.clients$
+    combineLatest([this.clientsService.clients$, this.exercisesConfigService.clientExercises$])
       .pipe(
-        tap(val => this.clients = val),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe();
+        take(1),
+        map(([clients, exercises]) => {
+          clients.forEach((client: IClient) => {
+            client.limits?.forEach(num => {
+              let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
+              client.limitsNames =
+                (!!client.limitsNames ? client.limitsNames + ', ' : '') + comparedExercise.exercise_fullname;
+            })
+          })
+          this.clients = clients;
+          this.exercises = exercises;
+        })
+      ).subscribe()
     this.loaderService.getLoading().subscribe(val => {
       this.isLoading = val
     });
-    this.exercisesConfigService.clientExercises$.pipe(take(1)).subscribe(val => this.exercises = val)
   }
 
   addClient(): void {
