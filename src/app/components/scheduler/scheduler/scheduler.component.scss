@@ -1,5 +1,13 @@
+:host {
+  display: flex;
+  height: calc(100vh - 20px);
+  flex-direction: column;
+  // overflow: hidden;
+}
+
 .top-container {
   display: flex;
+  flex: 0;
 
   & .container-buttons {
     display: flex;
@@ -7,4 +15,10 @@
     padding: 1rem 0;
     gap: .5em;
   }
+}
+
+.bottom-container {
+  //TODO: Доделаем со скроллом потом
+  // flex: 1 0 calc(100% - 324px);
+  // overflow: scroll;
 }

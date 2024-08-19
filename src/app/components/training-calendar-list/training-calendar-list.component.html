@@ -2,10 +2,8 @@
   <div class='main_block__content'>
     <div class='container'>
       <ul class='content__list'>
-        <li *ngFor='let linkItem of content'>
-          <a class='content__item'>
-            {{linkItem.clientGIUD}}
-          </a>
+        <li *ngFor='let linkItem of timeline'>
+          <span class="time_item">{{linkItem}}</span>
         </li>
       </ul>
     </div>
