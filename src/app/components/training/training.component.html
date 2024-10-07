@@ -1,0 +1,13 @@
+<!-- Контент диалогового окна клиента -->
+<form [formGroup]="trainingForm">
+  <tui-scrollbar>
+    <tui-input-time formControlName="time" [items]="timeSlots">
+      Input time
+    </tui-input-time>
+  </tui-scrollbar>
+  <div class="tui-form__row">
+    <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='onSubmit()'>
+      Сохранить
+    </button>
+  </div>
+</form>

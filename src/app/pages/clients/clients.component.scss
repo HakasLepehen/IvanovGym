@@ -1,0 +1,26 @@
+.container {
+  height: 100dvh;
+}
+
+.main_block {
+  padding-bottom: 2em;
+}
+
+.content__wrapper {
+  & :nth-child(n) {
+    padding-top: .25em;
+
+    & hr {
+      padding-top: 1px;
+    }
+  }
+}
+
+.content__label {
+  color: #7f7f7f;
+  font-size: .8em;
+}
+
+.content__text {
+  margin: 0;
+}
