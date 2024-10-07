@@ -43,6 +43,7 @@ import IClientExercise from 'src/app/interfaces/client_exercise';
   templateUrl: './client-operations.component.html',
   styleUrls: ['./client-operations.component.scss'],
 })
+
 export class ClientOperationsComponent implements OnInit {
   public canEdit: boolean = false;
   public client!: IClient;
@@ -105,7 +106,7 @@ export class ClientOperationsComponent implements OnInit {
     map(
       map => (id: TuiContextWithImplicit<number> | number) =>
         (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
-      )
+    )
   )
 
   onSearch(search: string | null): void {

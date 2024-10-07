@@ -1,4 +1,7 @@
-export const TIMELINES = [
+import { TuiTime } from "@taiga-ui/cdk";
+
+export const TIMELINES: Array<string | TuiTime> = [
+  new TuiTime(0, 0, 0, 0),
   '10-30',
   '11-00',
   '11-30',

@@ -1,9 +1,37 @@
-import { Injectable } from '@angular/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { Injectable, Injector } from '@angular/core';
+import { TuiDialogService } from '@taiga-ui/core';
+import { Subject, takeUntil } from 'rxjs';
+import { TrainingComponent } from '../training/training.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchedulerConfigService {
+  public destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor() { }
+  constructor(
+    private readonly _dialogs: TuiDialogService,
+    private readonly _injector: Injector
+  ) { }
+
+  addTraining(): void {
+
+  }
+
+  openModal() {
+    this._dialogs
+      .open(new PolymorpheusComponent(TrainingComponent, this._injector),
+        {
+          label: 'Создание тренировки',
+          data: {
+            isPlanning: true
+          },
+          closeable: true,
+          dismissible: false,
+        }
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe()
+  }
 }

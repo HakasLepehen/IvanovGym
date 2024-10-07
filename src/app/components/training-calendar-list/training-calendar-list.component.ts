@@ -1,5 +1,5 @@
 import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { TUI_DEFAULT_MATCHER, TuiDay } from '@taiga-ui/cdk';
+import { TUI_DEFAULT_MATCHER, TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { Subject } from 'rxjs/internal/Subject';
 import { map, startWith, switchMap } from 'rxjs/operators';
 import { ITraining } from 'src/app/interfaces/training';
@@ -14,7 +14,7 @@ import { TIMELINES } from './timeline';
 export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
   @Input()
   public selectedDay: TuiDay | null = null;
-  public timeline: string[] = TIMELINES;
+  public timeline: Array<string | TuiTime> = TIMELINES;
   public content: ITraining[] = [
     {
       clientGIUD: '123',
@@ -25,18 +25,18 @@ export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterVi
     }
   ];
 
-  constructor(private _hostElement: ElementRef) {
-    console.log('constructor started: ', _hostElement.nativeElement);
+  constructor() {
+
   }
   ngAfterContentInit(): void {
-    console.log('constructor started: ', this._hostElement.nativeElement);
+    console.log('ngAfterContentInit started: ');
   }
   ngAfterViewInit(): void {
-    console.log('constructor started: ', this._hostElement.nativeElement);
+    console.log('ngAfterViewInit started: ');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges started');
+    console.log('ngOnChanges started', changes);
   }
 
   ngOnInit() {
