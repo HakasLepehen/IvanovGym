@@ -41,7 +41,11 @@ export class ClientsConfigService {
     this.loader.show();
     this.cs.getClients()
       .pipe(
-        tap(() => { this.loader.hide() }),
+        tap((val) => {
+          console.log(val);
+
+          this.loader.hide()
+        }),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         }),

@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { IClient } from './../../interfaces/client';
+import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TuiButtonModule, TuiScrollbarModule } from '@taiga-ui/core';
+import { TuiButtonModule, TuiDialogContext, TuiScrollbarModule } from '@taiga-ui/core';
 import { tuiCreateTimePeriods, TuiInputTimeModule } from '@taiga-ui/kit';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
+import { ClientsService } from '../clients/clients.service';
 
 @Component({
   selector: 'app-training',
@@ -14,12 +18,28 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 })
 
 export class TrainingComponent {
-  @Input()
-  public isPlanning: boolean = false;
+  private isPlanning: boolean = false;
   readonly trainingForm = new FormGroup({
     time: new FormControl(null),
   });
   timeSlots = tuiCreateTimePeriods();
+  clients!: IClient[];
+
+  constructor(
+    @Inject(POLYMORPHEUS_CONTEXT)
+    private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
+    private _clientsService: ClientsService
+  ) {
+    this.isPlanning = context?.data?.isPlanning;
+    _clientsService.getClients().subscribe();
+    _clientsService.clients$.subscribe(val => console.log(val)
+    )
+  }
+
+  ngOnInit() {
+    console.log(this.context);
+
+  }
 
   onSubmit(): void {
     console.log(this.trainingForm.controls.time.value);

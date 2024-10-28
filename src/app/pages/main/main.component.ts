@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
+// import { LoaderService } from 'src/app/components/loader/loader.service';
 
 type SectionType = {
-   title: string;
-   routeLink: string;
+  title: string;
+  routeLink: string;
 }
 
 @Component({
@@ -11,7 +13,7 @@ type SectionType = {
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
-  content: Array<SectionType> = [
+  public content: Array<SectionType> = [
     {
       title: 'Управление клиентами',
       routeLink: 'clients'
@@ -28,5 +30,16 @@ export class MainComponent {
       title: 'Упражнения',
       routeLink: 'exercises'
     }
-  ]
+  ];
+
+  constructor(
+    private _clientsConfigService: ClientsConfigService,
+    // private _loaderService: LoaderService,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this._clientsConfigService.getClients();
+  }
 }

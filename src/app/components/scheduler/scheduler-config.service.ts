@@ -1,6 +1,6 @@
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { Injectable, Injector } from '@angular/core';
-import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent, POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { Inject, Injectable, Injector } from '@angular/core';
+import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 
@@ -12,7 +12,7 @@ export class SchedulerConfigService {
 
   constructor(
     private readonly _dialogs: TuiDialogService,
-    private readonly _injector: Injector
+    private readonly _injector: Injector,
   ) { }
 
   addTraining(): void {

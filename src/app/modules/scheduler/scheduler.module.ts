@@ -4,6 +4,7 @@ import { TaigaModule } from '../taiga/taiga.module';
 import { SchedulerRoutingModule } from './scheduler-routing.module';
 import { SchedulerComponent } from '../../pages/scheduler/scheduler.component';
 import { TrainingCalendarListComponent } from 'src/app/components/training-calendar-list/training-calendar-list.component';
+import { LoaderModule } from "../../components/loader/loader.module";
 
 
 
@@ -13,6 +14,7 @@ import { TrainingCalendarListComponent } from 'src/app/components/training-calen
     CommonModule,
     SchedulerRoutingModule,
     TaigaModule,
-  ],
+    LoaderModule
+],
 })
 export class SchedulerModule { }

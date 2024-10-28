@@ -21,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { rootReducer } from './store/reducers/root.reducer';
+import { LoaderService } from './components/loader/loader.service';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { rootReducer } from './store/reducers/root.reducer';
     {
       provide: POLYMORPHEUS_CONTEXT,
       useExisting: TuiDialogService
-    }
+    },
+    LoaderService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [],
