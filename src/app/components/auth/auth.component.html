@@ -9,7 +9,7 @@
     <form [formGroup]='loginForm' (ngSubmit)='onSubmit()' required>
       <div class='tui-col_12'>
         <div class='auth_form tui-form__row'>
-          <tui-input formControlName='login' class='b-form'>
+          <tui-input formControlName='login'>
             Введите e-mail
             <!-- <input tuiTextfield role='presentation' type='email' autocomplete='on' /> -->
             <input tuiTextfield autocomplete="email" translate="no" type="email" />
