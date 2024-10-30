@@ -12,7 +12,6 @@ import { ExercisesService } from './exercises.service';
 import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { Store } from '@ngrx/store';
-import { reload } from 'src/app/store/actions/exercise.actions';
 import IClientExercise from 'src/app/interfaces/client_exercise';
 
 @Injectable({
@@ -29,7 +28,6 @@ export class ExercisesConfigService {
     private exercisesService: ExercisesService,
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector,
-    private store: Store<{ exercise: {} }>
   ) { }
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
@@ -83,9 +81,6 @@ export class ExercisesConfigService {
           () => this.closeModal(context),
           take(1),
         ),
-        tap(() => {
-          this.store.dispatch(reload())
-        }),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         })
@@ -149,9 +144,7 @@ export class ExercisesConfigService {
           return this.handleError(err.message);
         })
       )
-      .subscribe({
-        complete: () => this.store.dispatch(reload())
-      });
+      .subscribe();
   }
 
   loadExercisesByBodypart(body_part: number): void {
@@ -208,9 +201,7 @@ export class ExercisesConfigService {
         dismissible: false,
       })
       .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        complete: () => this.store.dispatch(reload())
-      });
+      .subscribe();
   }
 
   closeModal(context: TuiDialogContext<boolean, IExerciseDialog>): void {

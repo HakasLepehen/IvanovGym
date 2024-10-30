@@ -20,7 +20,6 @@ import { TaigaModule } from './modules/taiga/taiga.module';
 import { UserModule } from './modules/user/user.module';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { rootReducer } from './store/reducers/root.reducer';
 import { LoaderService } from './components/loader/loader.service';
 
 
@@ -32,7 +31,7 @@ import { LoaderService } from './components/loader/loader.service';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forRoot(...rootReducer),
+    StoreModule.forRoot(),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
       maxAge: 5,

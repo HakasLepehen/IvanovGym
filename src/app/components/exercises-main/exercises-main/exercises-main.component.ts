@@ -1,13 +1,9 @@
 import { ExercisesConfigService } from './../exercises-config.service';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { IExerciseView } from '../../../interfaces/exercise_view';
-import { TuiDialogService } from '@taiga-ui/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { reload } from 'src/app/store/actions/exercise.actions';
 
 @Component({
   selector: 'app-exercises',

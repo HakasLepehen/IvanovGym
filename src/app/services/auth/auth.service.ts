@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ENV } from '../../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Store } from '@ngrx/store';
-import { setToken } from '../../store/actions/auth.action';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
@@ -29,7 +27,6 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private _store: Store<{ token: string }>,
     private _router: Router
   ) {
     this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
@@ -57,7 +54,7 @@ export class AuthService {
     }, this.options)
       .subscribe((response: any) => {
         if (response) {
-          this._store.dispatch(setToken({ token: response.access_token }));
+          //TODO: тут необходимо хранить токен ЕСЛИ ПОТРЕБУЕТСЯ
         }
       });
   }
