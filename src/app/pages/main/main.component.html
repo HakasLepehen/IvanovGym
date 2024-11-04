@@ -13,4 +13,7 @@
       </ul>
     </div>
   </div>
+  <ul *ngIf="clients?.length">
+    <li *ngFor="let item of clients">{{item.id}}</li>
+  </ul>
 </div>

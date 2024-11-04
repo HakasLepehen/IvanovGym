@@ -9,6 +9,9 @@ import { ClientsService } from 'src/app/components/clients/clients.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
 import IClientExercise from 'src/app/interfaces/client_exercise';
+import { select, Store } from '@ngrx/store';
+import { clientsSelector } from 'src/app/store/selectors/client.selector';
+import { setClients } from 'src/app/store/actions/client.action';
 
 interface ClientProps {
   client: IClient | null,
@@ -28,7 +31,8 @@ export class ClientsConfigService {
     private loader: LoaderService,
     private readonly cs: ClientsService,
     private readonly dialogs: TuiDialogService,
-    private readonly injector: Injector
+    private readonly injector: Injector,
+    private store: Store,
   ) {
     this.onLoad$.subscribe((val: boolean) => {
       if (val) {
@@ -42,8 +46,7 @@ export class ClientsConfigService {
     this.cs.getClients()
       .pipe(
         tap((val) => {
-          console.log(val);
-
+          this.store.dispatch(setClients({clients: val}))
           this.loader.hide()
         }),
         catchError((err: HttpErrorResponse) => {

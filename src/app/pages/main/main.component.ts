@@ -1,5 +1,9 @@
+import { IClient } from 'src/app/interfaces/client';
 import { Component } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Subject, tap } from 'rxjs';
 import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
+import { clientsSelector } from 'src/app/store/selectors/client.selector';
 // import { LoaderService } from 'src/app/components/loader/loader.service';
 
 type SectionType = {
@@ -13,6 +17,7 @@ type SectionType = {
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
+  public clients!: IClient[];
   public content: Array<SectionType> = [
     {
       title: 'Управление клиентами',
@@ -34,12 +39,18 @@ export class MainComponent {
 
   constructor(
     private _clientsConfigService: ClientsConfigService,
-    // private _loaderService: LoaderService,
+    private store: Store
   ) {
-
+    store
+      .pipe(
+        select(clientsSelector),
+        tap(val => { if (val) this.clients = val; })
+      )
+      .subscribe()
   }
 
   ngOnInit(): void {
     this._clientsConfigService.getClients();
+
   }
 }
