@@ -1,5 +1,5 @@
 import { IClient } from 'src/app/interfaces/client';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, combineLatest, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../../components/clients/clients.service';
 import { ClientsConfigService } from '../../components/clients/clients-config.service';
@@ -33,10 +33,11 @@ export class ClientsComponent implements OnInit, OnDestroy {
         take(1),
         map(([clients, exercises]) => {
           clients.forEach((client: IClient) => {
+            client = Object.assign({}, client, { limitsNames: [] });
             client.limits?.forEach(num => {
               let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
-              client.limitsNames =
-                (!!client.limitsNames ? client.limitsNames + ', ' : '') + comparedExercise.exercise_fullname;
+
+              client.limitsNames?.push(comparedExercise.exercise_fullname as string);
             })
           })
           this.clients = clients;
@@ -44,7 +45,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
         })
       ).subscribe()
     this.loaderService.getLoading().subscribe(val => {
-      this.isLoading = val
+      this.isLoading = val;
     });
   }
 
