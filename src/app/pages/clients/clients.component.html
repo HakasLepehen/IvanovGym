@@ -1,5 +1,5 @@
 <div class='container'>
-  <div class='main_block' *ngIf="isLoading === false; else load">
+  <div class='main_block' *ngIf="!isLoading; else load">
     <div class='container main_block__title'>
       <h3 class='tui-text_h4'>Список клиентов</h3>
     </div>
@@ -78,7 +78,7 @@
       </button>
     </div>
   </div>
+  <ng-template #load>
+    <app-loader></app-loader>
+  </ng-template>
 </div>
-<ng-template #load>
-  <app-loader></app-loader>
-</ng-template>

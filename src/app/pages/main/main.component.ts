@@ -51,6 +51,5 @@ export class MainComponent {
 
   ngOnInit(): void {
     this._clientsConfigService.getClients();
-
   }
 }
