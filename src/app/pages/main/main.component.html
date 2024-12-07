@@ -6,7 +6,7 @@
     <div class='container'>
       <ul class='content__list'>
         <li *ngFor='let linkItem of content'>
-          <a class='content__item' [href]='linkItem.routeLink'>
+          <a class='content__item' [routerLink]='linkItem.routeLink'>
             {{linkItem.title}}
           </a>
         </li>

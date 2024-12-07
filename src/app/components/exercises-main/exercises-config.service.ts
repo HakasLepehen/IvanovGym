@@ -1,3 +1,4 @@
+import { setClientExercises } from './../../store/actions/client-exercises.action';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
@@ -28,6 +29,7 @@ export class ExercisesConfigService {
     private exercisesService: ExercisesService,
     private readonly dialogs: TuiDialogService,
     private readonly injector: Injector,
+    private store: Store,
   ) { }
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
@@ -159,7 +161,7 @@ export class ExercisesConfigService {
           result.forEach(exercise => {
             this.loadExecutionVariants(exercise);
           })
-          this.setExercises(result);
+          this.setClientExercises(result);
           this.loader.hide();
         })
       ).subscribe()
@@ -181,7 +183,7 @@ export class ExercisesConfigService {
     return this.exercises$;
   }
 
-  setExercises(val: IExercise[]): void {
+  setClientExercises(val: IExercise[]): void {
     this.exercises$.next(val);
   }
 
@@ -230,6 +232,8 @@ export class ExercisesConfigService {
           });
         }),
         tap(result => {
+          this.store.dispatch(setClientExercises({ clientExercises: result }))
+
           this.clientExercises$.next(result);
           this.loader.hide();
         }),

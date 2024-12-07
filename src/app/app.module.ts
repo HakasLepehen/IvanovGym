@@ -22,6 +22,7 @@ import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LoaderService } from './components/loader/loader.service';
 import { clientReducer } from './store/reducers/client.reducer';
+import { clientExercisesReducer } from './store/reducers/client-exercises.reducer';
 
 
 @NgModule({
@@ -32,7 +33,7 @@ import { clientReducer } from './store/reducers/client.reducer';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({clientsState: clientReducer}),
+    StoreModule.forRoot({ clientsState: clientReducer, clientExercisesState: clientExercisesReducer }),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
       maxAge: 5,

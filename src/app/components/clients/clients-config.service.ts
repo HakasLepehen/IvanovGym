@@ -142,7 +142,6 @@ export class ClientsConfigService {
   }
 
   refreshData() {
-    this.onLoad$.next(false);
     this.onLoad$.next(true);
   }
 }

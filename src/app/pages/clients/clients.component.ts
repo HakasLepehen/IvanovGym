@@ -1,7 +1,7 @@
 import { select, Store } from '@ngrx/store';
 import { IClient } from 'src/app/interfaces/client';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, combineLatest, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
+import { Subject, combineLatest, combineLatestAll, concat, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../../components/clients/clients.service';
 import { ClientsConfigService } from '../../components/clients/clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
@@ -34,8 +34,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.store
       .pipe(
         select(clientsSelector),
-      // map((clients) => {
-        tap(val => { if (val) this.clients = val; })
+        tap(val => {
+          val?.length ? this.clients = val : this.clientsConfigService.getClients();
+        })
           // console.log(clients);
 
           //       this.clients = clients.map((client: IClient) => {
@@ -49,9 +50,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
           //       })
           //       this.exercises = exercises;
               // })
-      ).subscribe()
+    ).subscribe()
+
     // this.clientsConfigService.getClients();
-    // this.getExercises();
     // combineLatest([this.clientsService.clients$, this.exercisesConfigService.clientExercises$])
     //   .pipe(
     //     take(1),
@@ -76,10 +77,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   addClient(): void {
     this.clientsConfigService.openModal({ client: null, isEdit: false, exercises: this.exercises });
-  }
-
-  getClients(): void {
-    this.clientsService.getClients();
   }
 
   getExercises() {

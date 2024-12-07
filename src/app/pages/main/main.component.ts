@@ -4,6 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { Subject, tap } from 'rxjs';
 import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
+import { ExercisesConfigService } from 'src/app/components/exercises-main/exercises-config.service';
 // import { LoaderService } from 'src/app/components/loader/loader.service';
 
 type SectionType = {
@@ -39,17 +40,14 @@ export class MainComponent {
 
   constructor(
     private _clientsConfigService: ClientsConfigService,
+    private _exerciseConfigService: ExercisesConfigService,
     private store: Store
   ) {
-    store
-      .pipe(
-        select(clientsSelector),
-        tap(val => { if (val) this.clients = val; })
-      )
-      .subscribe()
+    
   }
 
   ngOnInit(): void {
     this._clientsConfigService.getClients();
+    this._exerciseConfigService.getExercisesForClient();
   }
 }
