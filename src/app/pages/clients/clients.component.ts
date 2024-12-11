@@ -8,6 +8,7 @@ import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ExercisesConfigService } from '../../components/exercises-main/exercises-config.service';
 import IClientExercise from 'src/app/interfaces/client_exercise';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
+import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
 
 @Component({
   selector: 'app-clients',
@@ -31,44 +32,21 @@ export class ClientsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.store
-      .pipe(
-        select(clientsSelector),
-        tap(val => {
-          val?.length ? this.clients = val : this.clientsConfigService.getClients();
-        })
-          // console.log(clients);
-
-          //       this.clients = clients.map((client: IClient) => {
-          //         client = Object.assign({}, client, { limitsNames: [] });
-          //         client.limits?.forEach(num => {
-          //           let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
-
-          //           (<any>client.limitsNames).push(comparedExercise.exercise_fullname as string);
-          //         })
-          //         return client;
-          //       })
-          //       this.exercises = exercises;
-              // })
+    this.store.pipe(
+      select(clientsSelector),
+      tap(val => {
+        val?.length ? this.clients = val : this.clientsConfigService.getClients();
+      })
     ).subscribe()
 
-    // this.clientsConfigService.getClients();
-    // combineLatest([this.clientsService.clients$, this.exercisesConfigService.clientExercises$])
-    //   .pipe(
-    //     take(1),
-    //     map(([clients, exercises]) => {
-    //       this.clients = clients.map((client: IClient) => {
-    //         client = Object.assign({}, client, { limitsNames: [] });
-    //         client.limits?.forEach(num => {
-    //           let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
+    this.store.pipe(
+      select(clientExercisesSelector),
+      tap(exercises => {
+        exercises?.length ? this.exercises = exercises : this.exercisesConfigService.getExercisesForClient();
+        this.clientsConfigService.setLimitNamesForClients(exercises);
+      })
+    ).subscribe()
 
-    //           (<any>client.limitsNames).push(comparedExercise.exercise_fullname as string);
-    //         })
-    //         return client;
-    //       })
-    //       this.exercises = exercises;
-    //     })
-    //   ).subscribe()
     this.loaderService.getLoading().subscribe(val => {
       this.isLoading = val;
       this.cd.markForCheck();

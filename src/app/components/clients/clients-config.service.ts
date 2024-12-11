@@ -12,6 +12,7 @@ import IClientExercise from 'src/app/interfaces/client_exercise';
 import { select, Store } from '@ngrx/store';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
 import { setClients } from 'src/app/store/actions/client.action';
+import { IExercise } from 'src/app/interfaces/exercise';
 
 interface ClientProps {
   client: IClient | null,
@@ -46,7 +47,9 @@ export class ClientsConfigService {
     this.cs.getClients()
       .pipe(
         tap((val) => {
-          this.store.dispatch(setClients({clients: val}))
+          this.store.dispatch(setClients({ clients: val }));
+          // тут когда-нибудь могут возникнут ошибки в связи с единообразностью состояния клиентов
+          this.clients = val;
           this.loader.hide()
         }),
         catchError((err: HttpErrorResponse) => {
@@ -143,5 +146,26 @@ export class ClientsConfigService {
 
   refreshData() {
     this.onLoad$.next(true);
+  }
+
+  /**
+   * Метод задает поле limitNames для каждого клиента
+   * @param exercises - массив упражнений с полным наименованием
+   */
+  setLimitNamesForClients(exercises: IClientExercise[]): void {
+    if (this.clients.length) {
+      this.clients.forEach(client => {
+        this.clients = this.clients.map((client: IClient) => {
+          client = Object.assign({}, client, { limitsNames: [] });
+          client.limits?.forEach(num => {
+            let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
+
+            (<any>client.limitsNames).push(comparedExercise.exercise_fullname as string);
+          })
+          return client;
+        })
+      })
+      this.store.dispatch(setClients({ clients: this.clients }))
+    }
   }
 }
