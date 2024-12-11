@@ -1,7 +1,7 @@
 import { select, Store } from '@ngrx/store';
 import { IClient } from 'src/app/interfaces/client';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, combineLatest, combineLatestAll, concat, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, tap } from 'rxjs';
 import { ClientsService } from '../../components/clients/clients.service';
 import { ClientsConfigService } from '../../components/clients/clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
@@ -34,15 +34,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.pipe(
       select(clientsSelector),
-      tap(val => {
-        val?.length ? this.clients = val : this.clientsConfigService.getClients();
-      })
+      tap(val => this.clients = val)
     ).subscribe()
 
     this.store.pipe(
       select(clientExercisesSelector),
       tap(exercises => {
-        exercises?.length ? this.exercises = exercises : this.exercisesConfigService.getExercisesForClient();
+        this.exercises = exercises;
         this.clientsConfigService.setLimitNamesForClients(exercises);
       })
     ).subscribe()

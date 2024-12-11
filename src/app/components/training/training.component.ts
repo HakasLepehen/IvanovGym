@@ -22,7 +22,7 @@ export class TrainingComponent {
   readonly trainingForm = new FormGroup({
     time: new FormControl(null),
   });
-  timeSlots = tuiCreateTimePeriods();
+  timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
 
   constructor(
