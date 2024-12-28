@@ -3,6 +3,7 @@ import { Inject, Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { Subject, takeUntil } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
+import { TuiDay } from "@taiga-ui/cdk";
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +20,14 @@ export class SchedulerConfigService {
 
   }
 
-  openModal() {
+  openModal(selectedDay: TuiDay) {
     this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector),
         {
           label: 'Создание тренировки',
           data: {
-            isPlanning: true
+            isPlanning: true,
+            selectedDay: selectedDay
           },
           closeable: true,
           dismissible: false,

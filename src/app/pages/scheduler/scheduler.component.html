@@ -1,5 +1,5 @@
 <div class="top-container">
-  <tui-calendar [value]="value" (dayClick)="onDayClick($event)"></tui-calendar>
+  <tui-calendar [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
   <div class="container-buttons">
     <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [icon]="'tuiIconPlusLarge'"
       (click)='addTraining()'>
@@ -7,6 +7,6 @@
   </div>
 </div>
 <div class="bottom-container">
-  <app-training-calendar-list [selectedDay]="value" />
+  <app-training-calendar-list [selectedDay]="selectedDay" />
 </div>
-<app-loader></app-loader>
+<!--<app-loader></app-loader>-->

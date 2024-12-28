@@ -10,7 +10,7 @@ import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-c
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchedulerComponent implements OnInit, OnChanges {
-  public value: TuiDay | null = null;
+  public selectedDay: TuiDay | null = null;
 
   constructor(private _schedulerService: SchedulerConfigService, private loader: LoaderService) {
     console.log('constructor started');
@@ -26,11 +26,11 @@ export class SchedulerComponent implements OnInit, OnChanges {
   }
 
   public onDayClick(day: TuiDay | any): void {
-    this.value = day;
-    console.log(this.value);
+    this.selectedDay = day;
+    console.log(this.selectedDay);
   }
 
   public addTraining() {
-    this._schedulerService.openModal();
+    this._schedulerService.openModal(this.selectedDay as TuiDay);
   }
 }

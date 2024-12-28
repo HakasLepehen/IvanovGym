@@ -1,9 +1,16 @@
 <!-- Контент диалогового окна клиента -->
-<form [formGroup]="trainingForm">
+<form [formGroup]="trainingForm" class="trainingForm">
   <tui-scrollbar>
-    <tui-input-time formControlName="time" [items]="timeSlots">
+    <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot">
       Время начала тренировки
     </tui-input-time>
+      <tui-select formControlName="client" class="trainingForm__client">
+        Выберите клиента
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="clients"
+        ></tui-data-list-wrapper>
+      </tui-select>
   </tui-scrollbar>
   <div class="tui-form__row">
     <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='onSubmit()'>
