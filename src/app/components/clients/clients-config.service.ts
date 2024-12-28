@@ -53,7 +53,8 @@ export class ClientsConfigService {
           this.loader.hide()
         }),
         catchError((err: HttpErrorResponse) => {
-          return this.handleError(err.message);
+          this.handleError(err.message)
+          return of();
         }),
       )
       .subscribe();
