@@ -10,7 +10,7 @@ import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-c
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchedulerComponent implements OnInit, OnChanges {
-  public selectedDay: TuiDay | null = null;
+  public selectedDay: TuiDay | null = TuiDay.fromLocalNativeDate(new Date(Date.now()));
 
   constructor(private _schedulerService: SchedulerConfigService, private loader: LoaderService) {
     console.log('constructor started');

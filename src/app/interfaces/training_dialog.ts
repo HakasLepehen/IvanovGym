@@ -5,4 +5,5 @@ export interface ITrainingDialog extends TuiDialogOptions<any> {
   training: any;
   isPlanning: boolean;
   selectedDay: TuiDay;
+  isEditing: boolean;
 }

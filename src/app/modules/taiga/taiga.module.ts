@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { TUI_DIALOG_CLOSES_ON_BACK } from '@taiga-ui/cdk';
+import { TUI_DIALOG_CLOSES_ON_BACK, TuiDayOfWeek } from '@taiga-ui/cdk';
 import {
+  TUI_FIRST_DAY_OF_WEEK,
   TuiAlertModule,
   TuiButtonModule,
   TuiCalendarModule,
@@ -51,6 +52,10 @@ import { of } from 'rxjs';
       provide: TUI_DIALOG_CLOSES_ON_BACK,
       useValue: of(true),
     },
+    {
+      provide: TUI_FIRST_DAY_OF_WEEK,
+      useValue: TuiDayOfWeek.Monday
+    }
   ],
   exports: [
     CommonModule,

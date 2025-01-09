@@ -6,12 +6,14 @@ import { tuiCreateTimePeriods, TuiInputTimeModule, tuiItemsHandlersProvider, Tui
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { IClient } from '../../interfaces/client';
 import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
-import {TuiDataListWrapperModule} from '@taiga-ui/kit';
+import { TuiDataListWrapperModule } from '@taiga-ui/kit';
 import { Store } from "@ngrx/store";
 import { clientsSelector } from "../../store/selectors/client.selector";
 import { take } from "rxjs";
 import { tap } from "rxjs/internal/operators/tap";
 import { TuiDay } from "@taiga-ui/cdk";
+import { PayloadModels } from 'src/app/interfaces/payload_models';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 
 @Component({
   selector: 'app-training',
@@ -28,7 +30,7 @@ import { TuiDay } from "@taiga-ui/cdk";
     TuiDataListWrapperModule
   ],
   templateUrl: './training.component.html',
-  styleUrls: [ './training.component.scss' ],
+  styleUrls: ['./training.component.scss'],
   providers: [
     tuiItemsHandlersProvider({
       stringify: (client: IClient) => `${client.fullName}`
@@ -39,6 +41,7 @@ import { TuiDay } from "@taiga-ui/cdk";
 
 export class TrainingComponent {
   private isPlanning: boolean = false;
+  private isEditing: boolean = false;
   private selectedDay!: TuiDay;
   readonly trainingForm = new FormGroup({
     time: new FormControl(null, Validators.required),
@@ -50,14 +53,16 @@ export class TrainingComponent {
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
-    private store: Store
+    private store: Store,
+    private scheduleConfigService: SchedulerConfigService
   ) {
     this.isPlanning = context?.data?.isPlanning;
     this.selectedDay = context?.data?.selectedDay;
+    this.isEditing = context?.data?.isEditing;
     store.select(clientsSelector)
       .pipe(
         take(1),
-        tap(val=> this.clients = val)
+        tap(val => this.clients = val)
       ).subscribe()
   }
 
@@ -67,7 +72,18 @@ export class TrainingComponent {
   }
 
   onSubmit(): void {
-    const selectedDay = this.selectedDay.toLocalNativeDate();
-    console.log(this.trainingForm.value);
+    let selectedDay: Date;
+    let trainingModel: PayloadModels.PlanningTrainingModel = {};
+
+    // prepare dto before send to backend
+    selectedDay = this.selectedDay.toLocalNativeDate();
+    //FIXME: надо найти более оптимальное решение для указания выбранного времени
+    // @ts-ignore: Object is possibly 'null'.
+    selectedDay.setHours(this.trainingForm.value.time.hours, this.trainingForm.value.time.minutes);
+    //FIXME: надо найти более оптимальное решение для указания идентификатора клиента
+    // @ts-ignore: Object is possibly 'null'.
+    trainingModel = { date: selectedDay, client_id: this.trainingForm.value!.client!.id };
+
+    this.scheduleConfigService.saveTraining(trainingModel, true);
   }
 }

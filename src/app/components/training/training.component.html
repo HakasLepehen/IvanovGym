@@ -13,7 +13,7 @@
       </tui-select>
   </tui-scrollbar>
   <div class="tui-form__row">
-    <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='onSubmit()'>
+    <button tuiButton size='m' appearance='whiteblock-active' type='button' [disabled]="!trainingForm.valid" (click)='onSubmit()'>
       Сохранить
     </button>
   </div>
