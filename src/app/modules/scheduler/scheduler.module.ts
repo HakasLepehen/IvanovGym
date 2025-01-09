@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { TaigaModule } from '../taiga/taiga.module';
 import { SchedulerRoutingModule } from './scheduler-routing.module';
 import { SchedulerComponent } from '../../pages/scheduler/scheduler.component';
 import { TrainingCalendarListComponent } from 'src/app/components/training-calendar-list/training-calendar-list.component';
 import { LoaderModule } from "../../components/loader/loader.module";
+import { TuiForModule } from "@taiga-ui/cdk";
 
 
 
@@ -14,7 +15,8 @@ import { LoaderModule } from "../../components/loader/loader.module";
     CommonModule,
     SchedulerRoutingModule,
     TaigaModule,
-    LoaderModule
-],
+    LoaderModule,
+    TuiForModule
+  ],
 })
 export class SchedulerModule { }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { ENV } from 'src/environment/environment';
 import { PayloadModels } from '../../interfaces/payload_models';
+import { IClient } from "../../interfaces/client";
 
 const options = {
   headers: {
@@ -21,7 +22,11 @@ export class SchedulerService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  saveTraining(model: PayloadModels.PlanningTrainingModel): Observable<any> {
+  getTrainings(): Observable<PayloadModels.PlanningTrainingModel[] | any> {
+    return this.httpClient.get(`${ENV.supabaseUrl}/${this.trainingURL}`);
+  }
+
+  saveTraining(model: PayloadModels.PlanningTrainingModel): Observable<Object> {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
   }
 }

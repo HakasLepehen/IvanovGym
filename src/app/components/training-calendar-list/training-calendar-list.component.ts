@@ -1,9 +1,17 @@
-import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { TUI_DEFAULT_MATCHER, TuiDay, TuiTime } from '@taiga-ui/cdk';
-import { Subject } from 'rxjs/internal/Subject';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
+import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { ITraining } from 'src/app/interfaces/training';
 import { TIMELINES } from './timeline';
+import { SchedulerConfigService } from "../scheduler/scheduler-config.service";
 
 @Component({
   selector: 'app-training-calendar-list',
@@ -15,6 +23,7 @@ export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public selectedDay: TuiDay | null = null;
   public timeline: Array<string | TuiTime> = TIMELINES;
+  private needToReloadTrainings: boolean = false;
   public content: ITraining[] = [
     {
       clientGIUD: '123',
@@ -25,9 +34,10 @@ export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterVi
     }
   ];
 
-  constructor() {
-
+  constructor(public schedulerConfigService: SchedulerConfigService) {
+    // this.schedulerConfigService = inject(SchedulerConfigService);
   }
+
   ngAfterContentInit(): void {
     console.log('ngAfterContentInit started: ');
   }
@@ -37,6 +47,7 @@ export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterVi
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ngOnChanges started', changes);
+    this.schedulerConfigService.getTrainings()
   }
 
   ngOnInit() {

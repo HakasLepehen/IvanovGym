@@ -1,17 +1,19 @@
 import { PolymorpheusComponent, POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Inject, Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, Subscription, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 import { TuiDay } from "@taiga-ui/cdk";
 import { SchedulerService } from './scheduler.service';
 import { PayloadModels } from 'src/app/interfaces/payload_models';
+import { ITrainingDialog } from "../../interfaces/training_dialog";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
+  public trainings$: Subject<any[]> = new Subject<PayloadModels.PlanningTrainingModel[]>();
 
   constructor(
     private readonly _dialogs: TuiDialogService,
@@ -37,7 +39,7 @@ export class SchedulerConfigService {
       .subscribe()
   }
 
-  saveTraining(props: { selectedDate: Date, formValue: any, isCreate: boolean }): void {
+  saveTraining(props: { selectedDate: Date, formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
     let {selectedDate, formValue, isCreate} = props;
     let trainingModel: PayloadModels.PlanningTrainingModel = {};
 
@@ -47,10 +49,22 @@ export class SchedulerConfigService {
 
     if (isCreate) {
       this.schedulerService.saveTraining(trainingModel)
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          tap(() => context.completeWith(true))
+        )
         .subscribe()
     } else {
       alert(`Распиши функцию сохранения редактирования тренировки`);
     }
+  }
+
+  getTrainings() {
+    return this.schedulerService.getTrainings()
+      .pipe(
+        take(1),
+        tap((value: any[]) => {this.trainings$.next(value)})
+      )
+      .subscribe()
   }
 }

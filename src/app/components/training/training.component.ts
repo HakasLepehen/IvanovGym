@@ -14,6 +14,7 @@ import { tap } from "rxjs/internal/operators/tap";
 import { TuiDay } from "@taiga-ui/cdk";
 import { PayloadModels } from 'src/app/interfaces/payload_models';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { LoaderService } from "../loader/loader.service";
 
 @Component({
   selector: 'app-training',
@@ -54,7 +55,8 @@ export class TrainingComponent {
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
-    private scheduleConfigService: SchedulerConfigService
+    private scheduleConfigService: SchedulerConfigService,
+    private loaderService: LoaderService,
   ) {
     this.isPlanning = context?.data?.isPlanning;
     this.selectedDay = context?.data?.selectedDay;
@@ -74,6 +76,7 @@ export class TrainingComponent {
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning,
     }
-    this.scheduleConfigService.saveTraining(props);
+    this.loaderService.show();
+    // this.scheduleConfigService.saveTraining(props, this.context);
   }
 }

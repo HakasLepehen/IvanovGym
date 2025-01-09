@@ -47,7 +47,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
     this.loaderService.getLoading().subscribe(val => {
       this.isLoading = val;
-      this.cd.markForCheck();
+      this.cd.detectChanges();
     });
   }
 
