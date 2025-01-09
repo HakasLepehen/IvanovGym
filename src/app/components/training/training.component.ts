@@ -66,24 +66,14 @@ export class TrainingComponent {
       ).subscribe()
   }
 
-  ngOnInit() {
-    console.log(this.context);
-
-  }
+  ngOnInit() {}
 
   onSubmit(): void {
-    let selectedDay: Date;
-    let trainingModel: PayloadModels.PlanningTrainingModel = {};
-
-    // prepare dto before send to backend
-    selectedDay = this.selectedDay.toLocalNativeDate();
-    //FIXME: надо найти более оптимальное решение для указания выбранного времени
-    // @ts-ignore: Object is possibly 'null'.
-    selectedDay.setHours(this.trainingForm.value.time.hours, this.trainingForm.value.time.minutes);
-    //FIXME: надо найти более оптимальное решение для указания идентификатора клиента
-    // @ts-ignore: Object is possibly 'null'.
-    trainingModel = { date: selectedDay, client_id: this.trainingForm.value!.client!.id };
-
-    this.scheduleConfigService.saveTraining(trainingModel, true);
+    const props = {
+      selectedDate: this.selectedDay.toLocalNativeDate(),
+      formValue: this.trainingForm.value,
+      isCreate: this.isPlanning,
+    }
+    this.scheduleConfigService.saveTraining(props);
   }
 }

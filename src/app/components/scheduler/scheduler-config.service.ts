@@ -37,9 +37,16 @@ export class SchedulerConfigService {
       .subscribe()
   }
 
-  saveTraining(model: PayloadModels.PlanningTrainingModel, isCreate: boolean): void {
+  saveTraining(props: { selectedDate: Date, formValue: any, isCreate: boolean }): void {
+    let {selectedDate, formValue, isCreate} = props;
+    let trainingModel: PayloadModels.PlanningTrainingModel = {};
+
+    // prepare dto before send to backend
+    selectedDate.setHours(formValue.time.hours, formValue.time.minutes);
+    trainingModel = { date: selectedDate, client_id: formValue.client!.id };
+
     if (isCreate) {
-      this.schedulerService.saveTraining(model)
+      this.schedulerService.saveTraining(trainingModel)
         .pipe(take(1))
         .subscribe()
     } else {
