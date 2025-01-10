@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TuiDay } from '@taiga-ui/cdk';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
@@ -9,20 +9,16 @@ import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-c
   styleUrls: ['./scheduler.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulerComponent implements OnInit, OnChanges {
+export class SchedulerComponent implements OnInit {
   public selectedDay: TuiDay | null = TuiDay.fromLocalNativeDate(new Date(Date.now()));
+  public plannedTrainings:
 
-  constructor(private _schedulerService: SchedulerConfigService, private loader: LoaderService) {
-    console.log('constructor started');
-    loader.show();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges started');
+  constructor(
+    private _schedulerService: SchedulerConfigService,
+  ) {
   }
 
   ngOnInit() {
-    console.log('ngOnInit started');
   }
 
   public onDayClick(day: TuiDay | any): void {

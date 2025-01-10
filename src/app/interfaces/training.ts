@@ -13,5 +13,5 @@ export interface ITraining {
   // Год на который запланирована тренировка
   year: number,
   // Идентификаторы элементов тренировок(упражнение, повторения, подходы) специфичные для данной тренировки
-  trainingExercises: number[]
+  trainingExerciseIds: number[]
 }
