@@ -15,6 +15,7 @@ import { TuiForModule } from "@taiga-ui/cdk";
     CommonModule,
     SchedulerRoutingModule,
     TaigaModule,
-  ],
+    LoaderModule
+],
 })
 export class SchedulerModule { }

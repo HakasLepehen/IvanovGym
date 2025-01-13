@@ -76,7 +76,6 @@ export class TrainingComponent {
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning,
     }
-    this.loaderService.show();
     this.scheduleConfigService.saveTraining(props, this.context);
   }
 }

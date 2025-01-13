@@ -6,6 +6,9 @@
     </button>
   </div>
 </div>
-<div class="bottom-container">
+<div *ngIf="!isLoading; else loader" class="bottom-container">
   <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="plannedTrainings" />
 </div>
+<ng-template #loader>
+  <app-loader />
+</ng-template>

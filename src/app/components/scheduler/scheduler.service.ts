@@ -22,8 +22,8 @@ export class SchedulerService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  getTrainings(): Observable<PayloadModels.PlanningTrainingModel[] | any> {
-    return this.httpClient.get(`${ENV.supabaseUrl}/${this.trainingURL}`);
+  getTrainings(): Observable<PayloadModels.PlanningTrainingModel[]> {
+    return this.httpClient.get<PayloadModels.PlanningTrainingModel[]>(`${ENV.supabaseUrl}/${this.trainingURL}`);
   }
 
   saveTraining(model: PayloadModels.PlanningTrainingModel): Observable<Object> {

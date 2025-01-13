@@ -1,12 +1,11 @@
 <div class='main_block'>
-<!--  <div class='main_block__content'>-->
-<!--    <div class='container'>-->
-<!--      <ul class='content__list' *ngIf="schedulerConfigService.trainings$ | async; let trainings">-->
-<!--        <li *ngFor="let training of trainings">-->
-<!--          <span class="time_item">{{training.id}}</span>-->
-<!--        </li>-->
-<!--      </ul>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--<app-loader />-->
+ <div class='main_block__content'>
+    <div class='container'>
+      <ul class='content__list' *ngIf="plannedTrainings.length; let trainings">
+        <li *ngFor="let training in trainings">
+          <span class="time_item">{{training.client_id}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

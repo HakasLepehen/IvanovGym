@@ -1,16 +1,11 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  inject,
   Input,
-  OnChanges,
-  OnInit,
   SimpleChanges
 } from '@angular/core';
-import { TuiDay, TuiTime } from '@taiga-ui/cdk';
-import { ITraining } from 'src/app/interfaces/training';
-import { TIMELINES } from './timeline';
+import { TuiDay} from '@taiga-ui/cdk';
 import { SchedulerConfigService } from "../scheduler/scheduler-config.service";
 
 @Component({
@@ -19,35 +14,16 @@ import { SchedulerConfigService } from "../scheduler/scheduler-config.service";
   styleUrls: ['./training-calendar-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TrainingCalendarListComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
+export class TrainingCalendarListComponent {
   @Input()
   public selectedDay: TuiDay | null = null;
-  public timeline: Array<string | TuiTime> = TIMELINES;
-  private needToReloadTrainings: boolean = false;
-  public content: ITraining[] = [
-    {
-      clientGIUD: '123',
-      day: 0,
-      month: 0,
-      year: 0,
-      trainingExercises: []
-    }
-  ];
+  @Input()
+  public plannedTrainings = [];
 
-  constructor(public schedulerConfigService: SchedulerConfigService) {
-    // this.schedulerConfigService = inject(SchedulerConfigService);
-  }
-
-  ngAfterContentInit(): void {
-    console.log('ngAfterContentInit started: ');
-  }
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit started: ');
+  constructor() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges started', changes);
-    this.schedulerConfigService.getTrainings()
   }
 
   ngOnInit() {

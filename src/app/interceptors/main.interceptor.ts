@@ -32,6 +32,7 @@ export class MainInterceptor implements HttpInterceptor {
         (event) => { },
         (error) => {
           if (error instanceof HttpErrorResponse) {
+            alert(error.error?.message ?? error.error?.msg);
             if (error.status === 401) {
               localStorage.removeItem('token');
               return this._router.navigate(['login']);

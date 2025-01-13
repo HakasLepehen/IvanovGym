@@ -37,7 +37,7 @@ export class ClientsConfigService {
   ) {
     this.onLoad$.subscribe((val: boolean) => {
       if (val) {
-        this.getClients();
+        // this.getClients();
       }
     });
   }
@@ -128,7 +128,6 @@ export class ClientsConfigService {
 
   hideLoaderAndRefresh(): void {
     this.loader.hide();
-    this.refreshData();
   }
 
   closeModal(context: TuiDialogContext<boolean, IClientDialog>): void {
@@ -140,12 +139,7 @@ export class ClientsConfigService {
   handleError(msg: string) {
     console.log(msg);
     this.loader.hide();
-    this.refreshData();
     return of();
-  }
-
-  refreshData() {
-    this.onLoad$.next(true);
   }
 
   /**

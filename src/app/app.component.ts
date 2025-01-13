@@ -1,5 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { LoaderService } from './components/loader/loader.service';
 import { Location } from '@angular/common';
 import { ClientsConfigService } from './components/clients/clients-config.service';
@@ -18,19 +18,11 @@ export class AppComponent implements OnInit {
   apiLoaded: boolean = false;
 
   constructor(
-    private loader: LoaderService,
     private location: Location,
     private _clientsConfigService: ClientsConfigService,
     private _exerciseConfigService: ExercisesConfigService,
     private store: Store
   ) {
-  }
-
-  back() {
-    this.location.back();
-  }
-
-  ngOnInit() {
     this._clientsConfigService.getClients();
     this._exerciseConfigService.getExercisesForClient();
 
@@ -40,5 +32,12 @@ export class AppComponent implements OnInit {
         this._clientsConfigService.setLimitNamesForClients(exercises)
       })
     ).subscribe()
+  }
+
+  back() {
+    this.location.back();
+  }
+
+  ngOnInit() {
   }
 }
