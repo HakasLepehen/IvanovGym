@@ -1,9 +1,15 @@
 <div class='main_block'>
- <div class='main_block__content'>
+  <div class='main_block__content'>
     <div class='container'>
-      <ul class='content__list' *ngIf="plannedTrainings.length; let trainings">
-        <li *ngFor="let training in trainings">
-          <span class="time_item">{{training.client_id}}</span>
+      <ul class='content__list' *ngIf="plannedTrainings.length;">
+        <li *ngFor="let training of plannedTrainings">
+          <div style="display: flex; gap: 20px;">
+            <span class="time_item">{{training.hour}}:{{training.minutes}}</span>
+            <span class="time_item">{{training.clientFullName}}</span>
+            <button tuiIconButton [size]="'m'" appearance='accent' type='button' [icon]="'tuiIconTrash'"
+              (click)='removeTraining(training)'>
+            </button>
+          </div>
         </li>
       </ul>
     </div>

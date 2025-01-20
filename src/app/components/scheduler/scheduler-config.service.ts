@@ -1,21 +1,21 @@
 import { LoaderService } from './../loader/loader.service';
-import { PolymorpheusComponent, POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
-import { Inject, Injectable, Injector } from '@angular/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, Observable, of, Subject, Subscription, take, takeUntil, tap } from 'rxjs';
+import { catchError, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 import { TuiDay } from "@taiga-ui/cdk";
 import { SchedulerService } from './scheduler.service';
-import { PayloadModels } from 'src/app/interfaces/payload_models';
 import { ITrainingDialog } from "../../interfaces/training_dialog";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ITraining } from 'src/app/interfaces/training';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
-  public trainings$: Subject<any[]> = new Subject<PayloadModels.PlanningTrainingModel[]>();
+  public trainings$: Subject<any[]> = new Subject<any>();
 
   constructor(
     private readonly _dialogs: TuiDialogService,
@@ -42,14 +42,20 @@ export class SchedulerConfigService {
       .subscribe()
   }
 
-  saveTraining(props: { selectedDate: Date, formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
-    let {selectedDate, formValue, isCreate} = props;
-    let trainingModel: PayloadModels.PlanningTrainingModel = {};
+  saveTraining(props: { selectedDate: TuiDay, formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
+    let { selectedDate, formValue, isCreate } = props;
+    let trainingModel: ITraining;
 
     // prepare dto before send to backend
-    selectedDate.setHours(formValue.time.hours, formValue.time.minutes);
     this.loaderService.show();
-    trainingModel = { date: selectedDate, client_id: formValue.client!.id };
+    trainingModel = {
+      clientGUID: formValue.client.guid,
+      day: selectedDate.day,
+      month: selectedDate.month,
+      year: selectedDate.year,
+      hour: formValue.time.hours,
+      minutes: formValue.time.minutes
+    };
 
     if (isCreate) {
       this.schedulerService.saveTraining(trainingModel)
@@ -59,6 +65,7 @@ export class SchedulerConfigService {
             this.loaderService.hide();
             context.completeWith(true);
           }),
+          tap(() => this.getTrainings()),
           catchError((err: HttpErrorResponse) => {
             this.loaderService.hide();
             context.completeWith(true);
@@ -76,8 +83,21 @@ export class SchedulerConfigService {
     this.schedulerService.getTrainings()
       .pipe(
         take(1),
-        tap((value: PayloadModels.PlanningTrainingModel[]) => {this.trainings$.next(value)})
+        tap((value: any) => { this.trainings$.next(value) })
       )
       .subscribe()
+  }
+
+  getSameDayTrainings(trainings: ITraining[], day: TuiDay): ITraining[] {
+    return trainings.filter((training: ITraining) => {
+      const trainingTuiDay = new TuiDay(training.year, training.month, training.day);
+
+      return trainingTuiDay.daySame(day);
+    })
+  }
+
+  removeTraining(id: number): void {
+    console.log(id);
+
   }
 }

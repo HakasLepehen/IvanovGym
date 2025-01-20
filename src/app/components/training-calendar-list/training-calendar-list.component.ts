@@ -1,12 +1,12 @@
+import { ITraining } from './../../interfaces/training';
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
   Input,
   SimpleChanges
 } from '@angular/core';
 import { TuiDay} from '@taiga-ui/cdk';
-import { SchedulerConfigService } from "../scheduler/scheduler-config.service";
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 
 @Component({
   selector: 'app-training-calendar-list',
@@ -18,12 +18,16 @@ export class TrainingCalendarListComponent {
   @Input()
   public selectedDay: TuiDay | null = null;
   @Input()
-  public plannedTrainings = [];
+  public plannedTrainings: ITraining[] = [];
 
-  constructor() {
+  constructor(private _schedulerConfigService: SchedulerConfigService,) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+  }
+
+  public removeTraining(training: ITraining): void {
+    this._schedulerConfigService.removeTraining(training.id as number)
   }
 
   ngOnInit() {

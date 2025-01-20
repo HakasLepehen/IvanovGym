@@ -12,7 +12,6 @@ import { clientsSelector } from "../../store/selectors/client.selector";
 import { take } from "rxjs";
 import { tap } from "rxjs/internal/operators/tap";
 import { TuiDay } from "@taiga-ui/cdk";
-import { PayloadModels } from 'src/app/interfaces/payload_models';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { LoaderService } from "../loader/loader.service";
 
@@ -72,7 +71,7 @@ export class TrainingComponent {
 
   onSubmit(): void {
     const props = {
-      selectedDate: this.selectedDay.toLocalNativeDate(),
+      selectedDate: this.selectedDay,
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning,
     }

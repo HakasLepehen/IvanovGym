@@ -6,6 +6,7 @@ import { SchedulerComponent } from '../../pages/scheduler/scheduler.component';
 import { TrainingCalendarListComponent } from 'src/app/components/training-calendar-list/training-calendar-list.component';
 import { LoaderModule } from "../../components/loader/loader.module";
 import { TuiForModule } from "@taiga-ui/cdk";
+import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
 
 
 
@@ -16,6 +17,7 @@ import { TuiForModule } from "@taiga-ui/cdk";
     SchedulerRoutingModule,
     TaigaModule,
     LoaderModule
-],
+  ],
+  providers: [SchedulerConfigService]
 })
 export class SchedulerModule { }

@@ -1,5 +1,5 @@
 :host {
-  background-color: darkgray;
+  // background-color: darkgray;
   display: flex;
   flex-direction: column;
 }
@@ -18,7 +18,7 @@
   padding: 0;
   & li {
     margin-top: 1.5em;
-    color: rgb(217, 217, 22);
+    // color: rgb(217, 217, 22);
   }
 }
 
@@ -27,11 +27,11 @@
   display: block;
 }
 
-.time_item::after {
-  content: "";
-  display: block;
-  border-top: 1px solid rgb(217, 217, 22);
-}
+// .time_item::after {
+//   content: "";
+//   display: block;
+//   border-top: 1px solid rgb(217, 217, 22);
+// }
 
 .content__item {
   align-items: center;
