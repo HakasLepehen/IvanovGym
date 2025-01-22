@@ -18,7 +18,7 @@ export class TrainingCalendarListComponent {
   @Input()
   public selectedDay: TuiDay | null = null;
   @Input()
-  public plannedTrainings: ITraining[] = [];
+  public plannedTrainings!: ITraining[];
 
   constructor(private _schedulerConfigService: SchedulerConfigService,) {
   }
