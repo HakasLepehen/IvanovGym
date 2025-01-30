@@ -5,7 +5,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="fullName" tuiTextfieldSize="m">
         Ф.И.О.
-        <input placeholder="Введите ФИО клиента полностью" tuiTextfield />
+        <input placeholder="Введите ФИО клиента полностью" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="fullName" [error]="[] | tuiFieldError | async"></tui-error>
@@ -14,7 +14,7 @@
     <div class="tui-form__row">
       <tui-input-number formControlName="age" tuiTextfieldSize="m">
         Возраст
-        <input placeholder="Введите возраст" tuiTextfield />
+        <input placeholder="Введите возраст" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input-number>
       <tui-error formControlName="age" [error]="[] | tuiFieldError | async"></tui-error>
@@ -23,7 +23,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="target" tuiTextfieldSize="m">
         Цель
-        <input placeholder="Кратко опишите цели клиента" tuiTextfield />
+        <input placeholder="Кратко опишите цели клиента" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="target" [error]="[] | tuiFieldError | async"></tui-error>
@@ -45,7 +45,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="experience" tuiTextfieldSize="m">
         Опыт тренировок
-        <input placeholder="Имеется ли опыт тренировок?" tuiTextfield />
+        <input placeholder="Имеется ли опыт тренировок?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="experience" [error]="[] | tuiFieldError | async"></tui-error>
@@ -54,7 +54,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="sleep" tuiTextfieldSize="m">
         Режим сна и бодрствования
-        <input placeholder="Сколько часов обычно спит?" tuiTextfield />
+        <input placeholder="Сколько часов обычно спит?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="sleep" [error]="[] | tuiFieldError | async"></tui-error>
@@ -63,7 +63,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="food" tuiTextfieldSize="m">
         Режим питания
-        <input placeholder="Какой режим питания?" tuiTextfield />
+        <input placeholder="Какой режим питания?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="food" [error]="[] | tuiFieldError | async"></tui-error>
@@ -72,7 +72,7 @@
     <div class="tui-form__row">
       <tui-input formControlName="pharma" tuiTextfieldSize="m">
         Фармакология
-        <input placeholder="Имеются ли ограничения" tuiTextfield />
+        <input placeholder="Имеются ли ограничения" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="pharma" [error]="[] | tuiFieldError | async"></tui-error>
@@ -89,7 +89,7 @@
     </tui-multi-select> -->
       <tui-input formControlName="activity" tuiTextfieldSize="m">
         Ограничения
-        <input placeholder="Имеются ли ограничения" tuiTextfield />
+        <input placeholder="Имеются ли ограничения" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="activity" [error]="[] | tuiFieldError | async"></tui-error>
@@ -97,7 +97,7 @@
   </tui-scrollbar>
 
   <div class="tui-form__row">
-    <button tuiButton size='m' appearance='whiteblock-active' type='button' (click)='onSubmit()'>
+    <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button' (click)='onSubmit()'>
       Сохранить
     </button>
   </div>

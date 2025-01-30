@@ -1,12 +1,12 @@
 import { IExercise } from 'src/app/interfaces/exercise';
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { TuiButtonModule, TuiDialogContext, TuiExpandModule } from '@taiga-ui/core';
+import { TuiDialogContext, TuiExpand, TuiButton } from '@taiga-ui/core';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
 
 @Component({
   selector: 'app-adding-exercise',
   standalone: true,
-  imports: [TuiButtonModule, TuiExpandModule, ExercisesFormModule],
+  imports: [TuiButton, TuiExpand, ExercisesFormModule],
   templateUrl: './adding-exercise.component.html',
   styleUrls: ['./adding-exercise.component.scss']
 })

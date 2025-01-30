@@ -1,51 +1,34 @@
+import { TuiTextfieldControllerModule, TuiInputModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
+import { NG_EVENT_PLUGINS } from "@taiga-ui/event-plugins";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+// TODO: (Taiga UI migration) TUI_DIALOG_CLOSES_ON_BACK is deleted, you can create your own approach based on window.history property
 import { TUI_DIALOG_CLOSES_ON_BACK, TuiDayOfWeek } from '@taiga-ui/cdk';
-import {
-  TUI_FIRST_DAY_OF_WEEK,
-  TuiAlertModule,
-  TuiButtonModule,
-  TuiCalendarModule,
-  TuiDataListModule,
-  TuiDialogModule,
-  TuiErrorModule,
-  TuiNotificationModule,
-  TuiRootModule,
-  TuiScrollbarModule,
-  TuiSvgModule,
-  TuiTextfieldControllerModule
-} from '@taiga-ui/core';
-import {
-  TuiAccordionModule,
-  TuiDataListWrapperModule,
-  TuiFieldErrorPipeModule,
-  TuiInputModule,
-  TuiMultiSelectModule,
-} from '@taiga-ui/kit';
+import { TUI_FIRST_DAY_OF_WEEK, TuiRoot, TuiAlert, TuiNotification, TuiCalendar, TuiDataList, TuiError, TuiScrollbar, TuiScrollable, TuiIcon, TuiDialog, TuiButton } from '@taiga-ui/core';
+import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { of } from 'rxjs';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    TuiRootModule,
-    TuiDialogModule,
-    TuiAlertModule,
+    TuiRoot,
+    TuiDialog,
+    TuiAlert,
     TuiInputModule,
-    TuiErrorModule,
-    TuiFieldErrorPipeModule,
-    TuiButtonModule,
-    TuiAccordionModule,
-    TuiDialogModule,
-    TuiScrollbarModule,
-    TuiCalendarModule,
-    TuiSvgModule,
+    TuiError,
+    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
+    TuiButton,
+    ...TuiAccordion,
+    TuiScrollbar, TuiScrollable,
+    TuiCalendar,
+    TuiIcon,
     TuiMultiSelectModule,
-    TuiDataListModule,
-    TuiDataListWrapperModule,
+    ...TuiDataList,
+    ...TuiDataListWrapper,
     TuiTextfieldControllerModule,
-    TuiNotificationModule
+    TuiNotification
   ],
   providers: [
     {
@@ -55,27 +38,28 @@ import { of } from 'rxjs';
     {
       provide: TUI_FIRST_DAY_OF_WEEK,
       useValue: TuiDayOfWeek.Monday
-    }
-  ],
+    },
+      NG_EVENT_PLUGINS
+],
   exports: [
     CommonModule,
-    TuiRootModule,
-    TuiDialogModule,
-    TuiAlertModule,
+    TuiRoot,
+    TuiDialog,
+    TuiAlert,
     TuiInputModule,
     TuiTextfieldControllerModule,
-    TuiErrorModule,
-    TuiFieldErrorPipeModule,
-    TuiButtonModule,
-    TuiAccordionModule,
-    TuiDialogModule,
-    TuiScrollbarModule,
-    TuiCalendarModule,
-    TuiSvgModule,
+    TuiError,
+    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
+    TuiButton,
+    ...TuiAccordion,
+    TuiDialog,
+    TuiScrollbar, TuiScrollable,
+    TuiCalendar,
+    TuiIcon,
     TuiMultiSelectModule,
-    TuiDataListModule,
-    TuiDataListWrapperModule,
-    TuiNotificationModule
+    ...TuiDataList,
+    ...TuiDataListWrapper,
+    TuiNotification
   ],
 })
 export class TaigaModule {}

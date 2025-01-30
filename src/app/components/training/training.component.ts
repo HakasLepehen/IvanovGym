@@ -1,12 +1,12 @@
+import { TuiInputTimeModule, TuiSelectModule } from "@taiga-ui/legacy";
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TuiButtonModule, TuiDataListModule, TuiDialogContext, TuiScrollbarModule } from '@taiga-ui/core';
-import { tuiCreateTimePeriods, TuiInputTimeModule, tuiItemsHandlersProvider, TuiSelectModule } from '@taiga-ui/kit';
-import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { TuiDialogContext, TuiDataList, TuiScrollbar, TuiScrollable, TuiButton } from '@taiga-ui/core';
+import { tuiCreateTimePeriods, tuiItemsHandlersProvider, TuiDataListWrapper } from '@taiga-ui/kit';
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { IClient } from '../../interfaces/client';
 import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
-import { TuiDataListWrapperModule } from '@taiga-ui/kit';
 import { Store } from "@ngrx/store";
 import { clientsSelector } from "../../store/selectors/client.selector";
 import { take } from "rxjs";
@@ -22,12 +22,12 @@ import { LoaderService } from "../loader/loader.service";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TuiScrollbarModule,
-    TuiButtonModule,
+    TuiScrollbar, TuiScrollable,
+    TuiButton,
     TuiInputTimeModule,
     TuiSelectModule,
-    TuiDataListModule,
-    TuiDataListWrapperModule
+    TuiDataList,
+    TuiDataListWrapper
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],

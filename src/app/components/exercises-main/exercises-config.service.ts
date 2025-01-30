@@ -2,7 +2,7 @@ import { setClientExercises } from './../../store/actions/client-exercises.actio
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body_parts';

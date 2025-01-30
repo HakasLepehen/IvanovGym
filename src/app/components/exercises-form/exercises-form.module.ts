@@ -1,14 +1,13 @@
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { TuiLet } from "@taiga-ui/cdk";
+import { TuiTextfieldControllerModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ExercisesFormComponent } from './exercises-form/exercises-form.component';
-import { TuiButtonModule, TuiDataListModule, TuiDialogService, TuiErrorModule, TuiExpandModule, TuiTextfieldControllerModule } from '@taiga-ui/core';
+import { TuiDialogService, TuiDataList, TuiError, TuiExpand, TuiButton } from '@taiga-ui/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiDataListWrapperModule, TuiFieldErrorPipe, TuiFieldErrorPipeModule, TuiMultiSelectModule } from '@taiga-ui/kit';
+import { TuiFieldErrorPipe, TuiDataListWrapper, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
-import { TuiLetModule } from '@taiga-ui/cdk';
-
-
 
 @NgModule({
   declarations: [ExercisesFormComponent],
@@ -19,13 +18,13 @@ import { TuiLetModule } from '@taiga-ui/cdk';
     TaigaModule,
     FormsModule,
     ReactiveFormsModule,
-    TuiDataListModule,
-    TuiDataListWrapperModule,
+    ...TuiDataList,
+    ...TuiDataListWrapper,
     TuiMultiSelectModule,
     TuiTextfieldControllerModule,
-    TuiLetModule,
-    TuiErrorModule,
-    TuiFieldErrorPipeModule,
+    TuiLet,
+    TuiError,
+    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     AsyncPipe,
   ]
 })

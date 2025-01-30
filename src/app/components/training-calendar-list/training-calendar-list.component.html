@@ -6,7 +6,7 @@
           <div style="display: flex; gap: 20px;">
             <span class="time_item">{{training.hour}}:{{training.minutes}}</span>
             <span class="time_item">{{training.clientFullName}}</span>
-            <button tuiIconButton [size]="'m'" appearance='accent' type='button' [icon]="'tuiIconTrash'"
+            <button tuiIconButton [size]="'m'" appearance='accent' type='button' [iconStart]="'@tui.trash'"
               (click)='removeTraining(training)'>
             </button>
           </div>

@@ -12,7 +12,7 @@
           <tui-input formControlName='login'>
             Введите e-mail
             <!-- <input tuiTextfield role='presentation' type='email' autocomplete='on' /> -->
-            <input tuiTextfield autocomplete="email" translate="no" type="email" />
+            <input tuiTextfieldLegacy autocomplete="email" translate="no" type="email" />
           </tui-input>
           <tui-error formControlName='login' [error]='[] | tuiFieldError | async'></tui-error>
         </div>
@@ -27,7 +27,7 @@
           Если у Вас нет аккаунта, вы можете
           <a [routerLink]=goToPage>зарегистрироваться</a>
         </p>
-        <button tuiButton type='submit' size='m' shape='rounded' [showLoader]='isLoading' [disabled]='!loginForm.valid'>
+        <button tuiButton type='submit' size='m' [style.border-radius.%]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>
           Войти
         </button>
       </div>
@@ -36,7 +36,7 @@
           Если Вы уже являетесь пользователем. Вы можете
           <a [routerLink]=goToPage>авторизоваться</a>
         </p>
-        <button tuiButton type='submit' size='m' shape='rounded' [showLoader]='isLoading' [disabled]='!loginForm.valid'>
+        <button tuiButton type='submit' size='m' [style.border-radius.%]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>
           Зарегистрироваться
         </button>
       </div>

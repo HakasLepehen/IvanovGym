@@ -1,5 +1,5 @@
 import { LoaderService } from './../loader/loader.service';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { catchError, of, Subject, take, takeUntil, tap } from 'rxjs';

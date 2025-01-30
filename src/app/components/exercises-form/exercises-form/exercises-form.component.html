@@ -3,7 +3,7 @@
   <div class="tui-form__row">
     <tui-input formControlName="exercise_name" tuiTextfieldSize="m">
       Наименование упражнения
-      <input tuiTextfield />
+      <input tuiTextfieldLegacy />
       <span class="tui-required"></span>
     </tui-input>
     <tui-error formControlName="exercise_name" [error]="[] | tuiFieldError | async"></tui-error>
@@ -30,7 +30,7 @@
         <div class="tui-form__row">
           <tui-input tuiTextfieldSize="m" formControlName="name" id="name-{{i}}">
             Название
-            <input tuiTextfield />
+            <input tuiTextfieldLegacy />
             <span class="tui-required"></span>
           </tui-input>
           <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
@@ -39,18 +39,18 @@
         <div class="tui-form__row">
           <tui-input tuiTextfieldSize="m" formControlName="url" id="url-{{i}}">
             Ссылка на видео
-            <input tuiTextfield />
+            <input tuiTextfieldLegacy />
           </tui-input>
         </div>
         <!-- КОММЕНТАРИЙ -->
         <div class="tui-form__row">
           <tui-input tuiTextfieldSize="m" formControlName="comment" id="comment-{{i}}">
             Комментарий
-            <input tuiTextfield />
+            <input tuiTextfieldLegacy />
           </tui-input>
         </div>
 
-        <button tuiIconButton icon="tuiIconTrash" [size]="'m'" (click)="removeVariant(i)" type="button"> </button>
+        <button tuiIconButton iconStart="@tui.trash" [size]="'m'" (click)="removeVariant(i)" type="button"> </button>
 
       </div>
     </div>

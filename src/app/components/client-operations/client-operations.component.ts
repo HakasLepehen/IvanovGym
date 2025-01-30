@@ -1,18 +1,19 @@
+import { TuiInputModule, TuiInputNumberModule } from "@taiga-ui/legacy";
 import { ClientsConfigService } from './../clients/clients-config.service';
 import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
 import { IClient } from '../../interfaces/client';
-import { TuiButtonModule, TuiDialogContext, TuiDialogService, TuiErrorModule } from '@taiga-ui/core';
-import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { TuiDialogContext, TuiDialogService, TuiError, TuiButton } from '@taiga-ui/core';
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import IClientDialog from '../../interfaces/client-dialog';
 import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipeModule, TuiInputModule, TuiInputNumberModule } from '@taiga-ui/kit';
+import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
 import { ClientsService } from '../clients/clients.service';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 import { Subject } from 'rxjs/internal/Subject';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
-import { TuiContextWithImplicit, tuiIsNumber, TUI_DEFAULT_MATCHER, TuiLetModule } from '@taiga-ui/cdk';
+import { tuiIsNumber, TUI_DEFAULT_MATCHER, TuiContext, TuiLet } from '@taiga-ui/cdk';
 import { BehaviorSubject, Observable } from 'rxjs';
 import IClientExercise from 'src/app/interfaces/client_exercise';
 
@@ -21,15 +22,15 @@ import IClientExercise from 'src/app/interfaces/client_exercise';
   standalone: true,
   imports: [
     TaigaModule,
-    TuiButtonModule,
+    TuiButton,
     FormsModule,
     ReactiveFormsModule,
     TuiInputModule,
-    TuiErrorModule,
-    TuiFieldErrorPipeModule,
+    TuiError,
+    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     AsyncPipe,
     TuiInputNumberModule,
-    TuiLetModule
+    TuiLet
   ],
   providers: [
     TuiDialogService,
@@ -104,7 +105,7 @@ export class ClientOperationsComponent implements OnInit {
     map(items => new Map(items.map(({ id, exercise_fullname }) => [id, exercise_fullname]))),
     startWith(new Map()),
     map(
-      map => (id: TuiContextWithImplicit<number> | number) =>
+      map => (id: TuiContext<number> | number) =>
         (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
     )
   )

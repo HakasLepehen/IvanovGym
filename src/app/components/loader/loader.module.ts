@@ -1,12 +1,10 @@
+import { TuiLoader } from "@taiga-ui/core";
 import { LoaderComponent } from './loader/loader.component';
 import { NgModule } from '@angular/core';
-import { TuiLoaderModule } from '@taiga-ui/core';
-
-
 
 @NgModule({
   declarations: [LoaderComponent],
-  imports: [TuiLoaderModule,],
-  exports: [TuiLoaderModule, LoaderComponent]
+  imports: [TuiLoader,],
+  exports: [TuiLoader, LoaderComponent]
 })
 export class LoaderModule { }

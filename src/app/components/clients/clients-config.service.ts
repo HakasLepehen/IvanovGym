@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import IClientDialog from 'src/app/interfaces/client-dialog';

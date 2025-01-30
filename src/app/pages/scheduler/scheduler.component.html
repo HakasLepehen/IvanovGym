@@ -1,7 +1,7 @@
 <div class="top-container">
   <tui-calendar [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
   <div class="container-buttons">
-    <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [icon]="'tuiIconPlusLarge'"
+    <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.plus'"
       (click)='addTraining()'>
     </button>
   </div>

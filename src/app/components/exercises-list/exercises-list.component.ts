@@ -1,18 +1,18 @@
+import { TuiButton } from "@taiga-ui/core";
+import { TuiAccordion } from "@taiga-ui/kit";
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TuiAccordionModule } from '@taiga-ui/kit';
 import { Subject, of, takeUntil, tap } from 'rxjs';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
-import { TuiButtonModule } from '@taiga-ui/core';
 import { AddingExerciseComponent } from '../adding-exercise/adding-exercise.component';
 import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-exercises-list',
-  imports: [CommonModule, TuiAccordionModule, ExercisesFormModule, TuiButtonModule, AddingExerciseComponent],
+  imports: [CommonModule, TuiAccordion, ExercisesFormModule, TuiButton, AddingExerciseComponent],
   standalone: true,
   templateUrl: './exercises-list.component.html',
   styleUrls: ['./exercises-list.component.scss'],

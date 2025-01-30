@@ -1,10 +1,10 @@
 import { IExecutionVariant } from './../../../interfaces/execution_variant';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, Inject, AfterContentChecked } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
-import { tuiPure, TuiStringHandler, TuiContextWithImplicit, TUI_DEFAULT_MATCHER, tuiIsNumber, TuiHandler } from "@taiga-ui/cdk";
+import { tuiPure, TuiStringHandler, TUI_DEFAULT_MATCHER, tuiIsNumber, TuiHandler, TuiContext } from "@taiga-ui/cdk";
 import { IExercise } from "src/app/interfaces/exercise";
 import { ISelectBox } from "src/app/interfaces/selectbox";
 import { ExercisesConfigService } from "../../exercises-main/exercises-config.service";
@@ -111,7 +111,7 @@ export class ExercisesFormComponent {
       map(items => new Map(items.map<[number, string]>(({ id, name }) => [id, name]))),
       startWith(new Map()),
       map(
-        map => (id: TuiContextWithImplicit<number> | number) =>
+        map => (id: TuiContext<number> | number) =>
           (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
       )
     );

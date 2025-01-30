@@ -1,12 +1,11 @@
+import { TuiLet } from "@taiga-ui/cdk";
+import { TuiTextfieldControllerModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TestComponent } from './test/test.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiDataListModule, TuiTextfieldControllerModule } from '@taiga-ui/core';
-import { TuiDataListWrapperModule, TuiMultiSelectModule } from '@taiga-ui/kit';
-import { TuiLetModule } from '@taiga-ui/cdk';
-
-
+import { TuiDataList } from '@taiga-ui/core';
+import { TuiDataListWrapper } from '@taiga-ui/kit';
 
 @NgModule({
   declarations: [TestComponent],
@@ -14,11 +13,11 @@ import { TuiLetModule } from '@taiga-ui/cdk';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TuiDataListModule,
-    TuiDataListWrapperModule,
+    ...TuiDataList,
+    ...TuiDataListWrapper,
     TuiMultiSelectModule,
     TuiTextfieldControllerModule,
-		TuiLetModule,
+		TuiLet,
   ],
   exports: [TestComponent]
 })
