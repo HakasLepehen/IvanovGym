@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 // TODO: (Taiga UI migration) TUI_DIALOG_CLOSES_ON_BACK is deleted, you can create your own approach based on window.history property
-import { TUI_DIALOG_CLOSES_ON_BACK, TuiDayOfWeek } from '@taiga-ui/cdk';
+import { TuiDayOfWeek } from '@taiga-ui/cdk';
 import { TUI_FIRST_DAY_OF_WEEK, TuiRoot, TuiAlert, TuiNotification, TuiCalendar, TuiDataList, TuiError, TuiScrollbar, TuiScrollable, TuiIcon, TuiDialog, TuiButton } from '@taiga-ui/core';
-import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
+import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorContentPipe, TuiButtonLoading } from '@taiga-ui/kit';
 import { of } from 'rxjs';
 
 @NgModule({
@@ -20,6 +20,7 @@ import { of } from 'rxjs';
     TuiError,
     TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     TuiButton,
+    TuiButtonLoading,
     ...TuiAccordion,
     TuiScrollbar, TuiScrollable,
     TuiCalendar,
@@ -31,10 +32,6 @@ import { of } from 'rxjs';
     TuiNotification
   ],
   providers: [
-    {
-      provide: TUI_DIALOG_CLOSES_ON_BACK,
-      useValue: of(true),
-    },
     {
       provide: TUI_FIRST_DAY_OF_WEEK,
       useValue: TuiDayOfWeek.Monday
@@ -51,6 +48,7 @@ import { of } from 'rxjs';
     TuiError,
     TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     TuiButton,
+    TuiButtonLoading,
     ...TuiAccordion,
     TuiDialog,
     TuiScrollbar, TuiScrollable,

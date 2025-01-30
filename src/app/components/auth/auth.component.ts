@@ -18,7 +18,7 @@ export class AuthComponent implements OnInit {
   });
   error: any = '';
   location: any;
-  isLoading = false;
+  public isLoading = false;
 
   constructor(
     private fb: FormBuilder,
