@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
+import { tuiDialog, TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
@@ -61,25 +61,39 @@ export class ClientsConfigService {
 
   //TODO: не сделана логика обновления списка пользователя
   openModal(props: ClientProps) {
-    this.dialogs
-      .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
+    const dialog = tuiDialog(ClientOperationsComponent,
+      {
+        dismissible: true,
         label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
-        data: {
-          client: props.client
-            ? props.client
-            : {
-              fullName: '',
-              created_at: new Date(),
-              age: 0,
-            },
-          isEdit: !!props.client,
-          exercises: props.exercises
-        },
-        closeable: true,
-        dismissible: false,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      }
+    )
+    dialog().subscribe({
+      next: (data) => {
+        console.info(`Dialog emitted data = ${data}`);
+      },
+      complete: () => {
+        console.info('Dialog closed');
+      },
+    });
+    // this.dialogs
+    //   .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
+    //     label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
+    //     data: {
+    //       client: props.client
+    //         ? props.client
+    //         : {
+    //           fullName: '',
+    //           created_at: new Date(),
+    //           age: 0,
+    //         },
+    //       isEdit: !!props.client,
+    //       exercises: props.exercises
+    //     },
+    //     closeable: true,
+    //     dismissible: false,
+    //   })
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe();
   }
 
   addClient(data: IClient, context: TuiDialogContext<boolean, IClientDialog>) {
