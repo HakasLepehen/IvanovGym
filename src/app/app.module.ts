@@ -33,16 +33,12 @@ import { clientExercisesReducer } from './store/reducers/client-exercises.reduce
     ReactiveFormsModule,
     StoreModule.forRoot({ clientsState: clientReducer, clientExercisesState: clientExercisesReducer }),
     // Instrumentation must be imported after importing StoreModule (config is optional)
-    StoreDevtoolsModule.instrument({
-      maxAge: 5,
-    }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     BrowserAnimationsModule,
     TaigaModule,
     UserModule,
     AuthModule,
     TestModule,
-    StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [
     {

@@ -23,6 +23,13 @@ export class AppComponent implements OnInit {
     private _exerciseConfigService: ExercisesConfigService,
     private store: Store
   ) {
+  }
+
+  back() {
+    this.location.back();
+  }
+
+  ngOnInit() {
     this._clientsConfigService.getClients();
     this._exerciseConfigService.getExercisesForClient();
 
@@ -32,12 +39,5 @@ export class AppComponent implements OnInit {
         this._clientsConfigService.setLimitNamesForClients(exercises)
       })
     ).subscribe()
-  }
-
-  back() {
-    this.location.back();
-  }
-
-  ngOnInit() {
   }
 }
