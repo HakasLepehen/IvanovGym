@@ -1,36 +1,28 @@
-import { TuiInputModule, TuiInputNumberModule } from "@taiga-ui/legacy";
-import { ClientsConfigService } from './../clients/clients-config.service';
-import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
-import { IClient } from '../../interfaces/client';
-import { TuiDialogContext, TuiDialogService, TuiError, TuiButton } from '@taiga-ui/core';
-import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import IClientDialog from '../../interfaces/client-dialog';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
-import { ClientsService } from '../clients/clients.service';
-import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
-import { Subject } from 'rxjs/internal/Subject';
-import { map, startWith, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs/internal/observable/of';
-import { tuiIsNumber, TUI_DEFAULT_MATCHER, TuiContext, TuiLet } from '@taiga-ui/cdk';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TUI_DEFAULT_MATCHER, TuiContext, tuiIsNumber, TuiLet } from '@taiga-ui/cdk';
+import { TuiButton, TuiDialogContext, TuiDialogService, TuiError } from '@taiga-ui/core';
+import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe, TuiFieldErrorPipe, TuiInputNumber } from '@taiga-ui/kit';
+import { TuiInputModule } from "@taiga-ui/legacy";
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import IClientExercise from 'src/app/interfaces/client_exercise';
+import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
+import { IClient } from '../../interfaces/client';
+import IClientDialog from '../../interfaces/client-dialog';
+import { ClientsConfigService } from './../clients/clients-config.service';
 
 @Component({
   selector: 'app-client-operations',
   standalone: true,
   imports: [
     TaigaModule,
-    TuiButton,
     FormsModule,
     ReactiveFormsModule,
-    TuiInputModule,
-    TuiError,
-    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     AsyncPipe,
-    TuiInputNumberModule,
-    TuiLet
   ],
   providers: [
     TuiDialogService,
@@ -51,24 +43,21 @@ export class ClientOperationsComponent implements OnInit {
   private readonly search$ = new Subject<string>();
   public limits_control!: FormControl;
   public readonly exercises$: BehaviorSubject<IClientExercise[]> = new BehaviorSubject<IClientExercise[]>([]);
+  private context = inject(POLYMORPHEUS_CONTEXT);
 
   clientForm!: FormGroup;
 
-
   constructor(
-    @Inject(Injector)
-    private readonly injector: Injector,
-    @Inject(TuiDialogService)
-    private readonly dialogs: TuiDialogService,
-    @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<boolean, IClientDialog>,
+
+    // @Inject(POLYMORPHEUS_CONTEXT)
+    // private readonly context: TuiDialogContext<boolean, IClientDialog>,
     private clientConfigService: ClientsConfigService,
   ) { }
 
   ngOnInit() {
-    this.canEdit = this.context.data.isEdit;
-    this.client = this.context.data.client;
-    this.exercises$.next(this.context.data.exercises)
+    this.canEdit = this.context["data"].isEdit;
+    this.client = this.context['data'].client;
+    this.exercises$.next(this.context['data'].exercises)
     this.clientForm = new FormGroup({
       id: new FormControl(this.client.id),
       fullName: new FormControl(this.client.fullName, Validators.required),
@@ -116,8 +105,8 @@ export class ClientOperationsComponent implements OnInit {
 
   onSubmit() {
     if (!this.canEdit) {
-      return this.clientConfigService.addClient(this.clientForm.value, this.context);
+      return this.clientConfigService.addClient(this.clientForm.value, this.context as TuiDialogContext<boolean, IClientDialog>);
     }
-    return this.clientConfigService.editClient(this.clientForm.value, this.context);
+    return this.clientConfigService.editClient(this.clientForm.value, this.context as TuiDialogContext<boolean, IClientDialog>);
   }
 }

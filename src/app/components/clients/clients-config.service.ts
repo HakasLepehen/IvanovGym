@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { tuiDialog, TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, catchError, of, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import IClientDialog from 'src/app/interfaces/client-dialog';
 import { ClientsService } from 'src/app/components/clients/clients.service';
@@ -27,11 +27,11 @@ export class ClientsConfigService {
   clients: IClient[] = [];
   onLoad$: Subject<boolean> = this.cs.onLoad;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  private readonly dialogs: TuiDialogService = inject(TuiDialogService);
 
   constructor(
     private loader: LoaderService,
     private readonly cs: ClientsService,
-    private readonly dialogs: TuiDialogService,
     private readonly injector: Injector,
     private store: Store,
   ) {
@@ -61,20 +61,32 @@ export class ClientsConfigService {
 
   //TODO: не сделана логика обновления списка пользователя
   openModal(props: ClientProps) {
-    const dialog = tuiDialog(ClientOperationsComponent,
-      {
-        dismissible: true,
-        label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
-      }
-    )
-    dialog().subscribe({
-      next: (data) => {
-        console.info(`Dialog emitted data = ${data}`);
+    this.dialogs.open(new PolymorpheusComponent(ClientOperationsComponent), {
+      label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
+      data: {
+        client: props.client
+          ? props.client
+          : {
+            fullName: '',
+            created_at: new Date(),
+            age: 0,
+          },
+        isEdit: !!props.client,
+        exercises: props.exercises
       },
-      complete: () => {
-        console.info('Dialog closed');
-      },
-    });
+      closeable: true,
+      dismissible: false,
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+    //   .subscribe({
+    //   next: (data: any) => {
+    //     console.info(`Dialog emitted data = ${data}`);
+    //   },
+    //   complete: () => {
+    //     console.info('Dialog closed');
+    //   },
+    // });
     // this.dialogs
     //   .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
     //     label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
