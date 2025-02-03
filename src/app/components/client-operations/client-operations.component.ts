@@ -25,7 +25,6 @@ import { ClientsConfigService } from './../clients/clients-config.service';
     AsyncPipe,
   ],
   providers: [
-    TuiDialogService,
     {
       provide: TUI_VALIDATION_ERRORS,
       useValue: {
