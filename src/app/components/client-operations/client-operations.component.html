@@ -3,24 +3,26 @@
   <tui-scrollbar>
     <!-- ФИО клиента -->
     <div class="tui-form__row">
-      <!-- <tui-textfield>
-        <label tuiLabel>Введите ФИО клиента полностью</label>
-        <input formControlName="fullName" tuiInputNumber tuiTextfieldSize="m">
-          <input placeholder="Введите ФИО клиента полностью" tuiTextfieldLegacy />
-          <span class="tui-required"></span>
-        </input>
-      </tui-textfield> -->
+      <tui-textfield>
+        <label tuiLabel>Ф.И.О</label>
+        <input
+          tuiTextfield
+          formControlName="fullName"
+          placeholder="Введите ФИО клиента полностью"
+        />
+        <span class="tui-required"></span>
+      </tui-textfield>
       <tui-error formControlName="fullName" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <!-- Возраст -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input-number formControlName="age" tuiInputNumber="m">
         Возраст
         <input placeholder="Введите возраст" />
         <span class="tui-required"></span>
       </tui-input-number>
       <tui-error formControlName="age" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Цель -->
     <!-- <div class="tui-form__row">
       <tui-input formControlName="target" tuiTextfieldSize="m">

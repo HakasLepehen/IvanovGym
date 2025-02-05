@@ -1,11 +1,11 @@
-import { TuiTextfieldControllerModule, TuiInputModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
+import { TuiInputModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
 import { NG_EVENT_PLUGINS } from "@taiga-ui/event-plugins";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 // TODO: (Taiga UI migration) TUI_DIALOG_CLOSES_ON_BACK is deleted, you can create your own approach based on window.history property
 import { TuiDayOfWeek, TuiLet } from '@taiga-ui/cdk';
-import { TUI_FIRST_DAY_OF_WEEK, TuiRoot, TuiAlert, TuiNotification, TuiCalendar, TuiDataList, TuiError, TuiScrollbar, TuiScrollable, TuiIcon, TuiDialog, TuiButton } from '@taiga-ui/core';
+import { TUI_FIRST_DAY_OF_WEEK, TuiRoot, TuiAlert, TuiNotification, TuiCalendar, TuiDataList, TuiError, TuiScrollbar, TuiScrollable, TuiIcon, TuiDialog, TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorContentPipe, TuiButtonLoading, TuiInputNumber } from '@taiga-ui/kit';
 
 @NgModule({
@@ -15,7 +15,6 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     TuiRoot,
     TuiDialog,
     TuiAlert,
-    TuiInputModule,
     TuiError,
     TuiFieldErrorPipe,
     TuiFieldErrorContentPipe,
@@ -28,10 +27,11 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     TuiMultiSelectModule,
     ...TuiDataList,
     ...TuiDataListWrapper,
-    TuiTextfieldControllerModule,
+    ...TuiTextfield,
     TuiNotification,
     TuiInputNumber,
-    TuiLet
+    TuiLet,
+    TuiInputModule,
   ],
   providers: [
     {
@@ -46,7 +46,6 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     TuiDialog,
     TuiAlert,
     TuiInputModule,
-    TuiTextfieldControllerModule,
     TuiError,
     TuiFieldErrorPipe, TuiFieldErrorContentPipe,
     TuiButton,
@@ -62,7 +61,8 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     ...TuiDataListWrapper,
     TuiNotification,
     TuiInputNumber,
-    TuiLet
+    TuiLet,
+    ...TuiTextfield
   ],
 })
 export class TaigaModule { }
