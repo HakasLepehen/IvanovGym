@@ -50,9 +50,7 @@ export class SchedulerConfigService {
     this.loaderService.show();
     trainingModel = {
       clientGUID: formValue.client.guid,
-      day: selectedDate.day,
-      month: selectedDate.month,
-      year: selectedDate.year,
+      planned_date: selectedDate.toLocalNativeDate(),
       hour: formValue.time.hours,
       minutes: formValue.time.minutes
     };
@@ -90,7 +88,8 @@ export class SchedulerConfigService {
 
   getSameDayTrainings(trainings: ITraining[], day: TuiDay): ITraining[] {
     return trainings.filter((training: ITraining) => {
-      const trainingTuiDay = new TuiDay(training.year, training.month, training.day);
+
+      const trainingTuiDay = TuiDay.fromLocalNativeDate(new Date(training.planned_date));
 
       return trainingTuiDay.daySame(day);
     })

@@ -8,8 +8,6 @@ import { TrainingCalendarListComponent } from 'src/app/components/training-calen
 import { LoaderModule } from "../../components/loader/loader.module";
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
 
-
-
 @NgModule({
   declarations: [SchedulerComponent, TrainingCalendarListComponent],
   imports: [
