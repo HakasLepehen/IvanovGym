@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { ENV } from 'src/environment/environment';
@@ -27,5 +27,11 @@ export class SchedulerService {
 
   saveTraining(model: any): Observable<Object> {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
+  }
+
+  deleteTraining(id: number): Observable<Object> {
+    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${id}`) };
+    
+    return this.httpClient.delete(`${ENV.supabaseUrl}/${this.trainingURL}`, reqOptions)
   }
 }

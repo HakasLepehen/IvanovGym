@@ -67,7 +67,11 @@ export class SchedulerComponent implements OnInit {
             // we need to find client with given guid and set fullname for him
             let guid = training.clientGUID;
             let clientWithCurrentGUID = this.clients.find(client => client.guid === guid);
+            
+            if (!clientWithCurrentGUID) alert('не были получены данные по клиентам');
+
             training.clientFullName = clientWithCurrentGUID?.fullName;
+
           })
           this.plannedTrainings = value;
           this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(value, this.selectedDay as TuiDay);
@@ -81,7 +85,9 @@ export class SchedulerComponent implements OnInit {
   public onDayClick(day: TuiDay | any): void {
     this.selectedDay = day;
 
-    this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(this.plannedTrainings, this.selectedDay as TuiDay);
+    if (this.plannedTrainings) {
+      this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(this.plannedTrainings, this.selectedDay as TuiDay);
+    }
   }
 
   public addTraining() {

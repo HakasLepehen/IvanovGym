@@ -1,7 +1,7 @@
 <!-- Контент диалогового окна клиента -->
 <form [formGroup]="trainingForm" class="trainingForm">
   <tui-scrollbar>
-    <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot">
+    <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot" [tuiDropdownMinHeight]="220">
       Время начала тренировки
     </tui-input-time>
       <tui-select formControlName="client" class="trainingForm__client">

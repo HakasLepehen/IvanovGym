@@ -31,6 +31,5 @@ export class TrainingCalendarListComponent {
   }
 
   ngOnInit() {
-    console.log(this.selectedDay);
   }
 }

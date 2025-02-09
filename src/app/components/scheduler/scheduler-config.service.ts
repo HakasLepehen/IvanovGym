@@ -50,7 +50,7 @@ export class SchedulerConfigService {
     this.loaderService.show();
     trainingModel = {
       clientGUID: formValue.client.guid,
-      planned_date: selectedDate.toLocalNativeDate(),
+      planned_date: selectedDate.toUtcNativeDate(),
       hour: formValue.time.hours,
       minutes: formValue.time.minutes
     };
@@ -77,11 +77,14 @@ export class SchedulerConfigService {
   }
 
   getTrainings(): void {
-
+    this.loaderService.show()
     this.schedulerService.getTrainings()
       .pipe(
         take(1),
-        tap((value: any) => { this.trainings$.next(value) })
+        tap((value: any) => {
+          this.trainings$.next(value);
+          this.loaderService.hide();
+        })
       )
       .subscribe()
   }
@@ -89,14 +92,19 @@ export class SchedulerConfigService {
   getSameDayTrainings(trainings: ITraining[], day: TuiDay): ITraining[] {
     return trainings.filter((training: ITraining) => {
 
-      const trainingTuiDay = TuiDay.fromLocalNativeDate(new Date(training.planned_date));
+      const trainingTuiDay = TuiDay.fromUtcNativeDate(new Date(training.planned_date));
 
       return trainingTuiDay.daySame(day);
     })
   }
 
   removeTraining(id: number): void {
-    console.log(id);
-
+    this.loaderService.show();
+    this.schedulerService.deleteTraining(id)
+      .pipe(
+        take(1),
+        tap(() => this.getTrainings())
+      )
+      .subscribe()
   }
 }
