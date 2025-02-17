@@ -68,7 +68,7 @@ export class SchedulerComponent implements OnInit {
             let guid = training.clientGUID;
             let clientWithCurrentGUID = this.clients.find(client => client.guid === guid);
             
-            if (!clientWithCurrentGUID) alert('не были получены данные по клиентам');
+            if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
 
             training.clientFullName = clientWithCurrentGUID?.fullName;
 
@@ -92,6 +92,14 @@ export class SchedulerComponent implements OnInit {
 
   public addTraining() {
     this._schedulerConfigService.openModal(this.selectedDay as TuiDay);
+  }
+
+  public onEditTraining(training: ITraining) {
+    console.log(training);
+  }
+
+  public onRemoveTraining(id: number) {
+    this._schedulerConfigService.removeTraining(id)
   }
 
   ngOnDestroy() {

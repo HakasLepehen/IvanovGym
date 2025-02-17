@@ -2,11 +2,14 @@ import { ITraining } from './../../interfaces/training';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
+  Output,
   SimpleChanges
 } from '@angular/core';
 import { TuiDay} from '@taiga-ui/cdk';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { Enums } from 'src/app/enums/enums';
 
 @Component({
   selector: 'app-training-calendar-list',
@@ -19,15 +22,23 @@ export class TrainingCalendarListComponent {
   public selectedDay: TuiDay | null = null;
   @Input()
   public plannedTrainings!: ITraining[];
+  @Output()
+  public onEditTraining = new EventEmitter<ITraining>();
+  @Output()
+  public onRemoveTraining = new EventEmitter<number>();
 
-  constructor(private _schedulerConfigService: SchedulerConfigService,) {
+  constructor() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
   }
 
   public removeTraining(training: ITraining): void {
-    this._schedulerConfigService.removeTraining(training.id as number)
+    this.onRemoveTraining.emit(training.id);
+  }
+
+  public editTraining(training: ITraining): void {
+    this.onEditTraining.emit(training)
   }
 
   ngOnInit() {
