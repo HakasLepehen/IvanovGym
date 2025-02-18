@@ -11,9 +11,10 @@ import { Store } from "@ngrx/store";
 import { clientsSelector } from "../../store/selectors/client.selector";
 import { take } from "rxjs";
 import { tap } from "rxjs/internal/operators/tap";
-import { TuiDay } from "@taiga-ui/cdk";
+import { TuiDay, TuiTime } from "@taiga-ui/cdk";
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { LoaderService } from "../loader/loader.service";
+import { ITraining } from "src/app/interfaces/training";
 
 @Component({
   selector: 'app-training',
@@ -40,15 +41,15 @@ import { LoaderService } from "../loader/loader.service";
 })
 
 export class TrainingComponent {
-  private isPlanning: boolean = false;
-  private isEditing: boolean = false;
+  public isPlanning: boolean = false;
   private selectedDay!: TuiDay;
   readonly trainingForm = new FormGroup({
-    time: new FormControl(null, Validators.required),
+    time: new FormControl<string | null>(null, Validators.required),
     client: new FormControl(null, Validators.required),
   });
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
+  public editingTraining!: ITraining;
 
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
@@ -57,9 +58,10 @@ export class TrainingComponent {
     private scheduleConfigService: SchedulerConfigService,
     private loaderService: LoaderService,
   ) {
+    if (!!context?.data?.training) this.editingTraining = context.data.training;
+
     this.isPlanning = context?.data?.isPlanning;
     this.selectedDay = context?.data?.selectedDay;
-    this.isEditing = context?.data?.isEditing;
     store.select(clientsSelector)
       .pipe(
         take(1),
@@ -67,7 +69,13 @@ export class TrainingComponent {
       ).subscribe()
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (!!this.editingTraining) {
+      this.trainingForm.controls.time.setValue(
+        `${this.editingTraining.hour}:${(this.editingTraining.minutes == 0 ? '00' : this.editingTraining.minutes)}`
+      )
+    }
+  }
 
   onSubmit(): void {
     const props = {

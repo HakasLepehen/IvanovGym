@@ -8,8 +8,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { TuiDay} from '@taiga-ui/cdk';
-import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
-import { Enums } from 'src/app/enums/enums';
 
 @Component({
   selector: 'app-training-calendar-list',

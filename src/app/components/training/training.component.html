@@ -1,19 +1,19 @@
 <!-- Контент диалогового окна клиента -->
 <form [formGroup]="trainingForm" class="trainingForm">
   <tui-scrollbar>
-    <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot" [tuiDropdownMinHeight]="220">
+    <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot"
+      [tuiDropdownMinHeight]="220">
       Время начала тренировки
     </tui-input-time>
-      <tui-select formControlName="client" class="trainingForm__client">
-        Выберите клиента
-        <tui-data-list-wrapper
-          *tuiDataList
-          [items]="clients"
-        ></tui-data-list-wrapper>
-      </tui-select>
+    <tui-select formControlName="client" class="trainingForm__client">
+      Выберите клиента
+      <tui-data-list-wrapper *tuiDataList [items]="clients"></tui-data-list-wrapper>
+    </tui-select>
+    <div *ngIf="!isPlanning">isPlanning</div>
   </tui-scrollbar>
   <div class="tui-form__row">
-    <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button' [disabled]="!trainingForm.valid" (click)='onSubmit()'>
+    <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+      [disabled]="!trainingForm.valid" (click)='onSubmit()'>
       Сохранить
     </button>
   </div>

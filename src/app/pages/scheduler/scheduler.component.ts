@@ -41,8 +41,6 @@ export class SchedulerComponent implements OnInit {
       .pipe(
         select(clientsSelector),
         tap((clients: IClient[]) => {
-          // if we can't see clients from store - refresh data from server
-          // if (!clients?.length) this._clientsConfigService.getClients();
           this.clients = clients;
         }),
         takeUntil(this.destroy$)
@@ -95,7 +93,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   public onEditTraining(training: ITraining) {
-    console.log(training);
+    this._schedulerConfigService.openModal(this.selectedDay as TuiDay, training);
   }
 
   public onRemoveTraining(id: number) {

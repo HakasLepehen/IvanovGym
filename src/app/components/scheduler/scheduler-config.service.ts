@@ -24,15 +24,20 @@ export class SchedulerConfigService {
     private loaderService: LoaderService
   ) { }
 
-  openModal(selectedDay: TuiDay) {
+  openModal(selectedDay: TuiDay, training?: ITraining) {
+    let titleEditingDate: string = '';
+    if (!!training) {
+      titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU')
+    }
+
     this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector),
         {
-          label: 'Создание тренировки',
+          label: training ? `Редактирование тренировки от ${titleEditingDate}` : 'Создание тренировки',
           data: {
-            isPlanning: true,
+            isPlanning: !!!training,
             selectedDay: selectedDay,
-            // isEditing: false,
+            training: training
           },
           closeable: true,
           dismissible: false,
