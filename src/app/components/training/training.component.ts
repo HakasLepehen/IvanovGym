@@ -28,7 +28,7 @@ import { ITraining } from "src/app/interfaces/training";
     TuiInputTimeModule,
     TuiSelectModule,
     TuiDataList,
-    TuiDataListWrapper
+    TuiDataListWrapper,
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -45,7 +45,7 @@ export class TrainingComponent {
   private selectedDay!: TuiDay;
   readonly trainingForm = new FormGroup({
     time: new FormControl<string | null>(null, Validators.required),
-    client: new FormControl(null, Validators.required),
+    client: new FormControl<IClient | null>(null, Validators.required),
   });
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
@@ -70,11 +70,22 @@ export class TrainingComponent {
   }
 
   ngOnInit() {
+    let selectedClient: IClient | undefined;
     if (!!this.editingTraining) {
       this.trainingForm.controls.time.setValue(
         `${this.editingTraining.hour}:${(this.editingTraining.minutes == 0 ? '00' : this.editingTraining.minutes)}`
       )
+
+      selectedClient = this.clients.find((client: IClient) => client.guid === this.editingTraining.clientGUID);
+      if (!selectedClient) {
+        return alert('Не удалось найти клиента, попробуйте перезагрузить страницу!')
+      }
+      this.trainingForm.controls.client.setValue(selectedClient as IClient)
     }
+  }
+
+  identifyClient = (): any => {
+    return true;
   }
 
   onSubmit(): void {
