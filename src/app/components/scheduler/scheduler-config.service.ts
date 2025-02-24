@@ -9,6 +9,8 @@ import { SchedulerService } from './scheduler.service';
 import { ITrainingDialog } from "../../interfaces/training_dialog";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ITraining } from 'src/app/interfaces/training';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { IClient } from 'src/app/interfaces/client';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +35,7 @@ export class SchedulerConfigService {
     this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector),
         {
-          label: training ? `Редактирование тренировки от ${titleEditingDate}` : 'Создание тренировки',
+          label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
           data: {
             isPlanning: !!!training,
             selectedDay: selectedDay,
@@ -111,5 +113,26 @@ export class SchedulerConfigService {
         tap(() => this.getTrainings())
       )
       .subscribe()
+  }
+
+  public initializeTrainingFormControls(form: FormGroup, model: ITraining, clients: any): void {
+    let selectedClient: IClient | undefined;
+    form.controls["time"].setValue(
+      `${model.hour}:${(model.minutes == 0 ? '00' : model.minutes)}`
+    )
+
+    selectedClient = clients.find((client: IClient) => client.guid === model.clientGUID);
+    if (!selectedClient) {
+      alert('Не удалось найти клиента, попробуйте перезагрузить страницу!');
+      return;
+    }
+    form.controls["client"].setValue(selectedClient as IClient);
+    (<FormArray>form.controls['exercises']).push(
+            new FormGroup({
+              name: new FormControl('', Validators.required),
+              url: new FormControl(''),
+              comment: new FormControl('')
+            })
+    )
   }
 }

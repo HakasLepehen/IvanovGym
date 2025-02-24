@@ -1,9 +1,9 @@
 import { TuiInputTimeModule, TuiSelectModule } from "@taiga-ui/legacy";
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TuiDialogContext, TuiDataList, TuiScrollbar, TuiScrollable, TuiButton } from '@taiga-ui/core';
-import { tuiCreateTimePeriods, tuiItemsHandlersProvider, TuiDataListWrapper } from '@taiga-ui/kit';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TuiDialogContext, TuiDataList, TuiScrollbar, TuiScrollable, TuiButton, TuiError } from '@taiga-ui/core';
+import { tuiCreateTimePeriods, tuiItemsHandlersProvider, TuiDataListWrapper, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { IClient } from '../../interfaces/client';
 import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
@@ -13,7 +13,6 @@ import { take } from "rxjs";
 import { tap } from "rxjs/internal/operators/tap";
 import { TuiDay, TuiTime } from "@taiga-ui/cdk";
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
-import { LoaderService } from "../loader/loader.service";
 import { ITraining } from "src/app/interfaces/training";
 
 @Component({
@@ -23,12 +22,15 @@ import { ITraining } from "src/app/interfaces/training";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TuiScrollbar, TuiScrollable,
+    TuiScrollbar,
+    TuiScrollable,
     TuiButton,
     TuiInputTimeModule,
     TuiSelectModule,
     TuiDataList,
     TuiDataListWrapper,
+    TuiError,
+    TuiFieldErrorPipe
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -43,10 +45,7 @@ import { ITraining } from "src/app/interfaces/training";
 export class TrainingComponent {
   public isPlanning: boolean = false;
   private selectedDay!: TuiDay;
-  readonly trainingForm = new FormGroup({
-    time: new FormControl<string | null>(null, Validators.required),
-    client: new FormControl<IClient | null>(null, Validators.required),
-  });
+  public trainingForm!: FormGroup;
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
@@ -56,7 +55,7 @@ export class TrainingComponent {
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
     private scheduleConfigService: SchedulerConfigService,
-    private loaderService: LoaderService,
+    private fb: FormBuilder
   ) {
     if (!!context?.data?.training) this.editingTraining = context.data.training;
 
@@ -66,22 +65,22 @@ export class TrainingComponent {
       .pipe(
         take(1),
         tap(val => this.clients = val)
-      ).subscribe()
+    ).subscribe()
   }
 
   ngOnInit() {
-    let selectedClient: IClient | undefined;
+    this.trainingForm = this.fb.group({
+        time: new FormControl<string | null>(null, Validators.required),
+        client: new FormControl<IClient | null>(null, Validators.required),
+        exercises: this.fb.array([]),
+    })
     if (!!this.editingTraining) {
-      this.trainingForm.controls.time.setValue(
-        `${this.editingTraining.hour}:${(this.editingTraining.minutes == 0 ? '00' : this.editingTraining.minutes)}`
-      )
-
-      selectedClient = this.clients.find((client: IClient) => client.guid === this.editingTraining.clientGUID);
-      if (!selectedClient) {
-        return alert('Не удалось найти клиента, попробуйте перезагрузить страницу!')
-      }
-      this.trainingForm.controls.client.setValue(selectedClient as IClient)
+      this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients)
     }
+  }
+
+  get exercises(): FormArray<any> {
+    return this.trainingForm.controls['exercises'] as FormArray;
   }
 
   identifyClient = (): any => {
