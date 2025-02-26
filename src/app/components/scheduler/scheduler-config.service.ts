@@ -43,6 +43,7 @@ export class SchedulerConfigService {
           },
           closeable: true,
           dismissible: false,
+          size: !!training ? 'fullscreen' : 'm'
         }
       )
       .pipe(takeUntil(this.destroy$))

@@ -11,98 +11,23 @@
       <tui-data-list-wrapper *tuiDataList [items]="clients"></tui-data-list-wrapper>
     </tui-select>
 
-    <h4>Упражнения</h4>
+    <ng-container *ngIf="!!editingTraining">
+      <h4>Упражнения</h4>
 
-    <div class='main_block__content'>
-      <!-- <tui-accordion class='' *ngIf="clients; else empty"> -->
-        <!-- <tui-accordion-item *ngFor='let client of clients' size='m'>
-          <ng-template tuiAccordionItemContent> -->
-            <!-- <ul class='content__wrapper'>
-              <li>
-                <span class='content__label'>Ф.И.О</span>
-                <p class='content__text'>{{client.fullName}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Возраст</span>
-                <p class='content__text'>{{client.age}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Цель занятий</span>
-                <p class='content__text'>{{client.target}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Ограничения</span>
-                <p class='content__text' *ngFor="let limit_name of client.limitsNames">{{limit_name}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Опыт тренировок</span>
-                <p class='content__text'>{{client.experience}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Режим сна и бодрствования</span>
-                <p class='content__text'>{{client.sleep}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Режим питания</span>
-                <p class='content__text'>{{client.food}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Фармакология</span>
-                <p class='content__text'>{{client.pharma}}</p>
-                <hr>
-              </li>
-              <li>
-                <span class='content__label'>Повседневная активность</span>
-                <p class='content__text'>{{client.activity}}</p>
-                <hr>
-              </li>
-            </ul> -->
-          <!-- </ng-template>
-        </tui-accordion-item> -->
-      <!-- </tui-accordion> -->
-      <div class="tui-form__row" *ngFor="let item of exercises.controls;">
-        <!-- <div>{{item.name}}</div> -->
-        <!-- <div formGroupName="{{i}}"> -->
-  
-          <!-- НАИМЕНОВАНИЕ ВЫПОЛНЕНИЯ -->
-          <!-- <div class="tui-form__row">
-            <tui-input tuiTextfieldSize="m" formControlName="name" id="name-{{i}}">
-              Название
-              <input tuiTextfieldLegacy />
-              <span class="tui-required"></span>
-            </tui-input>
-            <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
-          </div> -->
-          <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
-          <!-- <div class="tui-form__row">
-            <tui-input tuiTextfieldSize="m" formControlName="url" id="url-{{i}}">
-              Ссылка на видео
-              <input tuiTextfieldLegacy />
-            </tui-input>
-          </div> -->
-          <!-- КОММЕНТАРИЙ -->
-          <!-- <div class="tui-form__row">
-            <tui-input tuiTextfieldSize="m" formControlName="comment" id="comment-{{i}}">
-              Комментарий
-              <input tuiTextfieldLegacy />
-            </tui-input>
-          </div> -->
-  
-          <!-- <button tuiIconButton iconStart="@tui.trash" [size]="'m'" (click)="removeVariant(i)" type="button"> </button> -->
-  
-        <!-- </div> -->
+      <div class='main_block__content'>
+        <div class="tui-form__row" *ngFor="let item of exercises.controls;">
+          <ng-container *ngIf="editingTraining.trainingExerciseIds?.length; else empty"></ng-container>
+        </div>
+        <ng-template #empty>
+          <p style="text-align: center;">Упражнения не заданы</p>
+        </ng-template>
       </div>
-      <ng-template #empty>
-        <h3 style="text-align: center;">Упражнения для данной тренировки не заданы</h3>
-      </ng-template>
-    </div>
+      <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+        [disabled]="!trainingForm.valid" (click)='addExercise()'>
+        Добавить упражнение
+      </button>
+    </ng-container>
+
 
   </tui-scrollbar>
 

@@ -87,12 +87,16 @@ export class TrainingComponent {
     return true;
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     const props = {
       selectedDate: this.selectedDay,
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning,
     }
     this.scheduleConfigService.saveTraining(props, this.context);
+  }
+
+  public addExercise(): void {
+    
   }
 }
