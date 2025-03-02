@@ -1,4 +1,4 @@
-import { TuiInputTimeModule, TuiSelectModule } from "@taiga-ui/legacy";
+import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from "@taiga-ui/legacy";
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -30,7 +30,8 @@ import { ITraining } from "src/app/interfaces/training";
     TuiDataList,
     TuiDataListWrapper,
     TuiError,
-    TuiFieldErrorPipe
+    TuiFieldErrorPipe,
+    TuiInputDateModule
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -71,10 +72,12 @@ export class TrainingComponent {
   ngOnInit() {
     this.trainingForm = this.fb.group({
         time: new FormControl<string | null>(null, Validators.required),
+        planned_date: new FormControl<string | null>(null, Validators.required),
         client: new FormControl<IClient | null>(null, Validators.required),
-        exercises: this.fb.array([]),
+        // exercises: this.fb.array([]),
     })
     if (!!this.editingTraining) {
+      // если в контексте было получено значение - инициализируем данные в форме
       this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients)
     }
   }
@@ -89,7 +92,6 @@ export class TrainingComponent {
 
   public onSubmit(): void {
     const props = {
-      selectedDate: this.selectedDay,
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning,
     }

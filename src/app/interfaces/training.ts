@@ -7,7 +7,7 @@ export interface ITraining {
   // Строковый идентификатор клиента
   clientGUID: string,
   // Дата на которую запланирована тренировка
-  planned_date: Date,
+  planned_date: Date | string,
   // Год на который запланирована тренировка
   hour: number,
   // Год на который запланирована тренировка

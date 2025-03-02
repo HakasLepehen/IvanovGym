@@ -29,6 +29,12 @@ export class SchedulerService {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
   }
 
+  updateTraining(model: any): Observable<Object> {
+    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
+
+    return this.httpClient.patch(`${ENV.supabaseUrl}/${this.trainingURL}`, model, reqOptions);
+  }
+
   deleteTraining(id: number): Observable<Object> {
     const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${id}`) };
     

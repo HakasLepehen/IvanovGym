@@ -2,9 +2,9 @@ import { LoaderService } from './../loader/loader.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
-import { TuiDay } from "@taiga-ui/cdk";
+import { TuiDay, TuiTime } from "@taiga-ui/cdk";
 import { SchedulerService } from './scheduler.service';
 import { ITrainingDialog } from "../../interfaces/training_dialog";
 import { HttpErrorResponse } from '@angular/common/http';
@@ -50,38 +50,43 @@ export class SchedulerConfigService {
       .subscribe()
   }
 
-  saveTraining(props: { selectedDate: TuiDay, formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
-    let { selectedDate, formValue, isCreate } = props;
+  saveTraining(props: { formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
+    let { formValue, isCreate } = props;
     let trainingModel: ITraining;
+    let obs: Observable<Object>;
 
     // prepare dto before send to backend
     this.loaderService.show();
     trainingModel = {
+      ...context.data.training,
       clientGUID: formValue.client.guid,
-      planned_date: selectedDate.toUtcNativeDate(),
+      planned_date: formValue.planned_date.toUtcNativeDate(),
       hour: formValue.time.hours,
       minutes: formValue.time.minutes
     };
 
     if (isCreate) {
-      this.schedulerService.saveTraining(trainingModel)
-        .pipe(
-          take(1),
-          tap(() => {
-            this.loaderService.hide();
-            context.completeWith(true);
-          }),
-          tap(() => this.getTrainings()),
-          catchError((err: HttpErrorResponse) => {
-            this.loaderService.hide();
-            context.completeWith(true);
-            return of();
-          })
-        )
-        .subscribe()
+      obs = this.schedulerService.saveTraining(trainingModel)
     } else {
-      alert(`Распиши функцию сохранения редактирования тренировки`);
+      delete trainingModel.clientFullName;
+      obs = this.schedulerService.updateTraining(trainingModel);
     }
+
+    obs
+      .pipe(
+        take(1),
+        tap(() => {
+          this.loaderService.hide();
+          context.completeWith(true);
+        }),
+        tap(() => this.getTrainings()),
+        catchError((err: HttpErrorResponse) => {
+          this.loaderService.hide();
+          context.completeWith(true);
+          return of();
+        })
+      )
+      .subscribe()
   }
 
   getTrainings(): void {
@@ -118,8 +123,12 @@ export class SchedulerConfigService {
 
   public initializeTrainingFormControls(form: FormGroup, model: ITraining, clients: any): void {
     let selectedClient: IClient | undefined;
+
+    form.controls["planned_date"].setValue(TuiDay.fromLocalNativeDate(new Date(model.planned_date)))
+
     form.controls["time"].setValue(
-      `${model.hour}:${(model.minutes == 0 ? '00' : model.minutes)}`
+      // `${model.hour}:${(model.minutes == 0 ? '00' : model.minutes)}`
+      new TuiTime(model.hour, model.minutes)
     )
 
     selectedClient = clients.find((client: IClient) => client.guid === model.clientGUID);
@@ -128,12 +137,12 @@ export class SchedulerConfigService {
       return;
     }
     form.controls["client"].setValue(selectedClient as IClient);
-    (<FormArray>form.controls['exercises']).push(
-            new FormGroup({
-              name: new FormControl('', Validators.required),
-              url: new FormControl(''),
-              comment: new FormControl('')
-            })
-    )
+    // (<FormArray>form.controls['exercises']).push(
+    //   new FormGroup({
+    //     name: new FormControl('', Validators.required),
+    //     url: new FormControl(''),
+    //     comment: new FormControl('')
+    //   })
+    // )
   }
 }

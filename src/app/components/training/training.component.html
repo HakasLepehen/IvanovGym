@@ -2,6 +2,10 @@
 <form [formGroup]="trainingForm" class="trainingForm">
   <tui-scrollbar>
 
+    <tui-input-date formControlName="planned_date">
+      Дата тренировки
+      <input tuiTextfieldLegacy />
+    </tui-input-date>
     <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot"
       [tuiDropdownMinHeight]="220">
       Время начала тренировки
@@ -15,9 +19,9 @@
       <h4>Упражнения</h4>
 
       <div class='main_block__content'>
-        <div class="tui-form__row" *ngFor="let item of exercises.controls;">
+        <!-- <div class="tui-form__row" *ngFor="let item of exercises.controls;">
           <ng-container *ngIf="editingTraining.trainingExerciseIds?.length; else empty"></ng-container>
-        </div>
+        </div> -->
         <ng-template #empty>
           <p style="text-align: center;">Упражнения не заданы</p>
         </ng-template>
