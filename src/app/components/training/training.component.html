@@ -19,9 +19,11 @@
       <h4>Упражнения</h4>
 
       <div class='main_block__content'>
-        <!-- <div class="tui-form__row" *ngFor="let item of exercises.controls;">
-          <ng-container *ngIf="editingTraining.trainingExerciseIds?.length; else empty"></ng-container>
-        </div> -->
+        <ng-container *ngIf="exercises.length; else empty">
+          <div class="tui-form__row" *ngFor="let item of exercises.controls;">
+
+          </div>
+        </ng-container>
         <ng-template #empty>
           <p style="text-align: center;">Упражнения не заданы</p>
         </ng-template>

@@ -57,6 +57,7 @@ export class SchedulerConfigService {
 
     // prepare dto before send to backend
     this.loaderService.show();
+    // expand context data to map values to send server
     trainingModel = {
       ...context.data.training,
       clientGUID: formValue.client.guid,
@@ -68,7 +69,6 @@ export class SchedulerConfigService {
     if (isCreate) {
       obs = this.schedulerService.saveTraining(trainingModel)
     } else {
-      delete trainingModel.clientFullName;
       obs = this.schedulerService.updateTraining(trainingModel);
     }
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { ENV } from 'src/environment/environment';
-import { IClient } from "../../interfaces/client";
+import { ITraining } from 'src/app/interfaces/training';
 
 const options = {
   headers: {
@@ -29,8 +29,10 @@ export class SchedulerService {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
   }
 
-  updateTraining(model: any): Observable<Object> {
+  updateTraining(model: ITraining): Observable<Object> {
     const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
+
+    delete model.clientFullName;
 
     return this.httpClient.patch(`${ENV.supabaseUrl}/${this.trainingURL}`, model, reqOptions);
   }

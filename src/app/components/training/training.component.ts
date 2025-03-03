@@ -74,7 +74,7 @@ export class TrainingComponent {
         time: new FormControl<string | null>(null, Validators.required),
         planned_date: new FormControl<string | null>(null, Validators.required),
         client: new FormControl<IClient | null>(null, Validators.required),
-        // exercises: this.fb.array([]),
+        exercises: this.fb.array([]),
     })
     if (!!this.editingTraining) {
       // если в контексте было получено значение - инициализируем данные в форме
