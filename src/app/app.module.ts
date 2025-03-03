@@ -21,10 +21,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LoaderService } from './components/loader/loader.service';
 import { clientReducer } from './store/reducers/client.reducer';
 import { clientExercisesReducer } from './store/reducers/client-exercises.reducer';
+import { TrainingExerciseListComponent } from './components/training-exercise-list/training-exercise-list.component';
 
 
 @NgModule({
-  declarations: [AppComponent, MainComponent, NotFoundComponent, ChildComponent],
+  declarations: [AppComponent, MainComponent, NotFoundComponent, ChildComponent, TrainingExerciseListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
