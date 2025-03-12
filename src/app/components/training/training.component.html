@@ -21,7 +21,7 @@
       <div class='main_block__content'>
         <ng-container *ngIf="exercises.length; else empty">
           <div class="tui-form__row" *ngFor="let item of exercises.controls;">
-
+            <app-training-exercise-list [exercises]="trainingExercises" />
           </div>
         </ng-container>
         <ng-template #empty>

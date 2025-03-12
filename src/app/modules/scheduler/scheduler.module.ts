@@ -7,6 +7,7 @@ import { SchedulerComponent } from '../../pages/scheduler/scheduler.component';
 import { TrainingCalendarListComponent } from 'src/app/components/training-calendar-list/training-calendar-list.component';
 import { LoaderModule } from "../../components/loader/loader.module";
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
+import { TrainingExerciseListComponent } from "src/app/components/training-exercise-list/training-exercise-list.component";
 
 @NgModule({
   declarations: [SchedulerComponent, TrainingCalendarListComponent],

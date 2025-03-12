@@ -14,6 +14,8 @@ import { tap } from "rxjs/internal/operators/tap";
 import { TuiDay, TuiTime } from "@taiga-ui/cdk";
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { ITraining } from "src/app/interfaces/training";
+import { TrainingExerciseListComponent } from "../training-exercise-list/training-exercise-list.component";
+import { ITrainingExercise } from "src/app/interfaces/training_exercise";
 
 @Component({
   selector: 'app-training',
@@ -31,7 +33,8 @@ import { ITraining } from "src/app/interfaces/training";
     TuiDataListWrapper,
     TuiError,
     TuiFieldErrorPipe,
-    TuiInputDateModule
+    TuiInputDateModule,
+    TrainingExerciseListComponent,
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -50,6 +53,7 @@ export class TrainingComponent {
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
+  public trainingExercises!: any[]
 
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
