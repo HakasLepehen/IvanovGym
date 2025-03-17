@@ -7,7 +7,7 @@
       <input tuiTextfieldLegacy />
     </tui-input-date>
     <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot"
-      [tuiDropdownMinHeight]="220">
+                    [tuiDropdownMinHeight]="220">
       Время начала тренировки
     </tui-input-time>
     <tui-select formControlName="client" class="trainingForm__client">
@@ -19,17 +19,18 @@
       <h4>Упражнения</h4>
 
       <div class='main_block__content'>
-        <ng-container *ngIf="exercises.length; else empty">
-          <div class="tui-form__row" *ngFor="let item of exercises.controls;">
-            <app-training-exercise-list [exercises]="trainingExercises" />
-          </div>
-        </ng-container>
+          <app-training-exercise-list
+            *ngIf="trainingExercises.length; else empty"
+            [exercises]="trainingExercises"
+            class="tui-form__row"
+          >
+          </app-training-exercise-list>
         <ng-template #empty>
           <p style="text-align: center;">Упражнения не заданы</p>
         </ng-template>
       </div>
       <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
-        [disabled]="!trainingForm.valid" (click)='addExercise()'>
+              (click)='addExercise()'>
         Добавить упражнение
       </button>
     </ng-container>
@@ -39,7 +40,7 @@
 
   <div class="tui-form__row">
     <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
-      [disabled]="!trainingForm.valid" (click)='onSubmit()'>
+            [disabled]="!trainingForm.valid" (click)='onSubmit()'>
       Сохранить
     </button>
   </div>
