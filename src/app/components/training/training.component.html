@@ -20,19 +20,11 @@
 
       <div class='main_block__content'>
           <app-training-exercise-list
-            *ngIf="trainingExercises.length; else empty"
             [exercises]="trainingExercises"
             class="tui-form__row"
           >
           </app-training-exercise-list>
-        <ng-template #empty>
-          <p style="text-align: center;">Упражнения не заданы</p>
-        </ng-template>
       </div>
-      <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
-              (click)='addExercise()'>
-        Добавить упражнение
-      </button>
     </ng-container>
 
 

@@ -109,27 +109,13 @@ export class TrainingComponent {
     this.scheduleConfigService.saveTraining(props, this.context);
   }
 
-  public addExercise(): void {
-    // this.exercises.push(
-    //   new FormGroup({
-    //     name: new FormControl('', Validators.required),
-    //     url: new FormControl(''),
-    //     comment: new FormControl('')
-    //   }));
-    // this.trainingExercises.push(
-    //     new FormGroup({
-    //       name: new FormControl('', Validators.required),
-    //       url: new FormControl(''),
-    //       comment: new FormControl('')
-    //     })
-    // )
-    this.trainingExercises = [
-      ...this.trainingExercises,
-      new FormGroup({
-        name: new FormControl('', Validators.required),
-        url: new FormControl(''),
-        comment: new FormControl('')
-      })
-    ]
-  }
+  // public addExercise(): void {
+  //   this.trainingExercises.push(
+  //       new FormGroup({
+  //         name: new FormControl('', Validators.required),
+  //         url: new FormControl(''),
+  //         comment: new FormControl('')
+  //       })
+  //   )
+  // }
 }

@@ -1,1 +1,8 @@
-<p>training-exercise-list works!</p>
+<ng-template #empty>
+  <p style="text-align: center;">Упражнения не заданы</p>
+</ng-template>
+<div #place></div>
+<button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+        (click)='addExercise()'>
+  Добавить упражнение
+</button>
