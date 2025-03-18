@@ -1,9 +1,9 @@
 import {
   Component,
-  ComponentRef,
+  ComponentRef, EventEmitter,
   inject,
   Input,
-  OnChanges,
+  OnChanges, Output,
   SimpleChanges,
   ViewChild,
   ViewContainerRef
@@ -11,6 +11,8 @@ import {
 import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
 import { TuiButton } from '@taiga-ui/core';
 import { NgIf } from '@angular/common';
+import IClientExercise from '../../interfaces/client_exercise';
+import { ITrainingExercise } from '../../interfaces/training_exercise';
 
 @Component({
   selector: 'app-training-exercise-list',
@@ -24,9 +26,8 @@ import { NgIf } from '@angular/common';
 })
 export class TrainingExerciseListComponent implements OnChanges {
   @Input()
-  exercises: any;
+  exercises!: ITrainingExercise[];
   @ViewChild('place', {read: ViewContainerRef}) placeContainer!: ViewContainerRef;
-  @ViewChild('empty', {read: ViewContainerRef}) emptyContainer!: ViewContainerRef;
 
   constructor() {
   }
@@ -35,10 +36,10 @@ export class TrainingExerciseListComponent implements OnChanges {
   }
 
   addExercise(): void {
-    if (!this.exercises?.length) {
-      this.emptyContainer.clear();
-    }
+    // создаем новый экземпляр упражнения
+    const newTrainingExercise: ITrainingExercise = {};
     this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
+    this.exercises.push(newTrainingExercise)
   }
 
   ngOnChanges(changes: SimpleChanges): void {

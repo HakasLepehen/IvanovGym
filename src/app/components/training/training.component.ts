@@ -23,6 +23,7 @@ import { TuiDay } from '@taiga-ui/cdk';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { ITraining } from 'src/app/interfaces/training';
 import { TrainingExerciseListComponent } from '../training-exercise-list/training-exercise-list.component';
+import { ITrainingExercise } from '../../interfaces/training_exercise';
 
 @Component({
   selector: 'app-training',
@@ -60,7 +61,7 @@ export class TrainingComponent {
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
-  public trainingExercises: any[] = [];
+  public trainingExercises: ITrainingExercise[] = [];
 
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
@@ -106,7 +107,8 @@ export class TrainingComponent {
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning
     };
-    this.scheduleConfigService.saveTraining(props, this.context);
+    console.log(this.trainingExercises);
+    // this.scheduleConfigService.saveTraining(props, this.context);
   }
 
   // public addExercise(): void {

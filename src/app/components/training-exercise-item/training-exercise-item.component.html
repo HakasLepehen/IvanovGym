@@ -1,1 +1,8 @@
-<p>training-exercise-item works!</p>
+<form [formGroup]="exForm">
+  <ng-container *ngIf="exec_vars">
+  <tui-select formControlName="exec_var_id" class="trainingForm__client">
+    Выберите клиента
+    <tui-data-list-wrapper *tuiDataList [items]="exec_vars"></tui-data-list-wrapper>
+  </tui-select>
+  </ng-container>
+</form>
