@@ -1,8 +1,17 @@
 <form [formGroup]="exForm">
-  <ng-container *ngIf="exec_vars">
-  <tui-select formControlName="exec_var_id" class="trainingForm__client">
-    Выберите клиента
-    <tui-data-list-wrapper *tuiDataList [items]="exec_vars"></tui-data-list-wrapper>
-  </tui-select>
-  </ng-container>
+  <tui-combo-box formControlName="exec_variant" class="trainingForm__client">
+    Выберите упражнение
+    <tui-data-list-wrapper *tuiDataList [items]="exec_vars | tuiFilterByInput"></tui-data-list-wrapper>
+  </tui-combo-box>
 </form>
+
+<!-- Условное отображение контента -->
+<div *ngIf="exForm.get('exec_var_id')?.value">
+  <!-- Контент, который будет отображаться, если значение в exec_var_id присутствует -->
+  <p>Значение выбрано: {{ exForm.get('exec_var_id')?.value | json }}</p>
+</div>
+
+<div *ngIf="!exForm.get('exec_var_id')?.value">
+  <!-- Контент, который будет отображаться, если значение в exec_var_id отсутствует -->
+  <p>Значение не выбрано.</p>
+</div>

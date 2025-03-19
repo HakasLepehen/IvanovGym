@@ -107,8 +107,7 @@ export class TrainingComponent {
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning
     };
-    console.log(this.trainingExercises);
-    // this.scheduleConfigService.saveTraining(props, this.context);
+    this.scheduleConfigService.saveTraining(props, this.context);
   }
 
   // public addExercise(): void {
