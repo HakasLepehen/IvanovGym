@@ -32,7 +32,7 @@ export class TrainingExerciseListComponent implements OnChanges {
 
   addExercise(): void {
     // создаем новый экземпляр упражнения
-    const newTrainingExercise: ITrainingExercise = {};
+    const newTrainingExercise: ITrainingExercise = {id: undefined, exec_var_id: undefined, execution_number: undefined, payload_weight: [], comment: ''};
     const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> = this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
 
     trainingExerciseComponentRef.setInput('exercise', newTrainingExercise);

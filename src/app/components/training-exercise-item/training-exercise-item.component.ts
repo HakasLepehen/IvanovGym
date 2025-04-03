@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
 import { take } from 'rxjs';
@@ -9,18 +9,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { JsonPipe, NgIf } from '@angular/common';
 import { TuiDataListWrapperComponent, TuiFilterByInputPipe, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiDataList } from '@taiga-ui/core';
-
-@Component({
-  selector: 'o-la-la',
-  template: `
-    <div>{{ message }}</div>`,
-  standalone: true
-})
-class OLaLaComponent {
-  public message: string = 'oh, my god!';
-
-  constructor() {}
-}
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -34,7 +22,6 @@ class OLaLaComponent {
     TuiDataList,
     JsonPipe,
     TuiFilterByInputPipe,
-    OLaLaComponent
   ],
   standalone: true,
   providers: [
@@ -42,10 +29,11 @@ class OLaLaComponent {
     tuiItemsHandlersProvider({
       stringify: (item: IClientExercise) => item.exercise_fullname as string
     }),
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TrainingExerciseItemComponent {
+export class TrainingExerciseItemComponent implements OnChanges {
   @Input({required: true})
   exercise!: ITrainingExercise;
   exec_vars!: IClientExercise[];
@@ -53,13 +41,6 @@ export class TrainingExerciseItemComponent {
   exForm!: FormGroup;
 
   constructor(private fb: FormBuilder,) {
-    this.exForm = this.fb.group({
-      id: [null],
-      exec_variant: [null, Validators.required],
-      execution_number: [0],
-      payload_weight: [0],
-      comment: ['']
-    })
     this.store.select(clientExercisesSelector)
       .pipe(take(1))
       // Не обязательно каждый раз перечитывать упражнения.
@@ -67,6 +48,20 @@ export class TrainingExerciseItemComponent {
       .subscribe(val => {
         this.exec_vars = val
       });
+  }
+
+  ngOnInit(): void {
+    this.exForm = this.fb.group({
+      id: [this.exercise.id],
+      exec_variant: [this.exercise.exec_var_id, Validators.required],
+      execution_number: [this.exercise.execution_number],
+      payload_weight: [this.exercise.payload_weight],
+      comment: [this.exercise.comment]
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    
   }
 }
 
