@@ -19,11 +19,19 @@
       <h4>Упражнения</h4>
 
       <div class='main_block__content'>
-          <app-training-exercise-list
-            [exercises]="trainingExercises"
-            class="tui-form__row"
-          >
-          </app-training-exercise-list>
+<!--          <app-training-exercise-list-->
+<!--            [exercises]="trainingExercises"-->
+<!--            class="tui-form__row"-->
+<!--          >-->
+<!--          </app-training-exercise-list>-->
+        <div #place></div>
+        <div *ngIf="!exercises.length;">
+          <p style="text-align: center;">Упражнения не заданы</p>
+        </div>
+        <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+                (click)='addExercise()'>
+          Добавить упражнение
+        </button>
       </div>
     </ng-container>
 

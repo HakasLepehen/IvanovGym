@@ -1,6 +1,6 @@
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, Inject, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -10,7 +10,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { TuiButton, TuiDataList, TuiDialogContext, TuiError, TuiScrollable, TuiScrollbar } from '@taiga-ui/core';
+import {
+  TuiButton,
+  TuiDataList,
+  TuiDialogContext,
+  TuiError,
+  TuiScrollable,
+  TuiScrollbar,
+  TuiTextfieldComponent
+} from '@taiga-ui/core';
 import { tuiCreateTimePeriods, TuiDataListWrapper, TuiFieldErrorPipe, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { IClient } from '../../interfaces/client';
@@ -24,6 +32,7 @@ import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { ITraining } from 'src/app/interfaces/training';
 import { TrainingExerciseListComponent } from '../training-exercise-list/training-exercise-list.component';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
+import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
 
 @Component({
   selector: 'app-training',
@@ -42,13 +51,15 @@ import { ITrainingExercise } from '../../interfaces/training_exercise';
     TuiError,
     TuiFieldErrorPipe,
     TuiInputDateModule,
-    TrainingExerciseListComponent
+    TrainingExerciseListComponent,
+    TrainingExerciseItemComponent,
+    TuiTextfieldComponent
   ],
   templateUrl: './training.component.html',
-  styleUrls: [ './training.component.scss' ],
+  styleUrls: ['./training.component.scss'],
   providers: [
     tuiItemsHandlersProvider({
-      stringify: (client: IClient) => `${ client.fullName }`
+      stringify: (client: IClient) => `${client.fullName}`
     })
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -62,6 +73,7 @@ export class TrainingComponent {
   clients!: IClient[];
   public editingTraining!: ITraining;
   public trainingExercises: ITrainingExercise[] = [];
+  @ViewChild('place', { read: ViewContainerRef }) placeContainer!: ViewContainerRef;
 
   constructor(
     @Inject(POLYMORPHEUS_CONTEXT)
@@ -107,16 +119,30 @@ export class TrainingComponent {
       formValue: this.trainingForm.value,
       isCreate: this.isPlanning
     };
-    this.scheduleConfigService.saveTraining(props, this.context);
+
+    console.log(this.trainingForm.value);
+    // this.scheduleConfigService.saveTraining(props, this.context);
   }
 
-  // public addExercise(): void {
-  //   this.trainingExercises.push(
-  //       new FormGroup({
-  //         name: new FormControl('', Validators.required),
-  //         url: new FormControl(''),
-  //         comment: new FormControl('')
-  //       })
-  //   )
-  // }
+  public addExercise(): void {
+
+    const newTrainingExercise: ITrainingExercise = {
+      id: undefined,
+      exec_var_id: undefined,
+      execution_number: undefined,
+      payload_weight: [],
+      comment: ''
+    };
+    const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> = this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
+
+    trainingExerciseComponentRef.setInput('index', this.exercises.length);
+    this.exercises.push(
+      new FormGroup({
+        exercise: new FormControl(null, Validators.required),
+        execution_number: new FormControl(0, Validators.required),
+        payload_weight: new FormControl(0, Validators.required),
+        comment: new FormControl('')
+      })
+    );
+  }
 }

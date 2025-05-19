@@ -1,17 +1,45 @@
-<form [formGroup]="exForm">
-  <tui-combo-box formControlName="exec_variant" class="trainingForm__client">
+<form [formGroup]='exForm'>
+
+  <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
+  <tui-select formControlName='exercise' class='trainingForm__client'>
     Выберите упражнение
-    <tui-data-list-wrapper *tuiDataList [items]="exec_vars | tuiFilterByInput"></tui-data-list-wrapper>
-  </tui-combo-box>
+    <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>
+  </tui-select>
+
+  <!-- ВЕС -->
+  <tui-textfield>
+    <label tuiLabel>Укажите вес, кг</label>
+    <input
+      tuiInputNumber
+      formControlName='execution_number'
+    />
+  </tui-textfield>
+
+  <!-- ПОВТОРЕНИЯ -->
+  <tui-textfield>
+    <label tuiLabel>Укажите количество повторений</label>
+    <input
+      tuiInputNumber
+      formControlName='execution_number'
+    />
+  </tui-textfield>
+
+<!-- КОММЕНТАРИЙ -->
+<!--  <tui-textfield tuiTextfieldSize="m">-->
+<!--    <label tuiLabel>Medium with label inside</label>-->
+<!--    <textarea-->
+<!--      placeholder="Placeholder"-->
+<!--      tuiTextarea-->
+<!--    ></textarea>-->
+<!--  </tui-textfield>-->
+
+  <tui-textfield>
+<!--    <label tuiLabel>Custom highlight</label>-->
+    <textarea
+      placeholder="Type 'width' or 'height'"
+      tuiTextarea
+      formControlName='comment'
+    ></textarea>
+  </tui-textfield>
+
 </form>
-
-<!-- Условное отображение контента -->
-<div *ngIf="exForm.get('exec_var_id')?.value">
-  <!-- Контент, который будет отображаться, если значение в exec_var_id присутствует -->
-  <p>Значение выбрано: {{ exForm.get('exec_var_id')?.value | json }}</p>
-</div>
-
-<div *ngIf="!exForm.get('exec_var_id')?.value">
-  <!-- Контент, который будет отображаться, если значение в exec_var_id отсутствует -->
-  <p>Значение не выбрано.</p>
-</div>
