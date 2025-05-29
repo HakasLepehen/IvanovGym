@@ -1,6 +1,14 @@
 import { select, Store } from '@ngrx/store';
 import { IClient } from 'src/app/interfaces/client';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+  Signal, WritableSignal
+} from '@angular/core';
 import { Subject, tap } from 'rxjs';
 import { ClientsService } from '../../components/clients/clients.service';
 import { ClientsConfigService } from '../../components/clients/clients-config.service';
@@ -9,6 +17,7 @@ import { ExercisesConfigService } from '../../components/exercises-main/exercise
 import IClientExercise from 'src/app/interfaces/client_exercise';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
 import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-clients',
@@ -19,17 +28,17 @@ import { clientExercisesSelector } from 'src/app/store/selectors/client-exercise
 export class ClientsComponent implements OnInit, OnDestroy {
   public clients: IClient[] = [];
   private exercises: IClientExercise[] = [];
-  public isLoading!: boolean;
-  private unsubscribe$: Subject<void> = new Subject();
+  public isLoading: Signal<boolean>;
 
   constructor(
     private clientsService: ClientsService,
     private exercisesConfigService: ExercisesConfigService,
     private clientsConfigService: ClientsConfigService,
     private loaderService: LoaderService,
-    private readonly cd: ChangeDetectorRef,
     private store: Store
-  ) { }
+  ) {
+    this.isLoading = toSignal(this.loaderService.getLoading(), {initialValue: true})
+  }
 
   ngOnInit() {
     this.store.pipe(
@@ -44,11 +53,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
         this.clientsConfigService.setLimitNamesForClients(exercises);
       })
     ).subscribe()
-
-    this.loaderService.getLoading().subscribe(val => {
-      this.isLoading = val;
-      this.cd.detectChanges();
-    });
   }
 
   addClient(): void {
@@ -74,6 +78,5 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clientsService.destroy$.next(true);
-    this.unsubscribe$.next();
   }
 }
