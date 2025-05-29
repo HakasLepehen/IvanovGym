@@ -16,24 +16,27 @@
     </div>
     <!-- Возраст -->
     <div class="tui-form__row">
-      <tui-input-number formControlName="age" tuiInputNumber="m">
-        Возраст
-        <input placeholder="Введите возраст" />
+      <tui-textfield>
+        <input
+          tuiInputNumber
+          formControlName="age"
+          placeholder="Введите возраст"
+        />
         <span class="tui-required"></span>
-      </tui-input-number>
-      <tui-error formControlName="age" [error]="[] | tuiFieldError | async"></tui-error>
+        <tui-error formControlName="age" [error]="[] | tuiFieldError | async"></tui-error>
+      </tui-textfield>
     </div>
     <!-- Цель -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="target" tuiTextfieldSize="m">
         Цель
         <input placeholder="Кратко опишите цели клиента" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="target" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Ограничения -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-multi-select *tuiLet="limits$ | async as exercises" [editable]="true" [stringify]="(stringify$ | async)!"
         [formControl]="limits_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
         (searchChange)="onSearch($event)">
@@ -44,52 +47,52 @@
         </tui-data-list-wrapper>
       </tui-multi-select>
       <tui-error [formControl]="limits_control" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Опыт тренировок -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="experience" tuiTextfieldSize="m">
         Опыт тренировок
         <input placeholder="Имеется ли опыт тренировок?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="experience" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Режим сна и бодрствования -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="sleep" tuiTextfieldSize="m">
         Режим сна и бодрствования
         <input placeholder="Сколько часов обычно спит?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="sleep" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Режим питания -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="food" tuiTextfieldSize="m">
         Режим питания
         <input placeholder="Какой режим питания?" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="food" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Фармакология -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="pharma" tuiTextfieldSize="m">
         Фармакология
         <input placeholder="Имеются ли ограничения" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="pharma" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
     <!-- Повседневная активность -->
-    <!-- <div class="tui-form__row">
+    <div class="tui-form__row">
       <tui-input formControlName="activity" tuiTextfieldSize="m">
         Ограничения
         <input placeholder="Имеются ли ограничения" tuiTextfieldLegacy />
         <span class="tui-required"></span>
       </tui-input>
       <tui-error formControlName="activity" [error]="[] | tuiFieldError | async"></tui-error>
-    </div> -->
+    </div>
   </tui-scrollbar>
 
   <div class="tui-form__row">
