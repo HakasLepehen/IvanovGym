@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { TUI_DEFAULT_MATCHER, TuiContext, tuiIsNumber, TuiLet } from '@taiga-ui/cdk';
 import { TuiButton, TuiDialogContext, TuiDialogService, TuiError, TuiTextfield } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe, TuiFieldErrorPipe, TuiInputNumber } from '@taiga-ui/kit';
-import { TuiInputModule } from "@taiga-ui/legacy";
+import { TuiInputModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
@@ -23,6 +23,8 @@ import { ClientsConfigService } from './../clients/clients-config.service';
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
+    TuiInputNumber,
+    TuiTextfieldControllerModule
   ],
   providers: [
     {

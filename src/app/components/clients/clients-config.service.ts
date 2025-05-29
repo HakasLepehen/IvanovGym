@@ -69,9 +69,9 @@ export class ClientsConfigService {
           : {
             fullName: '',
             created_at: new Date(),
-            age: 0,
+            age: null,
           },
-        isEdit: !!props.client,
+        isEdit: props.isEdit,
         exercises: props.exercises
       },
       closeable: true,
@@ -116,7 +116,10 @@ export class ClientsConfigService {
     this.cs
       .createClient(data)
       .pipe(
-        tap(() => this.closeModal(context)),
+        tap(() => {
+          this.closeModal(context);
+          this.getClients();
+        }),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         }),
@@ -131,7 +134,7 @@ export class ClientsConfigService {
       .removeClient(guid)
       .pipe(
         take(1),
-        tap(() => this.hideLoaderAndRefresh()),
+        tap(() => this.getClients()),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);
         }),
