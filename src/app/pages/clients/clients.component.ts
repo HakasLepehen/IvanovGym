@@ -55,6 +55,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.clientsConfigService.openModal({ client: null, isEdit: false, exercises: this.exercises });
   }
 
+
   getExercises() {
     this.exercisesConfigService.getExercisesForClient()
   }
