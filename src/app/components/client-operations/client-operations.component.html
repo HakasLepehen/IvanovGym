@@ -38,12 +38,12 @@
     <!-- Ограничения -->
     <div class="tui-form__row">
       <tui-multi-select *tuiLet="limits$ | async as exercises" [editable]="true" [stringify]="(stringify$ | async)!"
-        [formControl]="limits_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
-        (searchChange)="onSearch($event)">
+                        [formControl]="limits_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
+                        (searchChange)="onSearch($event)">
         Ограничения
         <span class="tui-required"></span>
         <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="exercises"
-          [itemContent]="(stringify$ | async)!">
+                               [itemContent]="(stringify$ | async)!">
         </tui-data-list-wrapper>
       </tui-multi-select>
       <tui-error [formControl]="limits_control" [error]="[] | tuiFieldError | async"></tui-error>
@@ -96,7 +96,13 @@
   </tui-scrollbar>
 
   <div class="tui-form__row">
-    <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+    <button
+      tuiButton
+      [disabled]="!clientForm.valid"
+      size='m'
+      appearance="outline-grayscale"
+      tuiAppearanceMode="checked"
+      type='button'
       (click)='onSubmit()'>
       Сохранить
     </button>
