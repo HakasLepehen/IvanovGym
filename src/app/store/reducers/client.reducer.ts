@@ -4,5 +4,5 @@ import * as UserActions from '../actions/client.action';
 
 export const clientReducer = createReducer(
   initialUserState,
-  on(UserActions.setClients, (state, { clients }) => ({...state, clients: clients}))
+  on(UserActions.setClients, (state, { clients }) => ({...state, clients: clients})),
 )
