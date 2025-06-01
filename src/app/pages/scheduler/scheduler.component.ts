@@ -1,9 +1,9 @@
 import { IClient } from './../../interfaces/client';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ITraining } from './../../interfaces/training';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TuiDay } from '@taiga-ui/cdk';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { catchError, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
@@ -43,10 +43,31 @@ export class SchedulerComponent implements OnInit {
         tap((clients: IClient[]) => {
           this.clients = clients;
         }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe()
+        tap(
+          this._schedulerConfigService.trainings$
+            .pipe(
+              take(1),
+              tap((value: ITraining[]) => {
+                  value.forEach(training => {
+                    // we need to find client with given guid and set fullname for him
+                    let guid = training.clientGUID;
+                    let clientWithCurrentGUID = this.clients.find(client => client.guid === guid);
 
+                    if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
+
+                    training.clientFullName = clientWithCurrentGUID?.fullName;
+
+                  });
+                  this.plannedTrainings = value;
+                  this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(value, this.selectedDay as TuiDay);
+                },
+                takeUntil(this.destroy$)
+              )
+            )
+            .subscribe(),
+        ),
+      )
+      .subscribe();
 
     this.loaderService.getLoading()
       .pipe(
@@ -54,30 +75,9 @@ export class SchedulerComponent implements OnInit {
           this.isLoading = val;
           this.cd.detectChanges();
         }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
-
-    this._schedulerConfigService.trainings$
-      .pipe(
-        tap((value: ITraining[]) => {
-          value.forEach(training => {
-            // we need to find client with given guid and set fullname for him
-            let guid = training.clientGUID;
-            let clientWithCurrentGUID = this.clients.find(client => client.guid === guid);
-            
-            if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
-
-            training.clientFullName = clientWithCurrentGUID?.fullName;
-
-          })
-          this.plannedTrainings = value;
-          this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(value, this.selectedDay as TuiDay);
-
-        }),
         takeUntil(this.destroy$)
       )
-      .subscribe()
+      .subscribe();
   }
 
   public onDayClick(day: TuiDay | any): void {
@@ -97,7 +97,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   public onRemoveTraining(id: number) {
-    this._schedulerConfigService.removeTraining(id)
+    this._schedulerConfigService.removeTraining(id);
   }
 
   ngOnDestroy() {
