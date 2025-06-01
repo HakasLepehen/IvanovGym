@@ -35,7 +35,6 @@ import { TuiDataList, TuiLabel, TuiTextfieldComponent, TuiTextfieldOptionsDirect
     TuiTextfieldOptionsDirective,
     TuiTextfield,
     TuiTextareaModule,
-    TuiTextarea
   ],
   standalone: true,
   providers: [

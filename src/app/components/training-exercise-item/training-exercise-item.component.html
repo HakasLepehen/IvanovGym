@@ -1,44 +1,33 @@
 <form [formGroup]='exForm'>
 
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <tui-select formControlName='exercise' class='trainingForm__client'>
+  <tui-select formControlName='exercise' class='trainingForm__client tui-form__row'>
     Выберите упражнение
     <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>
   </tui-select>
 
   <!-- ВЕС -->
-  <tui-textfield>
-    <label tuiLabel>Укажите вес, кг</label>
-    <input
-      tuiInputNumber
-      formControlName='execution_number'
-    />
-  </tui-textfield>
+  <div class='tui-form__row' style='display: flex;'>
+    <tui-textfield class='tui-form__row_half-width'>
+      <label tuiLabel>Укажите вес, кг</label>
+      <input
+        tuiInputNumber
+        formControlName='execution_number'
+      />
+    </tui-textfield>
 
-  <!-- ПОВТОРЕНИЯ -->
-<!--  <tui-textfield>-->
-<!--    <label tuiLabel>Укажите количество повторений</label>-->
-<!--    <input-->
-<!--      tuiInputNumber-->
-<!--      formControlName='execution_number'-->
-<!--    />-->
-<!--  </tui-textfield>-->
 
-  <tui-textfield>
-    <label tuiLabel>Комментарий</label>
-    <textarea
-      tuiTextarea
-      formControlName='comment'
-    ></textarea>
-  </tui-textfield>
+    <!-- ПОВТОРЕНИЯ -->
+    <tui-textfield class='tui-form__row_half-width'>
+      <label tuiLabel>Повторения, шт</label>
+      <input
+        tuiInputNumber
+        formControlName='execution_number'
+      />
+    </tui-textfield>
+  </div>
 
-<!-- КОММЕНТАРИЙ -->
-<!--  <tui-textfield tuiTextfieldSize="m">-->
-<!--    <label tuiLabel>Medium with label inside</label>-->
-<!--    <textarea-->
-<!--      placeholder="Placeholder"-->
-<!--      tuiTextarea-->
-<!--    ></textarea>-->
-<!--  </tui-textfield>-->
-
+  <!-- КОММЕНТАРИЙ -->
+  <tui-textarea formControlName='comment' class='tui-form__row'>Комментарий</tui-textarea>
 </form>
+<hr style='margin: .5rem 0;'>

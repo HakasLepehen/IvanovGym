@@ -121,7 +121,7 @@ export class TrainingComponent {
     };
 
     console.log(this.trainingForm.value);
-    this.scheduleConfigService.saveTraining(props, this.context);
+    // this.scheduleConfigService.saveTraining(props, this.context);
   }
 
   public addExercise(): void {
