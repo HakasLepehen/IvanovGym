@@ -16,12 +16,20 @@
   </tui-textfield>
 
   <!-- ПОВТОРЕНИЯ -->
+<!--  <tui-textfield>-->
+<!--    <label tuiLabel>Укажите количество повторений</label>-->
+<!--    <input-->
+<!--      tuiInputNumber-->
+<!--      formControlName='execution_number'-->
+<!--    />-->
+<!--  </tui-textfield>-->
+
   <tui-textfield>
-    <label tuiLabel>Укажите количество повторений</label>
-    <input
-      tuiInputNumber
-      formControlName='execution_number'
-    />
+    <label tuiLabel>Комментарий</label>
+    <textarea
+      tuiTextarea
+      formControlName='comment'
+    ></textarea>
   </tui-textfield>
 
 <!-- КОММЕНТАРИЙ -->
@@ -32,14 +40,5 @@
 <!--      tuiTextarea-->
 <!--    ></textarea>-->
 <!--  </tui-textfield>-->
-
-  <tui-textfield>
-<!--    <label tuiLabel>Custom highlight</label>-->
-    <textarea
-      placeholder="Type 'width' or 'height'"
-      tuiTextarea
-      formControlName='comment'
-    ></textarea>
-  </tui-textfield>
 
 </form>

@@ -11,7 +11,7 @@ import {
   TuiDataListWrapperComponent,
   TuiFilterByInputPipe,
   TuiInputNumber,
-  tuiItemsHandlersProvider
+  tuiItemsHandlersProvider,
 } from '@taiga-ui/kit';
 import { TuiDataList, TuiLabel, TuiTextfieldComponent, TuiTextfieldOptionsDirective } from '@taiga-ui/core';
 
@@ -34,7 +34,8 @@ import { TuiDataList, TuiLabel, TuiTextfieldComponent, TuiTextfieldOptionsDirect
     TuiLabel,
     TuiTextfieldOptionsDirective,
     TuiTextfield,
-    TuiTextareaModule
+    TuiTextareaModule,
+    TuiTextarea
   ],
   standalone: true,
   providers: [
