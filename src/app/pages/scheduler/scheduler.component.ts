@@ -13,7 +13,7 @@ import { ClientsConfigService } from 'src/app/components/clients/clients-config.
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SchedulerComponent implements OnInit {
   public selectedDay: TuiDay | null = TuiDay.fromLocalNativeDate(new Date(Date.now()));
@@ -29,8 +29,7 @@ export class SchedulerComponent implements OnInit {
     private readonly loaderService: LoaderService,
     private readonly store: Store,
     private cd: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._schedulerConfigService.getTrainings();
@@ -46,30 +45,32 @@ export class SchedulerComponent implements OnInit {
         tap(
           this._schedulerConfigService.trainings$
             .pipe(
-              take(1),
+              takeUntil(this.destroy$),
               tap((value: ITraining[]) => {
-                  value.forEach(training => {
-                    // we need to find client with given guid and set fullname for him
-                    let guid = training.clientGUID;
-                    let clientWithCurrentGUID = this.clients.find(client => client.guid === guid);
+                console.log(this.clients);
+                value.forEach((training) => {
+                  // we need to find client with given guid and set fullname for him
+                  let guid = training.clientGUID;
+                  let clientWithCurrentGUID = this.clients.find((client) => client.guid === guid);
 
-                    if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
+                  if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
 
-                    training.clientFullName = clientWithCurrentGUID?.fullName;
-
-                  });
-                  this.plannedTrainings = value;
-                  this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(value, this.selectedDay as TuiDay);
-                },
-                takeUntil(this.destroy$)
-              )
+                  training.clientFullName = clientWithCurrentGUID?.fullName;
+                });
+                this.plannedTrainings = value;
+                this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
+                  value,
+                  this.selectedDay as TuiDay
+                );
+              }),
             )
-            .subscribe(),
-        ),
+            .subscribe()
+        )
       )
       .subscribe();
 
-    this.loaderService.getLoading()
+    this.loaderService
+      .getLoading()
       .pipe(
         tap((val: boolean) => {
           this.isLoading = val;
@@ -84,7 +85,10 @@ export class SchedulerComponent implements OnInit {
     this.selectedDay = day;
 
     if (this.plannedTrainings) {
-      this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(this.plannedTrainings, this.selectedDay as TuiDay);
+      this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
+        this.plannedTrainings,
+        this.selectedDay as TuiDay
+      );
     }
   }
 
