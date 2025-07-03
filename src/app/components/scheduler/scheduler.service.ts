@@ -33,8 +33,7 @@ export class SchedulerService {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
   }
 
-  saveExercise(model: ITrainingExercise): Observable<Object> {
-    delete model.id;
+  saveExercises(model: ITrainingExercise[]): Observable<Object> {
     options.headers.Prefer = 'return=representation';
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options)
   }

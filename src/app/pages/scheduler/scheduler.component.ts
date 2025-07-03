@@ -40,14 +40,15 @@ export class SchedulerComponent implements OnInit {
       .pipe(
         select(clientsSelector),
         tap((clients: IClient[]) => {
-          this.clients = clients;
+          if (!!clients.length) {
+            this.clients = clients;
+          }
         }),
         tap(
           this._schedulerConfigService.trainings$
             .pipe(
               takeUntil(this.destroy$),
               tap((value: ITraining[]) => {
-                console.log(this.clients);
                 value.forEach((training) => {
                   // we need to find client with given guid and set fullname for him
                   let guid = training.clientGUID;

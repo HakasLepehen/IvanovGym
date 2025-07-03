@@ -2,7 +2,7 @@ import { LoaderService } from './../loader/loader.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Injectable, Injector } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, concatMap, from, Observable, of, reduce, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, from, map, Observable, of, reduce, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 import { TuiDay, TuiTime } from "@taiga-ui/cdk";
 import { SchedulerService } from './scheduler.service';
@@ -51,6 +51,7 @@ export class SchedulerConfigService {
   }
 
   saveTraining(props: { formValue: any, isCreate: boolean }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
+    const mappedExercises: any[] = [];
     let { formValue, isCreate } = props;
     let trainingModel: ITraining;
     let obs: Observable<Object>;
@@ -83,47 +84,68 @@ export class SchedulerConfigService {
       "comment": ""
     }
 
-    from(formValue.exercises).pipe(
-      concatMap((exercise: any) => {
-        const mappedExercise = {
-          id: undefined,
-          exec_var_id: exercise.exercise.id,
-          execution_number: exercise.execution_number,
-          payload_weight: exercise.payload_weight,
-          comment: exercise.comment,
-        }
-        return this.schedulerService.saveExercise(mappedExercise)
-      }),
-      concatMap((exercise: any) => {
-        console.log(exercise);
-        return exercise;
-      }),
-      reduce((acc: any[], response) => [...acc, response], [])
-    ).subscribe(allResponses => {
-      console.log('Все ответы:', allResponses);
-    });
+    formValue.exercises.forEach((exercise: any) => {
+      mappedExercises.push({
+              id: undefined,
+              exec_var_id: exercise.exercise.id,
+              execution_number: exercise.execution_number,
+              payload_weight: exercise.payload_weight,
+              comment: exercise.comment,
+      });
+    })
 
-    if (isCreate) {
-      obs = this.schedulerService.saveTraining(trainingModel)
-    } else {
-      obs = this.schedulerService.updateTraining(trainingModel);
-    }
-
-    obs
+    this.schedulerService.saveExercises(mappedExercises)
       .pipe(
-        take(1),
-        tap(() => {
-          this.loaderService.hide();
-          context.completeWith(true);
+        map((exercises) => {
+          return (<any>exercises).map((exercise: any) => exercise.id);
         }),
-        tap(() => this.getTrainings()),
-        catchError((err: HttpErrorResponse) => {
-          this.loaderService.hide();
-          context.completeWith(true);
-          return of();
+        tap((ids: number[]) => {
+          trainingModel.trainingExerciseIds = ids;
+
+          if (isCreate) {
+            obs = this.schedulerService.saveTraining(trainingModel)
+          } else {
+            obs = this.schedulerService.updateTraining(trainingModel);
+          }
+
+          obs
+            .pipe(
+              take(1),
+              tap(() => {
+                this.loaderService.hide();
+                context.completeWith(true);
+              }),
+              tap(() => this.getTrainings()),
+              catchError((err: HttpErrorResponse) => {
+                this.loaderService.hide();
+                context.completeWith(true);
+                return of();
+              })
+            )
+            .subscribe()
         })
       )
-      // .subscribe()
+      .subscribe()
+
+    // from(formValue.exercises).pipe(
+    //   concatMap((exercise: any) => {
+    //     const mappedExercise = {
+    //       id: undefined,
+    //       exec_var_id: exercise.exercise.id,
+    //       execution_number: exercise.execution_number,
+    //       payload_weight: exercise.payload_weight,
+    //       comment: exercise.comment,
+    //     }
+    //     return this.schedulerService.saveExercise(mappedExercise)
+    //   }),
+    //   concatMap((exercise: any) => {
+    //     console.log(exercise);
+    //     return exercise;
+    //   }),
+    //   reduce((acc: any[], response) => [...acc, response], [])
+    // ).subscribe(allResponses => {
+    //   console.log('Все ответы:', allResponses);
+    // });
   }
 
   getTrainings(): void {
