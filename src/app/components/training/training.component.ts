@@ -42,18 +42,12 @@ import { TrainingExerciseItemComponent } from '../training-exercise-item/trainin
     FormsModule,
     ReactiveFormsModule,
     TuiScrollbar,
-    TuiScrollable,
     TuiButton,
     TuiInputTimeModule,
     TuiSelectModule,
     TuiDataList,
     TuiDataListWrapper,
-    TuiError,
-    TuiFieldErrorPipe,
     TuiInputDateModule,
-    TrainingExerciseListComponent,
-    TrainingExerciseItemComponent,
-    TuiTextfieldComponent
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -102,6 +96,15 @@ export class TrainingComponent {
     });
     if (!!this.editingTraining) {
       // если в контексте было получено значение - инициализируем данные в форме
+      this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.trainingExerciseIds ?? []);
+      this.scheduleConfigService.trainingExercises$
+        .pipe(
+          take(1),
+          tap(val => {
+            val.forEach((trainingExercise: ITrainingExercise) => this.addExercise(trainingExercise));
+          })
+        )
+        .subscribe();
       this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients);
     }
   }
@@ -124,24 +127,16 @@ export class TrainingComponent {
     this.scheduleConfigService.saveTraining(props, this.context);
   }
 
-  public addExercise(): void {
-
-    const newTrainingExercise: ITrainingExercise = {
-      id: undefined,
-      exec_var_id: undefined,
-      execution_number: undefined,
-      payload_weight: [],
-      comment: ''
-    };
+  public addExercise(exercise?: ITrainingExercise): void {
     const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> = this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
 
     trainingExerciseComponentRef.setInput('index', this.exercises.length);
     this.exercises.push(
       new FormGroup({
-        exercise: new FormControl(null, Validators.required),
-        execution_number: new FormControl(0, Validators.required),
-        payload_weight: new FormControl(0, Validators.required),
-        comment: new FormControl('')
+        exercise: new FormControl(exercise?.id ?? null, Validators.required),
+        execution_number: new FormControl(exercise?.execution_number ?? 0, Validators.required),
+        payload_weight: new FormControl(exercise?.payload_weight ?? 0, Validators.required),
+        comment: new FormControl(exercise?.comment ?? ''),
       })
     );
   }

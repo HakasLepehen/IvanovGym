@@ -52,4 +52,14 @@ export class SchedulerService {
 
     return this.httpClient.delete(`${ENV.supabaseUrl}/${this.trainingURL}`, reqOptions)
   }
+
+  loadTrainingExercises(ids: number[]): Observable<ITrainingExercise[]> {
+    const reqOptions = {
+      ...options,
+      params: new HttpParams()
+        .set('select', `*`)
+        .set('id', `in.(${ids})`)
+    };
+    return this.httpClient.get<ITrainingExercise[]>(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
+  }
 }

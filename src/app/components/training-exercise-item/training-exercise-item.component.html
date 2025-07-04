@@ -1,10 +1,12 @@
 <form [formGroup]='exForm'>
 
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <tui-select formControlName='exercise' class='trainingForm__client tui-form__row'>
-    Выберите упражнение
-    <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>
-  </tui-select>
+  <div class='tui-form__row'>
+    <tui-select formControlName='exercise' class='trainingForm__client'>
+      Выберите упражнение
+      <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>
+    </tui-select>
+  </div>
 
   <!-- ВЕС -->
   <div class='tui-form__row' style='display: flex;'>

@@ -49,20 +49,22 @@ export class SchedulerComponent implements OnInit {
             .pipe(
               takeUntil(this.destroy$),
               tap((value: ITraining[]) => {
-                value.forEach((training) => {
-                  // we need to find client with given guid and set fullname for him
-                  let guid = training.clientGUID;
-                  let clientWithCurrentGUID = this.clients.find((client) => client.guid === guid);
+                if (this.clients?.length) {
+                  value.forEach((training) => {
+                    // we need to find client with given guid and set fullname for him
+                    let guid = training.clientGUID;
+                    let clientWithCurrentGUID = this.clients?.find((client) => client.guid === guid);
 
-                  if (!clientWithCurrentGUID) console.log('не были получены данные по клиентам');
+                    if (!clientWithCurrentGUID) return alert('не были получены данные по клиентам, попробуйте перезагрузить страницу');
 
-                  training.clientFullName = clientWithCurrentGUID?.fullName;
-                });
-                this.plannedTrainings = value;
-                this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
-                  value,
-                  this.selectedDay as TuiDay
-                );
+                    training.clientFullName = clientWithCurrentGUID?.fullName;
+                  });
+                  this.plannedTrainings = value;
+                  this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
+                    value,
+                    this.selectedDay as TuiDay
+                  );
+                }
               }),
             )
             .subscribe()
