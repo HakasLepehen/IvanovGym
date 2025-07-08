@@ -131,6 +131,8 @@ export class TrainingComponent {
     const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> = this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
 
     trainingExerciseComponentRef.setInput('index', this.exercises.length);
+    trainingExerciseComponentRef.instance.messageSent.subscribe(val => trainingExerciseComponentRef.destroy());
+
     this.exercises.push(
       new FormGroup({
         exercise: new FormControl(exercise?.exec_var_id ?? null, Validators.required),

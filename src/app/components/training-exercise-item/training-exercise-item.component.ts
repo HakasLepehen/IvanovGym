@@ -1,11 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef, EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
 import { take } from 'rxjs';
 import IClientExercise from '../../interfaces/client_exercise';
 import { TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiDataListDirective, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiDataListDirective, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiDataListWrapperComponent,
   TuiInputNumber,
@@ -29,6 +38,7 @@ import { TuiLabel, TuiTextfieldComponent } from '@taiga-ui/core';
     TuiTextareaModule,
     TuiDataListDirective,
     TuiSelectModule,
+    TuiButton,
   ],
   standalone: true,
   providers: [
@@ -46,8 +56,8 @@ import { TuiLabel, TuiTextfieldComponent } from '@taiga-ui/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrainingExerciseItemComponent implements OnChanges {
-  @Input({ required: true })
-  index!: number;
+  @Input({ required: true }) index!: number;
+  @Output() messageSent = new EventEmitter<number>(); // EventEmitter для отправки данных
   exec_vars: IClientExercise[] = [];
   store = inject(Store);
   selectedExecVar: any;
@@ -68,11 +78,15 @@ export class TrainingExerciseItemComponent implements OnChanges {
     let exercisesFormArray: FormArray<any> = this.controlContainer.control?.get('exercises') as FormArray;
     this.exForm = exercisesFormArray.at(this.index) as FormGroup;
     // инициализация поля выбора упражнения через поиск
-    this.selectedExecVar = this.exec_vars.find((el: IClientExercise) => el.id === this.exForm.get('exercise')?.value)
+    this.selectedExecVar = this.exec_vars.find((el: IClientExercise) => el.id === this.exForm.get('exercise')?.value);
     this.exForm.get('exercise')?.setValue(this.selectedExecVar);
   }
 
   ngOnChanges(changes: SimpleChanges): void {}
+
+  removeExercise(): void {
+    this.messageSent.emit(this.index)
+  }
 }
 
 
