@@ -133,7 +133,7 @@ export class TrainingComponent {
     trainingExerciseComponentRef.setInput('index', this.exercises.length);
     this.exercises.push(
       new FormGroup({
-        exercise: new FormControl(exercise?.id ?? null, Validators.required),
+        exercise: new FormControl(exercise?.exec_var_id ?? null, Validators.required),
         execution_number: new FormControl(exercise?.execution_number ?? 0, Validators.required),
         payload_weight: new FormControl(exercise?.payload_weight ?? 0, Validators.required),
         comment: new FormControl(exercise?.comment ?? ''),
