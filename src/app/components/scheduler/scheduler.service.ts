@@ -62,4 +62,9 @@ export class SchedulerService {
     };
     return this.httpClient.get<ITrainingExercise[]>(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
   }
+
+  deleteExercise(id: number | string): Observable<Object> {
+    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${id}`) };
+    return this.httpClient.delete(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
+  }
 }

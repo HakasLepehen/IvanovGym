@@ -57,7 +57,7 @@ import { TuiLabel, TuiTextfieldComponent } from '@taiga-ui/core';
 })
 export class TrainingExerciseItemComponent implements OnChanges {
   @Input({ required: true }) index!: number;
-  @Output() messageSent = new EventEmitter<number>(); // EventEmitter для отправки данных
+  @Output() messageSent = new EventEmitter<{id: number | string, index: number;}>(); // EventEmitter для отправки данных
   exec_vars: IClientExercise[] = [];
   store = inject(Store);
   selectedExecVar: any;
@@ -85,7 +85,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {}
 
   removeExercise(): void {
-    this.messageSent.emit(this.index)
+    this.messageSent.emit({id: this.exForm.get('id')?.value, index: this.index});
   }
 }
 

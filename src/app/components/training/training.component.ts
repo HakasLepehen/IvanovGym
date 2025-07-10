@@ -127,14 +127,16 @@ export class TrainingComponent {
     this.scheduleConfigService.saveTraining(props, this.context);
   }
 
+  /**
+   * добавляет компонент
+   * @param exercise
+   */
   public addExercise(exercise?: ITrainingExercise): void {
-    const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> = this.placeContainer.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
-
-    trainingExerciseComponentRef.setInput('index', this.exercises.length);
-    trainingExerciseComponentRef.instance.messageSent.subscribe(val => trainingExerciseComponentRef.destroy());
+    this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises)
 
     this.exercises.push(
       new FormGroup({
+        id: new FormControl(exercise?.id ?? null),
         exercise: new FormControl(exercise?.exec_var_id ?? null, Validators.required),
         execution_number: new FormControl(exercise?.execution_number ?? 0, Validators.required),
         payload_weight: new FormControl(exercise?.payload_weight ?? 0, Validators.required),

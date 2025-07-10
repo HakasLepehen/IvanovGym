@@ -1,6 +1,6 @@
 import { LoaderService } from './../loader/loader.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { Injectable, Injector } from '@angular/core';
+import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { catchError, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
@@ -9,13 +9,14 @@ import { SchedulerService } from './scheduler.service';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ITraining } from 'src/app/interfaces/training';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { IClient } from 'src/app/interfaces/client';
 import IClientExercise from '../../interfaces/client_exercise';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
+import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
@@ -27,8 +28,7 @@ export class SchedulerConfigService {
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
     private loaderService: LoaderService
-  ) {
-  }
+  ) {}
 
   openModal(selectedDay: TuiDay, training?: ITraining) {
     let titleEditingDate: string = '';
@@ -37,27 +37,28 @@ export class SchedulerConfigService {
     }
 
     this._dialogs
-      .open(new PolymorpheusComponent(TrainingComponent, this._injector),
-        {
-          label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
-          data: {
-            isPlanning: !!!training,
-            selectedDay: selectedDay,
-            training: training
-          },
-          closeable: true,
-          dismissible: false,
-          size: !!training ? 'fullscreen' : 'm'
-        }
-      )
+      .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
+        label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
+        data: {
+          isPlanning: !!!training,
+          selectedDay: selectedDay,
+          training: training,
+        },
+        closeable: true,
+        dismissible: false,
+        size: !!training ? 'fullscreen' : 'm',
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
 
-  saveTraining(props: {
-    formValue: any,
-    isCreate: boolean
-  }, context: TuiDialogContext<boolean, ITrainingDialog>): void {
+  saveTraining(
+    props: {
+      formValue: any;
+      isCreate: boolean;
+    },
+    context: TuiDialogContext<boolean, ITrainingDialog>
+  ): void {
     const mappedExercises: any[] = [];
     let { formValue, isCreate } = props;
     let trainingModel: ITraining;
@@ -71,7 +72,7 @@ export class SchedulerConfigService {
       clientGUID: formValue.client.guid,
       planned_date: formValue.planned_date.toUtcNativeDate(),
       hour: formValue.time.hours,
-      minutes: formValue.time.minutes
+      minutes: formValue.time.minutes,
     };
 
     formValue.exercises.forEach((exercise: any) => {
@@ -80,11 +81,12 @@ export class SchedulerConfigService {
         exec_var_id: exercise.exercise.id,
         execution_number: exercise.execution_number,
         payload_weight: exercise.payload_weight,
-        comment: exercise.comment
+        comment: exercise.comment,
       });
     });
 
-    this.schedulerService.saveExercises(mappedExercises)
+    this.schedulerService
+      .saveExercises(mappedExercises)
       .pipe(
         map((exercises) => {
           return (<any>exercises).map((exercise: any) => exercise.id);
@@ -120,7 +122,8 @@ export class SchedulerConfigService {
 
   getTrainings(): void {
     this.loaderService.show();
-    this.schedulerService.getTrainings()
+    this.schedulerService
+      .getTrainings()
       .pipe(
         take(1),
         tap((value: any) => {
@@ -133,7 +136,6 @@ export class SchedulerConfigService {
 
   getSameDayTrainings(trainings: ITraining[], day: TuiDay): ITraining[] {
     return trainings.filter((training: ITraining) => {
-
       const trainingTuiDay = TuiDay.fromUtcNativeDate(new Date(training.planned_date));
 
       return trainingTuiDay.daySame(day);
@@ -142,7 +144,8 @@ export class SchedulerConfigService {
 
   removeTraining(id: number): void {
     this.loaderService.show();
-    this.schedulerService.deleteTraining(id)
+    this.schedulerService
+      .deleteTraining(id)
       .pipe(
         take(1),
         tap(() => this.getTrainings())
@@ -178,12 +181,35 @@ export class SchedulerConfigService {
 
   // public getTrainingExercisesByTraining(ids: number[] | string[]): IClientExercise[] {
   public getTrainingExercisesByTraining(ids: number[] | string[]): any {
-
-    this.schedulerService.loadTrainingExercises(ids as number[])
+    this.schedulerService
+      .loadTrainingExercises(ids as number[])
       .pipe(
         take(1),
-        tap((exercises: ITrainingExercise[]) => this.trainingExercises$.next(exercises)),
+        tap((exercises: ITrainingExercise[]) => this.trainingExercises$.next(exercises))
       )
       .subscribe();
+  }
+
+  /**
+   * Создает компонент упражнения с необходимыми для него параметрами
+   * @param container
+   * @param exercises
+   */
+  public initializeExerciseComponent(container: ViewContainerRef, exercises: FormArray): void {
+    const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> =
+      container.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
+
+    trainingExerciseComponentRef.setInput('index', exercises.length);
+    trainingExerciseComponentRef.instance.messageSent.subscribe(
+      ({ id, index }: { id: number | string; index: number }): void => {
+        // if we haven't id - we are not saved this exercise
+        if (!id) {
+          exercises.removeAt(index);
+        } else {
+          this.schedulerService.deleteExercise(id).pipe(take(1)).subscribe();
+        }
+        trainingExerciseComponentRef.destroy();
+      }
+    );
   }
 }

@@ -49,6 +49,11 @@ export class SchedulerComponent implements OnInit {
             .pipe(
               takeUntil(this.destroy$),
               tap((value: ITraining[]) => {
+                this.plannedTrainings = value;
+                this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
+                  value,
+                  this.selectedDay as TuiDay
+                );
                 if (this.clients?.length) {
                   value.forEach((training) => {
                     // we need to find client with given guid and set fullname for him
@@ -59,11 +64,6 @@ export class SchedulerComponent implements OnInit {
 
                     training.clientFullName = clientWithCurrentGUID?.fullName;
                   });
-                  this.plannedTrainings = value;
-                  this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
-                    value,
-                    this.selectedDay as TuiDay
-                  );
                 }
               }),
             )
