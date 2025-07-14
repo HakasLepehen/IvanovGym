@@ -67,4 +67,10 @@ export class SchedulerService {
     const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${id}`) };
     return this.httpClient.delete(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
   }
+
+  updateExercise(model: ITrainingExercise): Observable<Object> {
+    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
+    options.headers.Prefer = 'return=minimal';
+    return this.httpClient.patch(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, reqOptions);
+  }
 }

@@ -2,7 +2,7 @@ import { LoaderService } from './../loader/loader.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, forkJoin, map, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { SchedulerService } from './scheduler.service';
@@ -11,12 +11,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ITraining } from 'src/app/interfaces/training';
 import { FormArray, FormGroup } from '@angular/forms';
 import { IClient } from 'src/app/interfaces/client';
-import IClientExercise from '../../interfaces/client_exercise';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
 import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
@@ -28,7 +27,8 @@ export class SchedulerConfigService {
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
     private loaderService: LoaderService
-  ) {}
+  ) {
+  }
 
   openModal(selectedDay: TuiDay, training?: ITraining) {
     let titleEditingDate: string = '';
@@ -42,11 +42,11 @@ export class SchedulerConfigService {
         data: {
           isPlanning: !!!training,
           selectedDay: selectedDay,
-          training: training,
+          training: training
         },
         closeable: true,
         dismissible: false,
-        size: !!training ? 'fullscreen' : 'm',
+        size: !!training ? 'fullscreen' : 'm'
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
@@ -62,7 +62,6 @@ export class SchedulerConfigService {
     const mappedExercises: any[] = [];
     let { formValue, isCreate } = props;
     let trainingModel: ITraining;
-    let obs: Observable<Object>;
 
     // prepare dto before send to backend
     this.loaderService.show();
@@ -72,7 +71,7 @@ export class SchedulerConfigService {
       clientGUID: formValue.client.guid,
       planned_date: formValue.planned_date.toUtcNativeDate(),
       hour: formValue.time.hours,
-      minutes: formValue.time.minutes,
+      minutes: formValue.time.minutes
     };
 
     formValue.exercises.forEach((exercise: any) => {
@@ -81,43 +80,13 @@ export class SchedulerConfigService {
         exec_var_id: exercise.exercise.id,
         execution_number: exercise.execution_number,
         payload_weight: exercise.payload_weight,
-        comment: exercise.comment,
+        comment: exercise.comment
       });
     });
 
-    this.schedulerService
-      .saveExercises(mappedExercises)
-      .pipe(
-        map((exercises) => {
-          return (<any>exercises).map((exercise: any) => exercise.id);
-        }),
-        tap((ids: number[]) => {
-          trainingModel.trainingExerciseIds = ids;
 
-          if (isCreate) {
-            obs = this.schedulerService.saveTraining(trainingModel);
-          } else {
-            obs = this.schedulerService.updateTraining(trainingModel);
-          }
+    isCreate ? this.saveTrainingExercises(trainingModel, mappedExercises, context) : this.updateTrainingExercises(trainingModel, mappedExercises, context);
 
-          obs
-            .pipe(
-              take(1),
-              tap(() => {
-                this.loaderService.hide();
-                context.completeWith(true);
-              }),
-              tap(() => this.getTrainings()),
-              catchError((err: HttpErrorResponse) => {
-                this.loaderService.hide();
-                context.completeWith(true);
-                return of();
-              })
-            )
-            .subscribe();
-        })
-      )
-      .subscribe();
   }
 
   getTrainings(): void {
@@ -211,5 +180,73 @@ export class SchedulerConfigService {
         trainingExerciseComponentRef.destroy();
       }
     );
+  }
+
+  private saveTrainingExercises(
+    trainingModel: any,
+    trainingExercises: ITrainingExercise[],
+    context: TuiDialogContext<boolean, ITrainingDialog>): void {
+
+    this.schedulerService
+      .saveExercises(trainingExercises)
+      .pipe(
+        map((exercises) => {
+          return (<any>exercises).map((exercise: any) => exercise.id);
+        }),
+        tap((ids: number[]) => {
+          trainingModel.trainingExerciseIds = ids;
+          this.schedulerService.saveTraining(trainingModel)
+            .pipe(
+              take(1),
+              tap(() => {
+                this.loaderService.hide();
+                context.completeWith(true);
+              }),
+              tap(() => this.getTrainings()),
+              catchError((err: HttpErrorResponse) => {
+                this.loaderService.hide();
+                context.completeWith(true);
+                return of();
+              })
+            )
+            .subscribe();
+        })
+      )
+      .subscribe();
+  }
+
+  private updateTrainingExercises(
+    trainingModel: any,
+    trainingExercises: ITrainingExercise[],
+    context: TuiDialogContext<boolean, ITrainingDialog>): void {
+    this.loaderService.show();
+
+    if (!!trainingExercises.length) {
+      forkJoin([trainingExercises.map(exercise => {
+        this.schedulerService.updateExercise(exercise);
+      })]).pipe(
+        // take(1),
+        tap(() => this.schedulerService.updateTraining(trainingModel).subscribe()),
+        tap(() => {
+          this.loaderService.hide();
+          context.completeWith(true);
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.loaderService.hide();
+          context.completeWith(true);
+          return of();
+        })
+      ).subscribe();
+    } else {
+      this.schedulerService.updateTraining(trainingModel)
+        .pipe(
+          take(1),
+          tap(() => {
+            this.loaderService.hide();
+            context.completeWith(true);
+          })
+        )
+        .subscribe();
+    }
   }
 }
