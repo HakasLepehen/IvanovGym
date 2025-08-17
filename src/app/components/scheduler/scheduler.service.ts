@@ -33,11 +33,6 @@ export class SchedulerService {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
   }
 
-  saveExercises(model: ITrainingExercise[]): Observable<Object> {
-    options.headers.Prefer = 'return=representation';
-    return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options)
-  }
-
   updateTraining(model: ITraining): Observable<Object> {
     const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
 
@@ -68,9 +63,13 @@ export class SchedulerService {
     return this.httpClient.delete(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
   }
 
-  updateExercise(model: ITrainingExercise): Observable<Object> {
-    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
-    options.headers.Prefer = 'return=minimal';
-    return this.httpClient.patch(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, reqOptions);
+  saveExercises(model: ITrainingExercise[]): Observable<Object> {
+    options.headers.Prefer = 'return=representation';
+    return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options)
+  }
+
+  updateExercises(model: ITrainingExercise[]): Observable<Object> {
+    options.headers.Prefer = 'return=representation, resolution=merge-duplicates';
+    return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options);
   }
 }

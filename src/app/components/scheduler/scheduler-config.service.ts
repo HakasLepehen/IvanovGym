@@ -2,7 +2,7 @@ import { LoaderService } from './../loader/loader.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, forkJoin, map, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, map, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { TrainingComponent } from '../training/training.component';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { SchedulerService } from './scheduler.service';
@@ -85,7 +85,7 @@ export class SchedulerConfigService {
     });
 
 
-    isCreate ? this.saveTrainingExercises(trainingModel, mappedExercises, context) : this.updateTrainingExercises(trainingModel, mappedExercises, context);
+    isCreate ? this.saveTrainingWithoutExercises(trainingModel, context) : this.updateTrainingExercises(trainingModel, mappedExercises, context);
 
   }
 
@@ -148,7 +148,6 @@ export class SchedulerConfigService {
     // )
   }
 
-  // public getTrainingExercisesByTraining(ids: number[] | string[]): IClientExercise[] {
   public getTrainingExercisesByTraining(ids: number[] | string[]): any {
     this.schedulerService
       .loadTrainingExercises(ids as number[])
@@ -182,34 +181,22 @@ export class SchedulerConfigService {
     );
   }
 
-  private saveTrainingExercises(
+  private saveTrainingWithoutExercises(
     trainingModel: any,
-    trainingExercises: ITrainingExercise[],
     context: TuiDialogContext<boolean, ITrainingDialog>): void {
 
-    this.schedulerService
-      .saveExercises(trainingExercises)
+    this.schedulerService.saveTraining(trainingModel)
       .pipe(
-        map((exercises) => {
-          return (<any>exercises).map((exercise: any) => exercise.id);
+        take(1),
+        tap(() => {
+          this.loaderService.hide();
+          context.completeWith(true);
         }),
-        tap((ids: number[]) => {
-          trainingModel.trainingExerciseIds = ids;
-          this.schedulerService.saveTraining(trainingModel)
-            .pipe(
-              take(1),
-              tap(() => {
-                this.loaderService.hide();
-                context.completeWith(true);
-              }),
-              tap(() => this.getTrainings()),
-              catchError((err: HttpErrorResponse) => {
-                this.loaderService.hide();
-                context.completeWith(true);
-                return of();
-              })
-            )
-            .subscribe();
+        tap(() => this.getTrainings()),
+        catchError((err: HttpErrorResponse) => {
+          this.loaderService.hide();
+          context.completeWith(true);
+          return of();
         })
       )
       .subscribe();
@@ -221,12 +208,17 @@ export class SchedulerConfigService {
     context: TuiDialogContext<boolean, ITrainingDialog>): void {
     this.loaderService.show();
 
-    if (!!trainingExercises.length) {
-      forkJoin([trainingExercises.map(exercise => {
-        this.schedulerService.updateExercise(exercise);
-      })]).pipe(
-        // take(1),
-        tap(() => this.schedulerService.updateTraining(trainingModel).subscribe()),
+    this.schedulerService.updateExercises(trainingExercises)
+      .pipe(
+        take(1),
+        map((exercises) => {
+          return (<any>exercises).map((exercise: any) => exercise.id);
+        }),
+        tap((ids: number[]) => {
+          trainingModel.trainingExerciseIds = ids;
+          this.schedulerService.updateTraining(trainingModel).pipe(take(1)).subscribe()
+        }),
+        tap(() => this.getTrainings()),
         tap(() => {
           this.loaderService.hide();
           context.completeWith(true);
@@ -237,16 +229,5 @@ export class SchedulerConfigService {
           return of();
         })
       ).subscribe();
-    } else {
-      this.schedulerService.updateTraining(trainingModel)
-        .pipe(
-          take(1),
-          tap(() => {
-            this.loaderService.hide();
-            context.completeWith(true);
-          })
-        )
-        .subscribe();
-    }
   }
 }
