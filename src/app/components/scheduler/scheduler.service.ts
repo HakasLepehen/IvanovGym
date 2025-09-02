@@ -48,12 +48,12 @@ export class SchedulerService {
     return this.httpClient.delete(`${ENV.supabaseUrl}/${this.trainingURL}`, reqOptions)
   }
 
-  loadTrainingExercises(ids: number[]): Observable<ITrainingExercise[]> {
+  loadTrainingExercises(id: number): Observable<ITrainingExercise[]> {
     const reqOptions = {
       ...options,
       params: new HttpParams()
         .set('select', `*`)
-        .set('id', `in.(${ids})`)
+        .set('training_id', `eq.${id}`)
     };
     return this.httpClient.get<ITrainingExercise[]>(`${ENV.supabaseUrl}/${this.exercisesURL}`, reqOptions);
   }
@@ -68,8 +68,9 @@ export class SchedulerService {
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options)
   }
 
-  updateExercises(model: ITrainingExercise[]): Observable<Object> {
-    options.headers.Prefer = 'return=representation, resolution=merge-duplicates';
-    return this.httpClient.post(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, options);
+  updateExercises(model: ITrainingExercise): Observable<Object> {
+    const reqOptions = { ...options, params: new HttpParams().set('id', `eq.${model.id}`) };
+    options.headers.Prefer = 'return=minimal';
+    return this.httpClient.patch(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, reqOptions);
   }
 }
