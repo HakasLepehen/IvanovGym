@@ -8,9 +8,6 @@ import { ITrainingExercise } from '../../interfaces/training_exercise';
 
 const options = {
   headers: {
-    apikey: ENV.supabaseKey,
-    Authorization: `Bearer ${ENV.supabaseKey}`,
-    ContentType: 'application/json',
     Prefer: 'return-minimal',
   },
 };

@@ -7,9 +7,6 @@ import { ENV } from 'src/environment/environment';
 
 const options: any = {
   headers: {
-    apikey: ENV.supabaseKey,
-    Authorization: `Bearer ${ENV.supabaseKey}`,
-    ContentType: 'application/json',
     Prefer: 'return=minimal',
   },
 };
@@ -63,21 +60,19 @@ export class ExercisesService {
   }
 
   updateExercise(model: IExercise): Observable<any> {
-    options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
     return this._http.patch(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, model, {
-      ...options.headers,
+      headers: options.headers as any,
       params: { id: `eq.${model.id}` },
     });
   }
 
-  updateExecVar(model: IExecutionVariant): Observable<ArrayBuffer> {
-    options.headers.ContentType = 'application/json';
+  updateExecVar(model: IExecutionVariant): Observable<any> {
     options.headers.Prefer = 'return-minimal';
 
     return this._http.patch(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, {
-      ...options.headers,
+      headers: options.headers as any,
       params: { id: `eq.${model.id}` },
     });
   }
@@ -85,7 +80,6 @@ export class ExercisesService {
   removeExecVar(id: number) {
     let params = new HttpParams();
 
-    delete options.headers.ContentType;
     delete options.headers.Prefer;
     params = params.set('id', `eq.${id}`);
 
@@ -95,17 +89,16 @@ export class ExercisesService {
   removeExercise(id: number): Observable<any> {
     let params = new HttpParams();
 
-    delete options.headers.ContentType;
     delete options.headers.Prefer;
     params = params.set('id', `eq.${id}`);
 
     return this._http.delete<Observable<HttpResponse<null>>>(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, {
-      ...options.headers,
+      headers: options.headers as any,
       params: params
     })
   }
 
-  loadAllExercises(): Observable<ArrayBuffer> {
+  loadAllExercises(): Observable<any> {
     let params = new HttpParams();
 
     params = params.append('select', `*`);
@@ -113,12 +106,12 @@ export class ExercisesService {
     delete options.headers.Prefer;
 
     return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, {
-      ...options.headers,
+      headers: options.headers as any,
       params: params
     });
   }
 
-  loadAllExecVars(): Observable<ArrayBuffer> {
+  loadAllExecVars(): Observable<any> {
     let params = new HttpParams();
 
     params = params.append('select', `*`);
@@ -126,7 +119,7 @@ export class ExercisesService {
     delete options.headers.Prefer;
 
     return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, {
-      ...options.headers,
+      headers: options.headers as any,
       params: params
     });
   }

@@ -9,9 +9,6 @@ import { LoaderService } from '../loader/loader.service';
 
 const options = {
   headers: {
-    apikey: ENV.supabaseKey,
-    Authorization: `Bearer ${ENV.supabaseKey}`,
-    ContentType: 'application/json',
     Prefer: 'return-minimal',
   },
 };
@@ -46,7 +43,6 @@ export class ClientsService {
     //TODO: Хотелось бы определить какой тип тут указывать в качестве возвращаемого
 
     delete model.id;
-    options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
     return this._http.post(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, options);
@@ -54,17 +50,16 @@ export class ClientsService {
 
   removeClient(guid: string): Observable<Object> {
     return this._http.delete<Observable<HttpResponse<null>>>(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, {
-      ...options.headers,
+      headers: options.headers as any,
       params: { guid: `eq.${guid}` },
     });
   }
 
   editClient(model: IClient): Observable<Object> {
-    options.headers.ContentType = 'application/json';
     options.headers.Prefer = 'return-minimal';
 
     return this._http.patch(`${ENV.supabaseUrl}/${this.clientsAPIUrl}`, model, {
-      ...options.headers,
+      headers: options.headers as any,
       params: { id: `eq.${model.id}` },
     });
   }
