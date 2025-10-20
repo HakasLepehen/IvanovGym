@@ -96,7 +96,7 @@ export class TrainingComponent {
     });
     if (!!this.editingTraining) {
       // если в контексте было получено значение - инициализируем данные в форме
-      this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.trainingExerciseIds ?? []);
+      this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.id as number);
       this.scheduleConfigService.trainingExercises$
         .pipe(
           take(1),
@@ -137,6 +137,7 @@ export class TrainingComponent {
     this.exercises.push(
       new FormGroup({
         id: new FormControl(exercise?.id ?? null),
+        training_id: new FormControl(this.editingTraining.id ?? null),
         exercise: new FormControl(exercise?.exec_var_id ?? null, Validators.required),
         execution_number: new FormControl(exercise?.execution_number ?? 0, Validators.required),
         payload_weight: new FormControl(exercise?.payload_weight ?? 0, Validators.required),

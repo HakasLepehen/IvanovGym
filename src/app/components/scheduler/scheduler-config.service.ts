@@ -74,18 +74,32 @@ export class SchedulerConfigService {
       minutes: formValue.time.minutes
     };
 
-    formValue.exercises.forEach((exercise: any) => {
-      mappedExercises.push({
-        id: undefined,
-        exec_var_id: exercise.exercise.id,
-        execution_number: exercise.execution_number,
-        payload_weight: exercise.payload_weight,
-        comment: exercise.comment
+    if (!isCreate) {
+      formValue.exercises.forEach((exercise: any) => {
+        if (exercise?.id) {
+          mappedExercises.push({
+            id: exercise.id,
+            training_id: exercise.training_id,
+            exec_var_id: exercise.exercise.id,
+            execution_number: exercise.execution_number,
+            payload_weight: exercise.payload_weight,
+            comment: exercise.comment
+          });
+        } else {
+          mappedExercises.push({
+            id: undefined,
+            training_id: exercise.training_id,
+            exec_var_id: exercise.exercise.id,
+            execution_number: exercise.execution_number,
+            payload_weight: exercise.payload_weight,
+            comment: exercise.comment
+          });
+        }
       });
-    });
+    }
 
 
-    isCreate ? this.saveTrainingExercises(trainingModel, mappedExercises, context) : this.updateTrainingExercises(trainingModel, mappedExercises, context);
+    isCreate ? this.saveTrainingWithoutExercises(trainingModel, context) : this.updateTrainingExercises(trainingModel, mappedExercises, context);
 
   }
 
@@ -148,10 +162,9 @@ export class SchedulerConfigService {
     // )
   }
 
-  // public getTrainingExercisesByTraining(ids: number[] | string[]): IClientExercise[] {
-  public getTrainingExercisesByTraining(ids: number[] | string[]): any {
+  public getTrainingExercisesByTraining(id: number): any {
     this.schedulerService
-      .loadTrainingExercises(ids as number[])
+      .loadTrainingExercises(id)
       .pipe(
         take(1),
         tap((exercises: ITrainingExercise[]) => this.trainingExercises$.next(exercises))
@@ -175,41 +188,35 @@ export class SchedulerConfigService {
         if (!id) {
           exercises.removeAt(index);
         } else {
-          this.schedulerService.deleteExercise(id).pipe(take(1)).subscribe();
+          this.schedulerService.deleteExercise(id)
+            .pipe(
+              take(1),
+              tap(() => {
+                this.getTrainings();
+              })
+            ).subscribe();
         }
         trainingExerciseComponentRef.destroy();
       }
     );
   }
 
-  private saveTrainingExercises(
+  private saveTrainingWithoutExercises(
     trainingModel: any,
-    trainingExercises: ITrainingExercise[],
     context: TuiDialogContext<boolean, ITrainingDialog>): void {
 
-    this.schedulerService
-      .saveExercises(trainingExercises)
+    this.schedulerService.saveTraining(trainingModel)
       .pipe(
-        map((exercises) => {
-          return (<any>exercises).map((exercise: any) => exercise.id);
+        take(1),
+        tap(() => {
+          this.loaderService.hide();
+          context.completeWith(true);
         }),
-        tap((ids: number[]) => {
-          trainingModel.trainingExerciseIds = ids;
-          this.schedulerService.saveTraining(trainingModel)
-            .pipe(
-              take(1),
-              tap(() => {
-                this.loaderService.hide();
-                context.completeWith(true);
-              }),
-              tap(() => this.getTrainings()),
-              catchError((err: HttpErrorResponse) => {
-                this.loaderService.hide();
-                context.completeWith(true);
-                return of();
-              })
-            )
-            .subscribe();
+        tap(() => this.getTrainings()),
+        catchError((err: HttpErrorResponse) => {
+          this.loaderService.hide();
+          context.completeWith(true);
+          return of();
         })
       )
       .subscribe();
@@ -219,14 +226,27 @@ export class SchedulerConfigService {
     trainingModel: any,
     trainingExercises: ITrainingExercise[],
     context: TuiDialogContext<boolean, ITrainingDialog>): void {
+
     this.loaderService.show();
 
-    if (!!trainingExercises.length) {
-      forkJoin([trainingExercises.map(exercise => {
-        this.schedulerService.updateExercise(exercise);
-      })]).pipe(
-        // take(1),
-        tap(() => this.schedulerService.updateTraining(trainingModel).subscribe()),
+    const newExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id == null);
+    const existingExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id != null);
+
+    this.schedulerService.saveExercises(newExercises)
+      .pipe(
+        take(1),
+        tap(() => {
+          if (existingExercises?.length) {
+            forkJoin(existingExercises.map(item => {
+              return this.schedulerService.updateExercises(item);
+            }))
+              .pipe(take(1)).subscribe();
+          }
+        }),
+        tap(() => {
+          this.schedulerService.updateTraining(trainingModel).pipe(take(1)).subscribe();
+        }),
+        tap(() => this.getTrainings()),
         tap(() => {
           this.loaderService.hide();
           context.completeWith(true);
@@ -237,16 +257,5 @@ export class SchedulerConfigService {
           return of();
         })
       ).subscribe();
-    } else {
-      this.schedulerService.updateTraining(trainingModel)
-        .pipe(
-          take(1),
-          tap(() => {
-            this.loaderService.hide();
-            context.completeWith(true);
-          })
-        )
-        .subscribe();
-    }
   }
 }
