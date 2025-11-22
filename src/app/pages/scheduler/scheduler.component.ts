@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { TuiDay } from '@taiga-ui/cdk';
-import { catchError, combineLatest, distinctUntilChanged, filter, of, shareReplay, Subject, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, shareReplay, Subject, takeUntil, tap } from 'rxjs';
 import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
@@ -14,7 +14,7 @@ import { ITraining } from './../../interfaces/training';
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchedulerComponent implements OnInit {
   public selectedDay: TuiDay | null = TuiDay.fromLocalNativeDate(new Date(Date.now()));
@@ -30,7 +30,8 @@ export class SchedulerComponent implements OnInit {
     private readonly loaderService: LoaderService,
     private readonly store: Store,
     private cd: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this._schedulerConfigService.getTrainings();
@@ -59,20 +60,18 @@ export class SchedulerComponent implements OnInit {
           this.clients = clients;
           this.plannedTrainings = trainings;
 
-          if (this.clients?.length) {
-            this.plannedTrainings.forEach((training) => {
-              // we need to find client with given guid and set fullname for him
-              const guid = training.clientGUID;
-              const clientWithCurrentGUID = this.clients.find((client) => client.guid === guid);
+          this.plannedTrainings.forEach((training) => {
+            // we need to find client with given guid and set fullname for him
+            const guid = training.clientGUID;
+            const clientWithCurrentGUID = this.clients.find((client) => client.guid === guid);
 
-              if (!clientWithCurrentGUID) {
-                console.warn(`Клиент с GUID ${guid} не найден`);
-                return;
-              }
+            if (!clientWithCurrentGUID) {
+              console.warn(`Клиент с GUID ${guid} не найден`);
+              return;
+            }
 
-              training.clientFullName = clientWithCurrentGUID.fullName;
-            });
-          }
+            training.clientFullName = clientWithCurrentGUID.fullName;
+          });
 
           this.filteredTrainingsByDay = this._schedulerConfigService.getSameDayTrainings(
             trainings,
