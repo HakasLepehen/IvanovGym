@@ -1,18 +1,19 @@
-import { LoaderService } from './../loader/loader.service';
-import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { catchError, forkJoin, map, of, Subject, take, takeUntil, tap } from 'rxjs';
-import { TrainingComponent } from '../training/training.component';
-import { TuiDay, TuiTime } from '@taiga-ui/cdk';
-import { SchedulerService } from './scheduler.service';
-import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ITraining } from 'src/app/interfaces/training';
+import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { TuiDay, TuiTime } from '@taiga-ui/cdk';
+import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import { catchError, concatMap, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
+import { ITraining } from 'src/app/interfaces/training';
+
+import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
 import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
+import { TrainingComponent } from '../training/training.component';
+import { LoaderService } from './../loader/loader.service';
+import { SchedulerService } from './scheduler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -226,21 +227,25 @@ export class SchedulerConfigService {
     const newExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id == null);
     const existingExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id != null);
 
+    // Шаг 1: Сохраняем новые упражнения
     this.schedulerService.saveExercises(newExercises)
       .pipe(
         take(1),
-        tap(() => {
+        // Шаг 2: Обновляем существующие упражнения (если есть) - параллельно через forkJoin
+        concatMap(() => {
           if (existingExercises?.length) {
-            forkJoin(existingExercises.map(item => {
-              return this.schedulerService.updateExercises(item);
-            }))
-              .pipe(take(1)).subscribe();
+            return forkJoin(
+              existingExercises.map(item => this.schedulerService.updateExercises(item))
+            );
           }
+          return of(null);
         }),
-        tap(() => {
-          this.schedulerService.updateTraining(trainingModel).pipe(take(1)).subscribe();
-        }),
+        // Шаг 3: Обновляем тренировку
+        switchMap(() => this.schedulerService.updateTraining(trainingModel)),
+        take(1),
+        // Шаг 4: Обновляем список тренировок
         tap(() => this.getTrainings()),
+        // Шаг 5: Завершаем операцию
         tap(() => {
           this.loaderService.hide();
           context.completeWith(true);
@@ -248,8 +253,10 @@ export class SchedulerConfigService {
         catchError((err: HttpErrorResponse) => {
           this.loaderService.hide();
           context.completeWith(true);
-          return of();
+          console.error('Ошибка при обновлении тренировки:', err);
+          return of(null);
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
 }
