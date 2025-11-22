@@ -81,6 +81,7 @@ export class SchedulerConfigService {
             id: exercise.id,
             training_id: exercise.training_id,
             exec_var_id: exercise.exercise.id,
+            set_count: exercise.set_count,
             execution_number: exercise.execution_number,
             payload_weight: exercise.payload_weight,
             comment: exercise.comment
@@ -90,6 +91,7 @@ export class SchedulerConfigService {
             id: undefined,
             training_id: exercise.training_id,
             exec_var_id: exercise.exercise.id,
+            set_count: exercise.set_count,
             execution_number: exercise.execution_number,
             payload_weight: exercise.payload_weight,
             comment: exercise.comment
@@ -152,14 +154,6 @@ export class SchedulerConfigService {
       return;
     }
     form.controls['client'].setValue(selectedClient as IClient);
-    // form.controls['exercises'].setValue(model.trainingExerciseIds);
-    // (<FormArray>form.controls['exercises']).push(
-    //   new FormGroup({
-    //     name: new FormControl('', Validators.required),
-    //     url: new FormControl(''),
-    //     comment: new FormControl('')
-    //   })
-    // )
   }
 
   public getTrainingExercisesByTraining(id: number): any {
