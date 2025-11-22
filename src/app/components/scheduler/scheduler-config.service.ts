@@ -231,7 +231,7 @@ export class SchedulerConfigService {
     this.schedulerService.saveExercises(newExercises)
       .pipe(
         take(1),
-        // Шаг 2: Обновляем существующие упражнения (если есть) - параллельно через forkJoin
+        // Обновляем существующие упражнения (если есть) - параллельно через forkJoin
         concatMap(() => {
           if (existingExercises?.length) {
             return forkJoin(
