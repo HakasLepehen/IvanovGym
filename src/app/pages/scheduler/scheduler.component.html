@@ -7,7 +7,7 @@
   </div>
 </div>
 <div *ngIf="!isLoading; else loader" class="bottom-container">
-  <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay"
+  <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
     (onEditTraining)="onEditTraining($event)" (onRemoveTraining)="onRemoveTraining($event)" />
 </div>
 <ng-template #loader>

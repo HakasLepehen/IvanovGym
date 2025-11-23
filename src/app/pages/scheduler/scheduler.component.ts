@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { select, Store } from '@ngrx/store';
 import { TuiDay } from '@taiga-ui/cdk';
 import { combineLatest, distinctUntilChanged, filter, shareReplay, Subject, takeUntil, tap } from 'rxjs';
-import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
 
-import { IClient } from './../../interfaces/client';
-import { ITraining } from './../../interfaces/training';
+import { IClient } from '../../interfaces/client';
+import { ITraining } from '../../interfaces/training';
 
 @Component({
   selector: 'app-scheduler',
@@ -26,11 +25,11 @@ export class SchedulerComponent implements OnInit {
 
   constructor(
     private _schedulerConfigService: SchedulerConfigService,
-    private _clientsConfigService: ClientsConfigService,
     private readonly loaderService: LoaderService,
     private readonly store: Store,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._schedulerConfigService.getTrainings();

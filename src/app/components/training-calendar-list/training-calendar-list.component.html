@@ -1,17 +1,21 @@
 <div class='main_block'>
   <div class='main_block__content'>
     <div class='container'>
-      <ul class='content__list' *ngIf="plannedTrainings?.length; else emptyTrainingsList">
-        <li *ngFor="let training of plannedTrainings">
-          <div style="display: flex; gap: 20px;">
-            <span class="time_item">{{training.hour}}:{{training.minutes}}</span>
-            <span class="time_item">{{training.clientFullName}}</span>
-            <button tuiIconButton [size]="'m'" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
-              (click)='editTraining(training)'>
-            </button>
-            <button tuiIconButton [size]="'m'" appearance='accent' type='button' [iconStart]="'@tui.trash'"
-              (click)='removeTraining(training)'>
-            </button>
+      <ul class='content__list' *ngIf='plannedTrainings?.length; else emptyTrainingsList'>
+        <li *ngFor='let training of plannedTrainings'>
+          <div class='client_record'>
+            <div class='client_record__text_part'>
+              <span class='time_item'>{{ training.hour }}:{{ training.minutes | transformMinutes }}</span>
+              <span class='client_name_item'>{{ training.clientFullName }}</span>
+            </div>
+            <div class='client_record__buttons'>
+              <button tuiIconButton [size]="'m'" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
+                      (click)='editTraining(training)'>
+              </button>
+              <button tuiIconButton [size]="'m'" appearance='accent' type='button' [iconStart]="'@tui.trash'"
+                      (click)='removeTraining(training)'>
+              </button>
+            </div>
           </div>
         </li>
       </ul>

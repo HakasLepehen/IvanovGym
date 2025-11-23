@@ -14,12 +14,9 @@ import {
   TuiButton,
   TuiDataList,
   TuiDialogContext,
-  TuiError,
-  TuiScrollable,
   TuiScrollbar,
-  TuiTextfieldComponent
 } from '@taiga-ui/core';
-import { tuiCreateTimePeriods, TuiDataListWrapper, TuiFieldErrorPipe, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { IClient } from '../../interfaces/client';
 import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
@@ -27,12 +24,10 @@ import { Store } from '@ngrx/store';
 import { clientsSelector } from '../../store/selectors/client.selector';
 import { take } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
-import { TuiDay } from '@taiga-ui/cdk';
+import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { ITraining } from 'src/app/interfaces/training';
-import { TrainingExerciseListComponent } from '../training-exercise-list/training-exercise-list.component';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
-import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
 
 @Component({
   selector: 'app-training',
@@ -54,7 +49,7 @@ import { TrainingExerciseItemComponent } from '../training-exercise-item/trainin
   providers: [
     tuiItemsHandlersProvider({
       stringify: (client: IClient) => `${client.fullName}`
-    })
+    }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -66,7 +61,6 @@ export class TrainingComponent {
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
-  public trainingExercises: ITrainingExercise[] = [];
   @ViewChild('place', { read: ViewContainerRef }) placeContainer!: ViewContainerRef;
 
   constructor(
