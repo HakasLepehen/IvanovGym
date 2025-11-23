@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "IvanovGym:build:production"
+              "buildTarget": "IvanovGym:build:production"
             },
             "development": {
-              "browserTarget": "IvanovGym:build:development"
+              "buildTarget": "IvanovGym:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "IvanovGym:build"
+            "buildTarget": "IvanovGym:build"
           }
         },
         "test": {
