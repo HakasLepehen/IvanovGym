@@ -8,7 +8,7 @@ import { ITraining } from '../../interfaces/training';
 export class SortByTimePipe implements PipeTransform {
 
   transform(trainings: ITraining[], ...args: unknown[]): ITraining[] {
-    if (!trainings.length) {
+    if (!trainings?.length) {
       return [];
     }
     return trainings.sort((prev: ITraining, next: ITraining) => {
