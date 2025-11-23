@@ -12,6 +12,7 @@ export interface ITrainingExercise {
   training_id?: number | null,
   exec_var_id?: number,
   execution_number?: number,
+  set_count?: number,
   payload_weight?: Array<number>,
   comment?: string
 }

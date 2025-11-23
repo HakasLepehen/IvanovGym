@@ -123,7 +123,6 @@ export class TrainingComponent {
       isCreate: this.isPlanning
     };
 
-    console.log(this.trainingForm.value);
     this.scheduleConfigService.saveTraining(props, this.context);
   }
 
@@ -139,6 +138,7 @@ export class TrainingComponent {
         id: new FormControl(exercise?.id ?? null),
         training_id: new FormControl(this.editingTraining.id ?? null),
         exercise: new FormControl(exercise?.exec_var_id ?? null, Validators.required),
+        set_count: new FormControl(exercise?.set_count ?? 0, Validators.required),
         execution_number: new FormControl(exercise?.execution_number ?? 0, Validators.required),
         payload_weight: new FormControl(exercise?.payload_weight ?? 0, Validators.required),
         comment: new FormControl(exercise?.comment ?? ''),
