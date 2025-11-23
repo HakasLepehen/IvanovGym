@@ -30,8 +30,7 @@ export class SchedulerComponent implements OnInit {
     private readonly loaderService: LoaderService,
     private readonly store: Store,
     private cd: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._schedulerConfigService.getTrainings();
