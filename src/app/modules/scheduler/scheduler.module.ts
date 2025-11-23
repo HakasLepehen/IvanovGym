@@ -8,6 +8,8 @@ import { TrainingCalendarListComponent } from 'src/app/components/training-calen
 import { LoaderModule } from "../../components/loader/loader.module";
 import { SchedulerConfigService } from 'src/app/components/scheduler/scheduler-config.service';
 import { TrainingExerciseListComponent } from "src/app/components/training-exercise-list/training-exercise-list.component";
+import { SortByTimePipe } from '../../pipes/sort-by-time/sort-by-time.pipe';
+import { TransformMinutesPipe } from '../../pipes/transform-minutes/transform-minutes.pipe';
 
 @NgModule({
   declarations: [SchedulerComponent, TrainingCalendarListComponent],
@@ -15,7 +17,9 @@ import { TrainingExerciseListComponent } from "src/app/components/training-exerc
     CommonModule,
     SchedulerRoutingModule,
     TaigaModule,
-    LoaderModule
+    LoaderModule,
+    SortByTimePipe,
+    TransformMinutesPipe
   ],
   providers: [SchedulerConfigService]
 })

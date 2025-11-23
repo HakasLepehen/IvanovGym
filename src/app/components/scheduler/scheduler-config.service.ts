@@ -162,6 +162,9 @@ export class SchedulerConfigService {
       .loadTrainingExercises(id)
       .pipe(
         take(1),
+        map((exercises: ITrainingExercise[]) =>
+          [...exercises].sort((a, b) => (a.id || 0) - (b.id || 0))
+        ),
         tap((exercises: ITrainingExercise[]) => this.trainingExercises$.next(exercises))
       )
       .subscribe();

@@ -1,38 +1,21 @@
-import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, Inject, ViewChild, ViewContainerRef } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
-import {
-  TuiButton,
-  TuiDataList,
-  TuiDialogContext,
-  TuiError,
-  TuiScrollable,
-  TuiScrollbar,
-  TuiTextfieldComponent
-} from '@taiga-ui/core';
-import { tuiCreateTimePeriods, TuiDataListWrapper, TuiFieldErrorPipe, tuiItemsHandlersProvider } from '@taiga-ui/kit';
-import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { IClient } from '../../interfaces/client';
-import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
+import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { clientsSelector } from '../../store/selectors/client.selector';
+import { TuiDay } from '@taiga-ui/cdk';
+import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-ui/core';
+import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { take } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
-import { TuiDay } from '@taiga-ui/cdk';
-import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { ITraining } from 'src/app/interfaces/training';
-import { TrainingExerciseListComponent } from '../training-exercise-list/training-exercise-list.component';
+import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
+
+import { IClient } from '../../interfaces/client';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
-import { TrainingExerciseItemComponent } from '../training-exercise-item/training-exercise-item.component';
+import { clientsSelector } from '../../store/selectors/client.selector';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 
 @Component({
   selector: 'app-training',
@@ -47,7 +30,7 @@ import { TrainingExerciseItemComponent } from '../training-exercise-item/trainin
     TuiSelectModule,
     TuiDataList,
     TuiDataListWrapper,
-    TuiInputDateModule,
+    TuiInputDateModule
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -66,7 +49,6 @@ export class TrainingComponent {
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
-  public trainingExercises: ITrainingExercise[] = [];
   @ViewChild('place', { read: ViewContainerRef }) placeContainer!: ViewContainerRef;
 
   constructor(
@@ -131,7 +113,7 @@ export class TrainingComponent {
    * @param exercise
    */
   public addExercise(exercise?: ITrainingExercise): void {
-    this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises)
+    this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises);
 
     this.exercises.push(
       new FormGroup({
@@ -141,7 +123,7 @@ export class TrainingComponent {
         set_count: new FormControl(exercise?.set_count ?? '', Validators.required),
         execution_number: new FormControl(exercise?.execution_number ?? '', Validators.required),
         payload_weight: new FormControl(exercise?.payload_weight ?? '', Validators.required),
-        comment: new FormControl(exercise?.comment ?? ''),
+        comment: new FormControl(exercise?.comment ?? '')
       })
     );
   }
