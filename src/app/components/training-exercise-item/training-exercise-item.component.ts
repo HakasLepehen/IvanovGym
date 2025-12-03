@@ -21,6 +21,7 @@ import {
   tuiItemsHandlersProvider
 } from '@taiga-ui/kit';
 import { TuiLabel, TuiTextfieldComponent } from '@taiga-ui/core';
+import { BodyParts, BodyParts2 } from '../../enums/body_parts';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -46,6 +47,9 @@ import { TuiLabel, TuiTextfieldComponent } from '@taiga-ui/core';
     tuiItemsHandlersProvider({
       stringify: (item: IClientExercise) => item.exercise_fullname as string,
     }),
+    // tuiItemsHandlersProvider({
+    //   stringify: (item: IClientExercise) => item.name as string,
+    // }),
   ],
   viewProviders: [
     // {
@@ -62,6 +66,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   store = inject(Store);
   selectedExecVar: any;
   exForm!: FormGroup;
+  body_parts = BodyParts2;
 
   constructor(private fb: FormBuilder, private controlContainer: ControlContainer) {
     this.store
