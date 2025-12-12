@@ -8,7 +8,7 @@
 <!--    </tui-select>-->
     <tui-select formControlName='exercise' class='trainingForm__exercise'>
       Выберите упражнение
-      <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>
+      <tui-data-list-wrapper *tuiDataList [items]='exec_vars' [labels]="body_parts"></tui-data-list-wrapper>
     </tui-select>
     <button
       tuiIconButton
