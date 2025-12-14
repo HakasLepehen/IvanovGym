@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ivanov-gym-app
+    container_name: ivanov-gym
     # Проброс порта для прямого доступа (без reverse proxy)
     # Или используйте expose, если будете использовать nginx на хосте
     ports:
