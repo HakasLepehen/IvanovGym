@@ -5,16 +5,20 @@
 Подключитесь к вашему VPS по SSH и выполните:
 
 # Обновление системы
+
 sudo apt update && sudo apt upgrade -y
 
 # Установка Docker
+
 sudo apt install -y docker.io docker-compose-plugin
 
 # Запуск Docker
+
 sudo systemctl start docker
 sudo systemctl enable docker
 
 # Проверка установки
+
 docker --version
 docker compose version
 
@@ -142,6 +146,7 @@ docker compose up -d --build
 ## Важные замечания
 
 ⚠️ **Безопасность:**
+
 - Приложение работает по HTTP (без шифрования)
 - Данные передаются в открытом виде
 - Не рекомендуется для production с чувствительными данными
@@ -158,6 +163,7 @@ docker compose up -d --build
 5. **Настройте HTTPS** для безопасного доступа
 
 Подробные инструкции по настройке SSL см. в файле `DEPLOY-SSL.md` (если создадите его позже).
+
 ```
 
 Инструкция упрощена: только шаги без SSL. Docker-compose.yml уже настроен правильно (проброс порта 80).
@@ -176,3 +182,4 @@ docker compose up -d --build
 - Конфигурация reverse proxy
 
 Приложение будет доступно по `http://YOUR_VPS_IP` после выполнения этих шагов.
+```
