@@ -1,7 +1,9 @@
 FROM node:20.19.6-bookworm-slim AS builder
 WORKDIR /myfiles
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-RUN git clone https://github.com/HakasLepehen/IvanovGym . && npm ci && npm run build
+RUN git clone https://github.com/HakasLepehen/IvanovGym .
+RUN npm ci
+RUN npm run build
 
 
 FROM nginx:alpine
