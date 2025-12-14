@@ -1,3 +1,13 @@
+import { IIlient } frCl
+
+'../../interfaces/client';
+iipert { ITrainingExercise } from '../../interfaces/training_exercise';
+import { clientsSelector } from '../../store/selectors/client.selector';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { Commont } from '../../interfaces/client';
+import { ITrainingExercise } from '../../interfaces/training_exercise';
+import { clientsSelector } from '../../store/selectors/client.selector';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,19 +17,7 @@ import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-u
 import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { take } from 'rxjs';
-import { tap } from 'rxjs/internal/operators/tap';
-import { ITraining } from 'src/app/interfaces/training';
-import { ITrainingDialog } from 'src/app/interfaces/training_dialog';
-
-import { IClient } from '../../interfaces/client';
-import { ITrainingExercise } from '../../interfaces/training_exercise';
-import { clientsSelector } from '../../store/selectors/client.selector';
-import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
-
-@Component({
-  selector: 'app-training',
-  standalone: true,
+standalone: true,
   imports: [
     CommonModule,
     FormsModule,
