@@ -1,4 +1,4 @@
-FROM node:20.19.6-bookworm-slim as builder
+FROM node:20.19.6-bookworm-slim AS builder
 WORKDIR /app
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/HakasLepehen/IvanovGym . && npm ci && npm run build
