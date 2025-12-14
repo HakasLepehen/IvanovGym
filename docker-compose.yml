@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: ivanov-gym-app
+    # Проброс порта для прямого доступа (без reverse proxy)
+    # Или используйте expose, если будете использовать nginx на хосте
     ports:
       - '${PORT:-80}:80'
     restart: always
