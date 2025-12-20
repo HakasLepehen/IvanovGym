@@ -7,10 +7,10 @@ RUN git clone https://github.com/HakasLepehen/IvanovGym .
 RUN npm ci
 RUN npm run build
 
-chown -R 101: /usr/share/nginx/html
 FROM nginx:alpine
 
 COPY --from=builder /myfiles/dist/ivanov-gym /usr/share/nginx/html
+RUN chown -R 101: /usr/share/nginx/html
 
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 
