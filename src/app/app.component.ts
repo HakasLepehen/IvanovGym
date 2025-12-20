@@ -1,5 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, SimpleChanges, SkipSelf } from '@angular/core';
 import { LoaderService } from './components/loader/loader.service';
 import { Location } from '@angular/common';
 import { ClientsConfigService } from './components/clients/clients-config.service';
@@ -7,11 +7,13 @@ import { ExercisesConfigService } from './components/exercises-main/exercises-co
 import { tap } from 'rxjs/internal/operators/tap';
 import IClientExercise from './interfaces/client_exercise';
 import { clientExercisesSelector } from './store/selectors/client-exercises.selector';
+import { TUI_ICON_RESOLVER } from '@taiga-ui/core';
+import { TuiStringHandler } from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'IvanovGym';

@@ -14,7 +14,13 @@ import { map, of, take } from 'rxjs';
 import IClientExercise from '../../interfaces/client_exercise';
 import { TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiDataListDirective, TuiLabel, TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
+import {
+  TuiButton,
+  TuiDataListDirective,
+  TuiLabel,
+  TuiTextfield,
+  TuiTextfieldComponent
+} from '@taiga-ui/core';
 import { TuiDataListWrapperComponent, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { BodyParts } from '../../enums/body_parts';
 import { tap } from 'rxjs/internal/operators/tap';
@@ -27,7 +33,6 @@ import { tap } from 'rxjs/internal/operators/tap';
     FormsModule,
     ReactiveFormsModule,
     TuiComboBoxModule,
-    TuiDataListWrapperComponent,
     TuiTextfieldComponent,
     TuiLabel,
     TuiTextfield,
@@ -42,15 +47,6 @@ import { tap } from 'rxjs/internal/operators/tap';
     tuiItemsHandlersProvider({
       stringify: (item: IClientExercise) => item.exercise_fullname as string,
     }),
-    // tuiItemsHandlersProvider({
-    //   stringify: (item: IClientExercise) => item.name as string,
-    // }),
-  ],
-  viewProviders: [
-    // {
-    //   provide: ControlContainer,
-    //   useFactory: () => inject(ControlContainer, {skipSelf: true})
-    // }
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
