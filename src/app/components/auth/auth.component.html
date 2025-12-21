@@ -18,7 +18,10 @@
         </div>
 
         <div class='auth_form tui-form__row'>
-          <tui-input formControlName='password' class='password-input b-form'>Введите пароль</tui-input>
+          <tui-input formControlName='password' class='password-input b-form'>
+              Введите пароль
+              <input tuiTextfieldLegacy autocomplete='on' type='password' />
+            </tui-input>
           <tui-error formControlName='password' [error]='[] | tuiFieldError | async'></tui-error>
         </div>
       </div>
