@@ -19,7 +19,7 @@ export class AuthService {
   private tokenSubject: BehaviorSubject<string | null>;
   private token$: Observable<any | null>;
   private isLogin: boolean = false;
-  private authUrl = '/auth/v1';
+  private readonly authUrl = '/auth/v1';
   headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('apikey', ENV.supabaseKey);
@@ -38,25 +38,13 @@ export class AuthService {
       email: login,
       password: password
     }, this.options)
-    .pipe(
-      map((response: any) => {
+      .pipe(
+        map((response: any) => {
           localStorage.setItem('token', JSON.stringify(response.access_token));
           this.tokenSubject.next(response.access_token);
           return response.access_token
-      })
-    )
-  }
-
-  getUser(login: string | any, password: string | any) {
-    this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
-      email: login,
-      password: password
-    }, this.options)
-      .subscribe((response: any) => {
-        if (response) {
-          //TODO: тут необходимо хранить токен ЕСЛИ ПОТРЕБУЕТСЯ
-        }
-      });
+        })
+      )
   }
 
   signOut() {
