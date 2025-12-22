@@ -47,11 +47,8 @@ export class AuthService {
     )
   }
 
-  getUser(login: string | any, password: string | any) {
-    this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
-      email: login,
-      password: password
-    }, this.options)
+  getUser() {
+    this.http.get(ENV.supabaseUrl + this.authUrl + '/user')
       .subscribe((response: any) => {
         if (response) {
           //TODO: тут необходимо хранить токен ЕСЛИ ПОТРЕБУЕТСЯ

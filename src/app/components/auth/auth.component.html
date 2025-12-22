@@ -2,8 +2,7 @@
 
   <div class='auth_wrapper'>
     <div class='auth_title'>
-      <h2 *ngIf="location.path == 'login'">Войти</h2>
-      <h2 *ngIf="location.path == 'signup'">Зарегистрироваться</h2>
+      <h2>Войти</h2>
     </div>
 
     <form [formGroup]='loginForm' (ngSubmit)='onSubmit()' required>
@@ -25,22 +24,9 @@
           <tui-error formControlName='password' [error]='[] | tuiFieldError | async'></tui-error>
         </div>
       </div>
-      <div *ngIf="location.path == 'login'" class='button_block tui-col_12'>
-        <p>
-          Если у Вас нет аккаунта, вы можете
-          <a [routerLink]=goToPage>зарегистрироваться</a>
-        </p>
+      <div class='button_block tui-col_12'>
         <button tuiButton type='submit' size='m' [style.border-radius.px]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>
           Войти
-        </button>
-      </div>
-      <div *ngIf="location.path == 'signup'" class='button_block tui-col_12'>
-        <p>
-          Если Вы уже являетесь пользователем. Вы можете
-          <a [routerLink]=goToPage>авторизоваться</a>
-        </p>
-        <button tuiButton type='submit' size='m' [style.border-radius.px]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>
-          Зарегистрироваться
         </button>
       </div>
     </form>

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -17,28 +17,17 @@ export class AuthComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   });
   error: any = '';
-  location: any;
   public isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private readonly authService: AuthService,
     private store: Store,
-    private route: ActivatedRoute,
     private router: Router
   ) {
-    [this.location] = route.snapshot.url;
   }
 
   ngOnInit(): void {
-  }
-
-  get isLoginPage(): boolean {
-    return this.location.path == 'login';
-  }
-
-  get goToPage() {
-    return this.isLoginPage ? '/signup' : '/login';
   }
 
   onSubmit(): any {
@@ -47,26 +36,24 @@ export class AuthComponent implements OnInit {
     const password: string = this.loginForm.value.password as string;
 
     this.error = '';
-    if (this.isLoginPage) {
-      return this.authService.signIn(email, password)
-        .pipe(first())
-        .subscribe({
-          next: () => {
-            this.isLoading = false;
-            this.router.navigate(['']);
-          },
-          error: error => {
-            this.isLoading = false;
+    return this.authService.signIn(email, password)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.router.navigate(['']);
+        },
+        error: error => {
+          this.isLoading = false;
 
-            if (error.error.error === 'invalid_grant') {
-              this.error = 'Неверный логин или пароль';
-            } else {
-              this.error = 'Не удалось авторизоваться';
-            }
-            return;
+          if (error.error.error === 'invalid_grant') {
+            this.error = 'Неверный логин или пароль';
+          } else {
+            this.error = 'Не удалось авторизоваться';
           }
-        });
-    }
+          return;
+        }
+      });
   }
 
   get login() {

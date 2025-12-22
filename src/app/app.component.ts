@@ -9,6 +9,7 @@ import IClientExercise from './interfaces/client_exercise';
 import { clientExercisesSelector } from './store/selectors/client-exercises.selector';
 import { TUI_ICON_RESOLVER } from '@taiga-ui/core';
 import { TuiStringHandler } from '@taiga-ui/cdk';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     private location: Location,
     private _clientsConfigService: ClientsConfigService,
     private _exerciseConfigService: ExercisesConfigService,
+    private authService: AuthService,
     private store: Store
   ) {
   }
@@ -41,5 +43,9 @@ export class AppComponent implements OnInit {
         this._clientsConfigService.setLimitNamesForClients(exercises)
       })
     ).subscribe()
+  }
+
+  getUser(): void {
+    this.authService.getUser();
   }
 }

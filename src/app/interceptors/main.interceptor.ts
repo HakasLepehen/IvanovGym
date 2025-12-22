@@ -51,7 +51,7 @@ export class MainInterceptor implements HttpInterceptor {
         MainInterceptor.is401Handled = true;
         setTimeout(() => { MainInterceptor.is401Handled = false; }, 1000);
 
-        alert(error.error?.message ?? error.error?.msg);
+        alert('Необходимо авторизоваться заново');
         localStorage.removeItem('token');
         this._router.navigate(['login']);
         return EMPTY;

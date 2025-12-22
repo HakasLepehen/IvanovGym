@@ -4,19 +4,27 @@ import { clientsSelector } from '../../store/selectors/client.selector';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TuiDay } from '@taiga-ui/cdk';
 import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-ui/core';
 import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { take, tap } from 'rxjs';
+import { map, take, tap } from 'rxjs';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITraining } from '../../interfaces/training';
 
 @Component({
-standalone: true,
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -62,6 +70,7 @@ export class TrainingComponent {
     store.select(clientsSelector)
       .pipe(
         take(1),
+        map((clients: IClient[]): IClient[] => clients.filter(client => client.isActive)),
         tap(val => this.clients = val)
       ).subscribe();
   }

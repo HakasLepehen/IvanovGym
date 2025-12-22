@@ -1,10 +1,10 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TUI_DEFAULT_MATCHER, TuiContext, tuiIsNumber, TuiLet } from '@taiga-ui/cdk';
-import { TuiButton, TuiDialogContext, TuiDialogService, TuiError, TuiTextfield } from '@taiga-ui/core';
-import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe, TuiFieldErrorPipe, TuiInputNumber } from '@taiga-ui/kit';
-import { TuiInputModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { TUI_DEFAULT_MATCHER, TuiContext, tuiIsNumber } from '@taiga-ui/cdk';
+import { TuiDialogContext } from '@taiga-ui/core';
+import { TUI_VALIDATION_ERRORS, TuiCheckbox, TuiInputNumber } from '@taiga-ui/kit';
+import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
@@ -13,7 +13,7 @@ import IClientExercise from 'src/app/interfaces/client_exercise';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 import { IClient } from '../../interfaces/client';
 import IClientDialog from '../../interfaces/client-dialog';
-import { ClientsConfigService } from './../clients/clients-config.service';
+import { ClientsConfigService } from '../clients/clients-config.service';
 
 @Component({
   selector: 'app-client-operations',
@@ -24,6 +24,7 @@ import { ClientsConfigService } from './../clients/clients-config.service';
     ReactiveFormsModule,
     AsyncPipe,
     TuiInputNumber,
+    TuiCheckbox,
     TuiTextfieldControllerModule
   ],
   providers: [
@@ -70,6 +71,7 @@ export class ClientOperationsComponent implements OnInit {
       food: new FormControl(this.client.food),
       pharma: new FormControl(this.client.pharma),
       activity: new FormControl(this.client.activity),
+      isActive: new FormControl(this.client.isActive),
     });
 
     this.limits_control = this.clientForm.get('limits') as FormControl;
