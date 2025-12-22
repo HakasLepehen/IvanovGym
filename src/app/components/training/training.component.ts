@@ -1,4 +1,10 @@
-import { IClient } from '../../interfaces/client';
+import { IIlient } frCl
+
+'../../interfaces/client';
+iipert { ITrainingExercise } from '../../interfaces/training_exercise';
+import { clientsSelector } from '../../store/selectors/client.selector';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { Commont } from '../../interfaces/client';
 import { ITrainingExercise } from '../../interfaces/training_exercise';
 import { clientsSelector } from '../../store/selectors/client.selector';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
@@ -11,11 +17,6 @@ import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-u
 import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { take, tap } from 'rxjs';
-import { ITrainingDialog } from '../../interfaces/training_dialog';
-import { ITraining } from '../../interfaces/training';
-
-@Component({
 standalone: true,
   imports: [
     CommonModule,
