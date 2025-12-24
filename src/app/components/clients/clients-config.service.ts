@@ -11,7 +11,7 @@ import { ClientOperationsComponent } from '../client-operations/client-operation
 import IClientExercise from 'src/app/interfaces/client_exercise';
 import { select, Store } from '@ngrx/store';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
-import { setClients } from 'src/app/store/actions/client.action';
+import { setClients, updateClient } from 'src/app/store/actions/client.action';
 import { IExercise } from 'src/app/interfaces/exercise';
 
 interface ClientProps {
@@ -147,6 +147,7 @@ export class ClientsConfigService {
     this.cs
       .editClient(model)
       .pipe(
+        tap(() => this.store.dispatch(updateClient({client: model})),),
         tap(() => this.closeModal(context)),
         catchError((err: HttpErrorResponse) => {
           return this.handleError(err.message);

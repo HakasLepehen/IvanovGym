@@ -4,16 +4,25 @@ import { clientsSelector } from '../../store/selectors/client.selector';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { TuiDay } from '@taiga-ui/cdk';
+import { tuiAutoFocusOptionsProvider, TuiDay } from '@taiga-ui/cdk';
 import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-ui/core';
-import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { TuiButtonLoading, tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { take, tap } from 'rxjs';
+import { BehaviorSubject, map, take, tap } from 'rxjs';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITraining } from '../../interfaces/training';
+import { LoaderService } from '../loader/loader.service';
 
 @Component({
   standalone: true,
@@ -27,14 +36,16 @@ import { ITraining } from '../../interfaces/training';
     TuiSelectModule,
     TuiDataList,
     TuiDataListWrapper,
-    TuiInputDateModule
+    TuiInputDateModule,
+    TuiButtonLoading
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
   providers: [
     tuiItemsHandlersProvider({
       stringify: (client: IClient) => `${client.fullName}`
-    })
+    }),
+    tuiAutoFocusOptionsProvider({preventScroll: true})
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -43,6 +54,7 @@ export class TrainingComponent {
   public isPlanning: boolean = false;
   private selectedDay!: TuiDay;
   public trainingForm!: FormGroup;
+  public isLoading$: BehaviorSubject<boolean>;
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
@@ -53,15 +65,18 @@ export class TrainingComponent {
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
     private scheduleConfigService: SchedulerConfigService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loaderService: LoaderService,
   ) {
     if (!!context?.data?.training) this.editingTraining = context.data.training;
+    this.isLoading$ = loaderService.getLoading();
 
     this.isPlanning = context?.data?.isPlanning;
     this.selectedDay = context?.data?.selectedDay;
     store.select(clientsSelector)
       .pipe(
         take(1),
+        map((clients: IClient[]): IClient[] => clients.filter(client => client.isActive)),
         tap(val => this.clients = val)
       ).subscribe();
   }

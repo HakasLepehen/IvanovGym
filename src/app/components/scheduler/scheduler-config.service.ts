@@ -45,9 +45,9 @@ export class SchedulerConfigService {
           selectedDay: selectedDay,
           training: training
         },
+        size: 'fullscreen',
         closeable: true,
         dismissible: false,
-        size: !!training ? 'fullscreen' : 'm'
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
@@ -183,6 +183,7 @@ export class SchedulerConfigService {
     trainingExerciseComponentRef.instance.messageSent.subscribe(
       ({ id, index }: { id: number | string; index: number }): void => {
         // if we haven't id - we are not saved this exercise
+        this.loaderService.show();
         if (!id) {
           exercises.removeAt(index);
         } else {
@@ -190,6 +191,7 @@ export class SchedulerConfigService {
             .pipe(
               take(1),
               tap(() => {
+                this.loaderService.hide();
                 this.getTrainings();
               })
             ).subscribe();
@@ -207,7 +209,6 @@ export class SchedulerConfigService {
       .pipe(
         take(1),
         tap(() => {
-          this.loaderService.hide();
           context.completeWith(true);
         }),
         tap(() => this.getTrainings()),
@@ -224,8 +225,6 @@ export class SchedulerConfigService {
     trainingModel: any,
     trainingExercises: ITrainingExercise[],
     context: TuiDialogContext<boolean, ITrainingDialog>): void {
-
-    this.loaderService.show();
 
     const newExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id == null);
     const existingExercises: ITrainingExercise[] = trainingExercises.filter((training: ITrainingExercise) => training.id != null);

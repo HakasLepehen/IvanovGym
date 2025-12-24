@@ -4,7 +4,7 @@
       <h3 class='tui-text_h4'>Список клиентов</h3>
     </div>
     <div class='main_block__content'>
-      <tui-accordion class='' *ngIf="clients; else empty">
+      <tui-accordion *ngIf="clients; else empty">
         <tui-accordion-item *ngFor='let client of clients' size='m'>
           {{client.fullName}}
           <ng-template tuiAccordionItemContent>
@@ -56,7 +56,7 @@
               </li>
               <li>
                 <span class='content__label'>Действующий?</span>
-                <p class='content__text'>{{client.isActive}}</p>
+                <p class='content__text'>{{client.isActive | boolToString}}</p>
                 <hr>
               </li>
             </ul>

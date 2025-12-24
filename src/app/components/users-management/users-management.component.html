@@ -1,1 +1,42 @@
-<p>Здесь планируется управление доступами пользователями, которые будут связаны с сущностью клиентов</p>
+<div class='container'>
+
+  <div class='auth_wrapper'>
+<!--    <div class='auth_title'>-->
+<!--      <h2 *ngIf="location.path == 'login'">Войти</h2>-->
+<!--      <h2 *ngIf="location.path == 'signup'">Зарегистрироваться</h2>-->
+<!--    </div>-->
+
+    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()' required>
+      <div class='tui-col_12'>
+        <div class='auth_form tui-form__row'>
+          <tui-input formControlName='login'>
+            Введите e-mail
+            <!-- <input tuiTextfield role='presentation' type='email' autocomplete='on' /> -->
+            <input tuiTextfieldLegacy autocomplete="email" translate="no" type="email" class='login-input'/>
+          </tui-input>
+          <tui-error formControlName='login' [error]='[] | tuiFieldError | async'></tui-error>
+        </div>
+
+        <div class='auth_form tui-form__row'>
+          <tui-input formControlName='password' class='password-input b-form'>Введите пароль</tui-input>
+          <tui-error formControlName='password' [error]='[] | tuiFieldError | async'></tui-error>
+        </div>
+      </div>
+        <button tuiButton type='submit' size='m' [style.border-radius.px]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>
+          Войти
+        </button>
+<!--      <div *ngIf="location.path == 'signup'" class='button_block tui-col_12'>-->
+<!--        <p>-->
+<!--          Если Вы уже являетесь пользователем. Вы можете-->
+<!--          <a [routerLink]=goToPage>авторизоваться</a>-->
+<!--        </p>-->
+<!--        <button tuiButton type='submit' size='m' [style.border-radius.px]="100" [loading]='isLoading' [disabled]='!loginForm.valid'>-->
+<!--          Зарегистрироваться-->
+<!--        </button>-->
+<!--      </div>-->
+    </form>
+    <div *ngIf='loginForm.valid' class='tui-col_12 tui-form__row'>
+      {{error}}
+    </div>
+  </div>
+</div>

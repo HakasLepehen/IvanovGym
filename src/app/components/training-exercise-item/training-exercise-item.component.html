@@ -1,23 +1,25 @@
 <form [formGroup]='exForm'>
 
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <div class='tui-form__row' style="display: flex;">
-<!--    <tui-select formControlName='exercise' class='trainingForm__exercise'>-->
-<!--      Выберите упражнение-->
-<!--      <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>-->
-<!--    </tui-select>-->
+  <div class='tui-form__row' style='display: flex;'>
+    <!--    <tui-select formControlName='exercise' class='trainingForm__exercise'>-->
+    <!--      Выберите упражнение-->
+    <!--      <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>-->
+    <!--    </tui-select>-->
     <tui-select formControlName='exercise' class='trainingForm__exercise'>
       Выберите упражнение
-      <tui-data-list-wrapper *tuiDataList [items]='exec_vars' [labels]="body_parts"></tui-data-list-wrapper>
+      <tui-data-list-wrapper *tuiDataList [items]='exec_vars' [labels]='body_parts'></tui-data-list-wrapper>
     </tui-select>
     <button
       tuiIconButton
       size='l'
-      appearance="accent"
-      tuiAppearanceMode="checked"
-      iconStart="trash"
+      appearance='accent'
+      tuiAppearanceMode='checked'
+      iconStart='trash'
       type='button'
-            (click)='removeExercise()'>
+      [loading]='isLoading$ | async'
+      [disabled]='isLoading$ | async'
+      (click)='removeExercise()'>
     </button>
   </div>
 
