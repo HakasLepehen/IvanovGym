@@ -14,7 +14,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { TuiDay } from '@taiga-ui/cdk';
+import { tuiAutoFocusOptionsProvider, TuiDay } from '@taiga-ui/cdk';
 import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-ui/core';
 import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
@@ -42,7 +42,8 @@ import { ITraining } from '../../interfaces/training';
   providers: [
     tuiItemsHandlersProvider({
       stringify: (client: IClient) => `${client.fullName}`
-    })
+    }),
+    tuiAutoFocusOptionsProvider({preventScroll: true})
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -45,9 +45,9 @@ export class SchedulerConfigService {
           selectedDay: selectedDay,
           training: training
         },
+        size: 'fullscreen',
         closeable: true,
         dismissible: false,
-        size: !!training ? 'fullscreen' : 'm'
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe();

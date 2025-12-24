@@ -44,8 +44,4 @@ export class AppComponent implements OnInit {
       })
     ).subscribe()
   }
-
-  getUser(): void {
-    this.authService.getUser();
-  }
 }
