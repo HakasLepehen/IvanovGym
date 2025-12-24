@@ -16,12 +16,13 @@ import {
 import { Store } from '@ngrx/store';
 import { tuiAutoFocusOptionsProvider, TuiDay } from '@taiga-ui/cdk';
 import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-ui/core';
-import { tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { TuiButtonLoading, tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { map, take, tap } from 'rxjs';
+import { BehaviorSubject, map, take, tap } from 'rxjs';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITraining } from '../../interfaces/training';
+import { LoaderService } from '../loader/loader.service';
 
 @Component({
   standalone: true,
@@ -35,7 +36,8 @@ import { ITraining } from '../../interfaces/training';
     TuiSelectModule,
     TuiDataList,
     TuiDataListWrapper,
-    TuiInputDateModule
+    TuiInputDateModule,
+    TuiButtonLoading
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -52,6 +54,7 @@ export class TrainingComponent {
   public isPlanning: boolean = false;
   private selectedDay!: TuiDay;
   public trainingForm!: FormGroup;
+  public isLoading$: BehaviorSubject<boolean>;
   timeSlots = tuiCreateTimePeriods(11, 21);
   clients!: IClient[];
   public editingTraining!: ITraining;
@@ -62,9 +65,11 @@ export class TrainingComponent {
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
     private scheduleConfigService: SchedulerConfigService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loaderService: LoaderService,
   ) {
     if (!!context?.data?.training) this.editingTraining = context.data.training;
+    this.isLoading$ = loaderService.getLoading();
 
     this.isPlanning = context?.data?.isPlanning;
     this.selectedDay = context?.data?.selectedDay;

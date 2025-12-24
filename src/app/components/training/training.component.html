@@ -23,19 +23,26 @@
         <div *ngIf="!exercises.length;">
           <p style="text-align: center;">Упражнения не заданы</p>
         </div>
-        <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+        <button tuiButton size='m'
+                appearance="outline-grayscale"
+                tuiAppearanceMode="checked"
+                type='button'
                 (click)='addExercise()'>
           Добавить упражнение
         </button>
       </div>
     </ng-container>
-
-
   </tui-scrollbar>
 
   <div class="tui-form__row">
-    <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
-            [disabled]="!trainingForm.valid" (click)='onSubmit()'>
+    <button tuiButton
+            size='m'
+            appearance="outline-grayscale"
+            tuiAppearanceMode="checked"
+            type='button'
+            [disabled]="!trainingForm.valid || (isLoading$ | async)"
+            [loading]='isLoading$ | async'
+            (click)='onSubmit()'>
       Сохранить
     </button>
   </div>

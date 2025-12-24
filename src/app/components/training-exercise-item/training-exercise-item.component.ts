@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
-import { map, of, take } from 'rxjs';
+import { BehaviorSubject, map, of, take } from 'rxjs';
 import IClientExercise from '../../interfaces/client_exercise';
 import { TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,9 +21,11 @@ import {
   TuiTextfield,
   TuiTextfieldComponent
 } from '@taiga-ui/core';
-import { TuiDataListWrapperComponent, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { TuiButtonLoading, TuiDataListWrapperComponent, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { BodyParts } from '../../enums/body_parts';
 import { tap } from 'rxjs/internal/operators/tap';
+import { LoaderService } from '../loader/loader.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -40,6 +42,8 @@ import { tap } from 'rxjs/internal/operators/tap';
     TuiDataListDirective,
     TuiSelectModule,
     TuiButton,
+    TuiButtonLoading,
+    AsyncPipe
   ],
   standalone: true,
   providers: [
@@ -58,8 +62,14 @@ export class TrainingExerciseItemComponent implements OnChanges {
   selectedExecVar: any;
   exForm!: FormGroup;
   body_parts!: string[];
+  public isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private fb: FormBuilder, private controlContainer: ControlContainer) {
+  constructor(
+    private fb: FormBuilder,
+    private controlContainer: ControlContainer,
+    private loaderService: LoaderService,
+  ) {
+    this.isLoading$ = loaderService.getLoading();
     of(BodyParts)
       .pipe(
         take(1),
