@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ENV } from '../../../environment/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subscription, take, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 type User = {
   access_token: string;
@@ -33,6 +34,8 @@ export class AuthService {
     this.token$ = this.tokenSubject.asObservable();
   }
 
+
+
   signIn(login: string | any, password: string | any) {
     return this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
       email: login,
@@ -41,10 +44,26 @@ export class AuthService {
       .pipe(
         map((response: any) => {
           localStorage.setItem('token', JSON.stringify(response.access_token));
+          const jwt = jwtDecode(response.access_token);
+          const userRole = (<any>jwt).user_role;
           this.tokenSubject.next(response.access_token);
           return response.access_token
+        }),
+        catchError((err: HttpErrorResponse) => {
+            return of(err);
         })
       )
+  }
+
+  getUser(): Subscription {
+    return this.http.get(`${ENV.supabaseUrl}${this.authUrl}/user`)
+      .pipe(
+        take(1),
+        tap(res => {
+          console.log(res);
+          return res;
+        })
+      ).subscribe();
   }
 
   signOut() {

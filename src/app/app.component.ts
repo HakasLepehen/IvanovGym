@@ -10,6 +10,9 @@ import { clientExercisesSelector } from './store/selectors/client-exercises.sele
 import { TUI_ICON_RESOLVER } from '@taiga-ui/core';
 import { TuiStringHandler } from '@taiga-ui/cdk';
 import { AuthService } from './services/auth/auth.service';
+import { jwtDecode } from 'jwt-decode';
+import { Subscription } from 'rxjs';
+import { supabase } from './optionsSupaBase';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +26,7 @@ export class AppComponent implements OnInit {
   constructor(
     private location: Location,
     private _clientsConfigService: ClientsConfigService,
+    private _authService: AuthService,
     private _exerciseConfigService: ExercisesConfigService,
     private authService: AuthService,
     private store: Store
@@ -31,6 +35,10 @@ export class AppComponent implements OnInit {
 
   back() {
     this.location.back();
+  }
+
+  back1() {
+    this.authService.getUser();
   }
 
   ngOnInit() {
