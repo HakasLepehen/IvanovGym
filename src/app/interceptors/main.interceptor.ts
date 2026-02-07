@@ -58,10 +58,10 @@ export class MainInterceptor implements HttpInterceptor {
         return EMPTY;
       }
       if (error.status === 0) {
-        alert(`не удалось получить данные с сервера: ${error.message}`);
+        alert(`не удалось получить данные с сервера: ${error.error.message}`);
         return EMPTY;
       }
-      alert(`Не удалось выполнить запрос: ${error.message}`);
+      alert(`Не удалось выполнить запрос: ${error.error.message}`);
     }
     return throwError(() => error as any);
   }

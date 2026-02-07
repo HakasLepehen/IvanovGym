@@ -9,6 +9,7 @@ import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
 import { AddingExerciseComponent } from '../adding-exercise/adding-exercise.component';
 import { Store } from '@ngrx/store';
+import { ISelectBox } from '../../interfaces/selectbox';
 
 @Component({
   selector: 'app-exercises-list',
@@ -41,7 +42,7 @@ export class ExercisesListComponent {
             return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
           }
 
-          this.title = this.exerciseConfigService.bodyParts.filter(el => el.id == params['part'])[0].name;
+          this.title = (<any>this.exerciseConfigService.bodyParts.filter(el => el.id == params['part'])).name;
           this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
           return of();
         }),

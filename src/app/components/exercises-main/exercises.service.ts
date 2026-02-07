@@ -17,7 +17,6 @@ const options: any = {
 export class ExercisesService {
   private destroy$: Subject<boolean> = new Subject();
   private _exercisesAPIUrl: string = 'rest/v1/exercises';
-  private _execVarsAPIUrl: string = 'rest/v1/execution_variants';
   public onLoad: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _http: HttpClient) {
@@ -31,14 +30,14 @@ export class ExercisesService {
     return this._http.post(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, model, options)
   }
 
-  saveExecVar(model: IExecutionVariant): Observable<any> {
-    return this._http.post(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, options);
-  }
+  // saveExecVar(model: IExecutionVariant): Observable<any> {
+    // return this._http.post(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, options);
+  // }
 
   loadExercises(body_part: number) {
     let params = new HttpParams();
 
-    params = params.append('muscle_group', `cs.{${body_part}}`);
+    params = params.append('muscle_group', `eq.${body_part}`);
     params = params.append('select', `*`);
     options.params = params;
     options.headers.Range = '0-9'
@@ -47,17 +46,17 @@ export class ExercisesService {
     return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, options);
   }
 
-  loadExecVars(exerciseId: number): Observable<ArrayBuffer> {
-    let params = new HttpParams();
+  // loadExecVars(exerciseId: number): Observable<ArrayBuffer> {
+  //   let params = new HttpParams();
+  //
+  //   delete options?.params;
+  //   delete options.headers.Prefer;
+  //   params = params.set('exercise_id', `eq.${exerciseId}`);
+  //   params = params.set('select', `*`);
+  //   options.params = params;
 
-    delete options?.params;
-    delete options.headers.Prefer;
-    params = params.set('exercise_id', `eq.${exerciseId}`);
-    params = params.set('select', `*`);
-    options.params = params;
-
-    return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, options);
-  }
+    // return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, options);
+  // }
 
   updateExercise(model: IExercise): Observable<any> {
     options.headers.Prefer = 'return-minimal';
@@ -68,23 +67,23 @@ export class ExercisesService {
     });
   }
 
-  updateExecVar(model: IExecutionVariant): Observable<any> {
-    options.headers.Prefer = 'return-minimal';
+  // updateExecVar(model: IExecutionVariant): Observable<any> {
+    // options.headers.Prefer = 'return-minimal';
+    //
+    // return this._http.patch(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, {
+    //   headers: options.headers as any,
+    //   params: { id: `eq.${model.id}` },
+    // });
+  // }
 
-    return this._http.patch(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, model, {
-      headers: options.headers as any,
-      params: { id: `eq.${model.id}` },
-    });
-  }
-
-  removeExecVar(id: number) {
-    let params = new HttpParams();
-
-    delete options.headers.Prefer;
-    params = params.set('id', `eq.${id}`);
-
-    return this._http.delete(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, options)
-  }
+  // removeExecVar(id: number) {
+    // let params = new HttpParams();
+    //
+    // delete options.headers.Prefer;
+    // params = params.set('id', `eq.${id}`);
+    //
+    // return this._http.delete(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, options)
+  // }
 
   removeExercise(id: number): Observable<any> {
     let params = new HttpParams();
@@ -111,16 +110,16 @@ export class ExercisesService {
     });
   }
 
-  loadAllExecVars(): Observable<any> {
-    let params = new HttpParams();
-
-    params = params.append('select', `*`);
-    options.params = params;
-    delete options.headers.Prefer;
-
-    return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, {
-      headers: options.headers as any,
-      params: params
-    });
-  }
+  // loadAllExecVars(): Observable<any> {
+  //   let params = new HttpParams();
+  //
+  //   params = params.append('select', `*`);
+  //   options.params = params;
+  //   delete options.headers.Prefer;
+  //
+  //   return this._http.get(`${ENV.supabaseUrl}/${this._execVarsAPIUrl}`, {
+  //     headers: options.headers as any,
+  //     params: params
+  //   });
+  // }
 }

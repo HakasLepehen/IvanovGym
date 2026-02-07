@@ -147,7 +147,7 @@ export class ExercisesFormComponent {
   }
 
   removeVariant(num: number) {
-    this.exercisesConfigService.deleteExecutionVariant(this.exec_var.at(num).value.id);
+    // this.exercisesConfigService.deleteExecutionVariant(this.exec_var.at(num).value.id);
     this.exec_var.removeAt(num);
   }
 }

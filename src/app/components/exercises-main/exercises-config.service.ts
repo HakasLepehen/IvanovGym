@@ -50,7 +50,7 @@ export class ExercisesConfigService {
               // сохраняем идентификатор поскольку изначально его не будет в модели
               execution_variant.exercise_id = id;
               // надо каким то образом сделать последовательное сохранение варианта выполнения. или оно того не стоит?
-              this.createExecutionVariant(execution_variant)
+              // this.createExecutionVariant(execution_variant)
             })
           }
         }),
@@ -66,10 +66,10 @@ export class ExercisesConfigService {
     if (model.exec_var?.length) {
       model.exec_var.map(exec_var => {
         if (exec_var?.id) {
-          this.editExecutionVariant(exec_var)
+          // this.editExecutionVariant(exec_var)
         } else {
           exec_var.exercise_id = model.id as number;
-          this.createExecutionVariant(exec_var);
+          // this.createExecutionVariant(exec_var);
         }
       })
     }
@@ -96,47 +96,47 @@ export class ExercisesConfigService {
     return of();
   }
 
-  createExecutionVariant(model: IExecutionVariant) {
-    this.loader.show();
-    this.exercisesService
-      .saveExecVar(model)
-      .pipe(
-        take(1),
-        tap(() => this.loader.hide()),
-        catchError((err: HttpErrorResponse) => {
-          return this.handleError(err.message);
-        })
-      ).subscribe();
-  }
+  // createExecutionVariant(model: IExecutionVariant) {
+  //   this.loader.show();
+  //   this.exercisesService
+  //     .saveExecVar(model)
+  //     .pipe(
+  //       take(1),
+  //       tap(() => this.loader.hide()),
+  //       catchError((err: HttpErrorResponse) => {
+  //         return this.handleError(err.message);
+  //       })
+  //     ).subscribe();
+  // }
 
-  editExecutionVariant(model: IExecutionVariant) {
-    this.exercisesService
-      .updateExecVar(model)
-      .pipe(
-        take(1),
-        catchError((err: HttpErrorResponse) => {
-          return this.handleError(err.message);
-        })
-      ).subscribe();
-  }
+  // editExecutionVariant(model: IExecutionVariant) {
+  //   this.exercisesService
+  //     .updateExecVar(model)
+  //     .pipe(
+  //       take(1),
+  //       catchError((err: HttpErrorResponse) => {
+  //         return this.handleError(err.message);
+  //       })
+  //     ).subscribe();
+  // }
 
-  deleteExecutionVariant(id: number) {
-    this.exercisesService
-      .removeExecVar(id)
-      .pipe(
-        take(1),
-        catchError((err: HttpErrorResponse) => {
-          return this.handleError(`${err.message}`);
-        })
-      ).subscribe();
-  }
+  // deleteExecutionVariant(id: number) {
+  //   this.exercisesService
+  //     .removeExecVar(id)
+  //     .pipe(
+  //       take(1),
+  //       catchError((err: HttpErrorResponse) => {
+  //         return this.handleError(`${err.message}`);
+  //       })
+  //     ).subscribe();
+  // }
 
   deleteExercise(model: IExercise): void {
     this.loader.show();
     if (model.exec_var?.length) {
-      model.exec_var.map(exec_var => {
-        this.deleteExecutionVariant(exec_var.id as number)
-      })
+      // model.exec_var.map(exec_var => {
+      //   this.deleteExecutionVariant(exec_var.id as number)
+      // })
     }
 
     this.exercisesService.removeExercise(model.id as number)
@@ -159,7 +159,7 @@ export class ExercisesConfigService {
           const result: IExercise[] = res as any;
 
           result.forEach(exercise => {
-            this.loadExecutionVariants(exercise);
+            // this.loadExecutionVariants(exercise);
           })
           this.setClientExercises(result);
           this.loader.hide();
@@ -167,17 +167,17 @@ export class ExercisesConfigService {
       ).subscribe()
   }
 
-  loadExecutionVariants(exercise: IExercise): void {
-    this.loader.show();
-
-    this.exercisesService.loadExecVars(<number>exercise.id)
-      .pipe(
-        take(1),
-        // в душе не чаю откуда такая конструкция. Предложил редактор для фикса ошибки [ts2352]
-        tap((res) => exercise.exec_var = res as unknown as Array<IExecutionVariant>
-        )
-      ).subscribe();
-  }
+  // loadExecutionVariants(exercise: IExercise): void {
+  //   this.loader.show();
+  //
+  //   this.exercisesService.loadExecVars(<number>exercise.id)
+  //     .pipe(
+  //       take(1),
+  //       // в душе не чаю откуда такая конструкция. Предложил редактор для фикса ошибки [ts2352]
+  //       tap((res) => exercise.exec_var = res as unknown as Array<IExecutionVariant>
+  //       )
+  //     ).subscribe();
+  // }
 
   get exercises(): Subject<IExercise[]> {
     return this.exercises$;
@@ -217,25 +217,25 @@ export class ExercisesConfigService {
 
   getExercisesForClient(): void {
     this.loader.show();
-    forkJoin([this.exercisesService.loadAllExercises(), this.exercisesService.loadAllExecVars()])
+    forkJoin([this.exercisesService.loadAllExercises()])
       .pipe(
         take(1),
-        map(([res1, res2]) => {
-          return (<any>res2).map((exec_var: IExecutionVariant) => {
-            const findEl: IExercise = (<any>res1).find((exercise: IExercise) => exercise.id === exec_var.exercise_id);
-            const clientExercise: IClientExercise = exec_var;
-
-            clientExercise.exercise_fullname = `${findEl.exercise_name} ${exec_var.name}`;
-            clientExercise.body_part_ids = findEl.muscle_group;
-
-            return clientExercise;
-          });
+        map(([res1]) => {
+          // return (<any>res2).map((exec_var: IExecutionVariant) => {
+          //   const findEl: IExercise = (<any>res1).find((exercise: IExercise) => exercise.id === exec_var.exercise_id);
+          //   const clientExercise: IClientExercise = exec_var;
+          //
+          //   clientExercise.exercise_fullname = `${findEl.exercise_name} ${exec_var.name}`;
+          //   clientExercise.body_part_ids = findEl.muscle_group;
+          //
+          //   return clientExercise;
+          // });
         }),
         tap(result => {
-          this.store.dispatch(setClientExercises({ clientExercises: result }))
-
-          this.clientExercises$.next(result);
-          this.loader.hide();
+          // this.store.dispatch(setClientExercises({ clientExercises: result }))
+          //
+          // this.clientExercises$.next(result);
+          // this.loader.hide();
         }),
       ).subscribe()
   }
