@@ -14,9 +14,9 @@ import { TuiStringHandler } from '@taiga-ui/cdk';
 export class AddingExerciseComponent {
   public expandedBlock: boolean = false;
   public model?: IExercise = {
-    exercise_name: '',
-    exec_var: [],
-    muscle_group: [],
+    name: '',
+    // exec_var: [],
+    muscle_group: undefined,
   }
 
   constructor(

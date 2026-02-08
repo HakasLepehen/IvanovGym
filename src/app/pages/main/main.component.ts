@@ -1,13 +1,6 @@
 import { LoaderService } from './../../components/loader/loader.service';
 import { IClient } from 'src/app/interfaces/client';
 import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { tap } from 'rxjs';
-import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
-import { ExercisesConfigService } from 'src/app/components/exercises-main/exercises-config.service';
-import IClientExercise from 'src/app/interfaces/client_exercise';
-import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
-// import { LoaderService } from 'src/app/components/loader/loader.service';
 
 type SectionType = {
   title: string;

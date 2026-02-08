@@ -8,7 +8,6 @@ import IClientDialog from 'src/app/interfaces/client-dialog';
 import { ClientsService } from 'src/app/components/clients/clients.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ClientOperationsComponent } from '../client-operations/client-operations.component';
-import IClientExercise from 'src/app/interfaces/client_exercise';
 import { select, Store } from '@ngrx/store';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
 import { setClients, updateClient } from 'src/app/store/actions/client.action';
@@ -17,7 +16,7 @@ import { IExercise } from 'src/app/interfaces/exercise';
 interface ClientProps {
   client: IClient | null,
   isEdit: boolean,
-  exercises: IClientExercise[]
+  exercises: IExercise[]
 }
 
 @Injectable({
@@ -176,7 +175,7 @@ export class ClientsConfigService {
    * Метод задает поле limitNames для каждого клиента
    * @param exercises - массив упражнений с полным наименованием
    */
-  setLimitNamesForClients(exercises: IClientExercise[]): void {
+  setLimitNamesForClients(exercises: IExercise[]): void {
     if (this.clients.length) {
       this.clients.forEach(client => {
         this.clients = this.clients.map((client: IClient) => {
@@ -184,7 +183,7 @@ export class ClientsConfigService {
           client.limits?.forEach(num => {
             let [comparedExercise] = exercises.filter(exercise => exercise.id === num);
 
-            (<any>client.limitsNames).push(comparedExercise.exercise_fullname as string);
+            (<any>client.limitsNames).push(comparedExercise.name as string);
           })
           return client;
         })

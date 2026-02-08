@@ -7,13 +7,11 @@ import { Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body_parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
-import { IExecutionVariant } from './../../interfaces/execution_variant';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
 import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { Store } from '@ngrx/store';
-import IClientExercise from 'src/app/interfaces/client_exercise';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +20,7 @@ export class ExercisesConfigService {
   private exercises$: Subject<IExercise[]> = new Subject();
   private savingId!: number;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  public clientExercises$: Subject<IClientExercise[]> = new Subject();
+  public clientExercises$: Subject<IExercise[]> = new Subject();
 
   constructor(
     private loader: LoaderService,
@@ -34,48 +32,48 @@ export class ExercisesConfigService {
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
   createExercise(model: IExercise, context: TuiDialogContext<boolean, IExerciseDialog>) {
-    this.exercisesService.saveExercise({ exercise_name: model.exercise_name, muscle_group: model.muscle_group })
-      .pipe(
-        take(1),
-        map(res => res[0].id),
-        tap(id => {
-          if (!id) {
-            return alert('Не удалось получить идентификатор упражнения при сохранении варианта выполнения. Обратитесь, пожалуйста, к разработчику');
-          }
-
-          if (model?.exec_var?.length) {
-            model.exec_var.forEach(execution_variant => {
-              // удаляем идентификатор, поскольку нам не даст сохранить supabase
-              delete execution_variant.id;
-              // сохраняем идентификатор поскольку изначально его не будет в модели
-              execution_variant.exercise_id = id;
-              // надо каким то образом сделать последовательное сохранение варианта выполнения. или оно того не стоит?
-              // this.createExecutionVariant(execution_variant)
-            })
-          }
-        }),
-        catchError((err: HttpErrorResponse) => {
-          return this.handleError(err.message);
-        }),
-      )
-      .subscribe()
+    // this.exercisesService.saveExercise({ exercise_name: model.exercise_name, muscle_group: model.muscle_group })
+    //   .pipe(
+    //     take(1),
+    //     map(res => res[0].id),
+    //     tap(id => {
+    //       if (!id) {
+    //         return alert('Не удалось получить идентификатор упражнения при сохранении варианта выполнения. Обратитесь, пожалуйста, к разработчику');
+    //       }
+    //
+    //       // if (model?.exec_var?.length) {
+    //       //   model.exec_var.forEach(execution_variant => {
+    //       //     // удаляем идентификатор, поскольку нам не даст сохранить supabase
+    //       //     delete execution_variant.id;
+    //       //     // сохраняем идентификатор поскольку изначально его не будет в модели
+    //       //     execution_variant.exercise_id = id;
+    //       //     // надо каким то образом сделать последовательное сохранение варианта выполнения. или оно того не стоит?
+    //       //     // this.createExecutionVariant(execution_variant)
+    //       //   })
+    //       // }
+    //     }),
+    //     catchError((err: HttpErrorResponse) => {
+    //       return this.handleError(err.message);
+    //     }),
+    //   )
+    //   .subscribe()
   }
 
   editExercise(model: IExercise, context: TuiDialogContext<boolean, IExerciseDialog>): void {
     this.loader.show();
-    if (model.exec_var?.length) {
-      model.exec_var.map(exec_var => {
-        if (exec_var?.id) {
-          // this.editExecutionVariant(exec_var)
-        } else {
-          exec_var.exercise_id = model.id as number;
-          // this.createExecutionVariant(exec_var);
-        }
-      })
-    }
+    // if (model.exec_var?.length) {
+    //   model.exec_var.map(exec_var => {
+    //     if (exec_var?.id) {
+    //       // this.editExecutionVariant(exec_var)
+    //     } else {
+    //       exec_var.exercise_id = model.id as number;
+    //       // this.createExecutionVariant(exec_var);
+    //     }
+    //   })
+    // }
 
     //remove field to save exercise
-    delete model.exec_var;
+    // delete model.exec_var;
 
     this.exercisesService.updateExercise(model)
       .pipe(
@@ -133,11 +131,11 @@ export class ExercisesConfigService {
 
   deleteExercise(model: IExercise): void {
     this.loader.show();
-    if (model.exec_var?.length) {
+    // if (model.exec_var?.length) {
       // model.exec_var.map(exec_var => {
       //   this.deleteExecutionVariant(exec_var.id as number)
       // })
-    }
+    // }
 
     this.exercisesService.removeExercise(model.id as number)
       .pipe(
@@ -158,9 +156,9 @@ export class ExercisesConfigService {
         tap((res) => {
           const result: IExercise[] = res as any;
 
-          result.forEach(exercise => {
+          // result.forEach(exercise => {
             // this.loadExecutionVariants(exercise);
-          })
+          // })
           this.setClientExercises(result);
           this.loader.hide();
         })

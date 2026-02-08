@@ -9,11 +9,11 @@ import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { map, startWith, switchMap } from 'rxjs/operators';
-import IClientExercise from 'src/app/interfaces/client_exercise';
 import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
 import { IClient } from '../../interfaces/client';
 import IClientDialog from '../../interfaces/client-dialog';
 import { ClientsConfigService } from '../clients/clients-config.service';
+import { IExercise } from '../../interfaces/exercise';
 
 @Component({
   selector: 'app-client-operations',
@@ -44,7 +44,7 @@ export class ClientOperationsComponent implements OnInit {
   public client!: IClient;
   private readonly search$ = new Subject<string>();
   public limits_control!: FormControl;
-  public readonly exercises$: BehaviorSubject<IClientExercise[]> = new BehaviorSubject<IClientExercise[]>([]);
+  public readonly exercises$: BehaviorSubject<IExercise[]> = new BehaviorSubject<IExercise[]>([]);
   private context = inject(POLYMORPHEUS_CONTEXT);
 
   clientForm!: FormGroup;
@@ -93,14 +93,14 @@ export class ClientOperationsComponent implements OnInit {
       startWith(null)
     );
 
-  stringify$: Observable<any> = this.exercises$.pipe(
-    map(items => new Map(items.map(({ id, exercise_fullname }) => [id, exercise_fullname]))),
-    startWith(new Map()),
-    map(
-      map => (id: TuiContext<number> | number) =>
-        (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
-    )
-  )
+  // stringify$: Observable<any> = this.exercises$.pipe(
+  //   map(items => new Map(items.map(({ id, exercise_fullname }) => [id, exercise_fullname]))),
+  //   startWith(new Map()),
+  //   map(
+  //     map => (id: TuiContext<number> | number) =>
+  //       (tuiIsNumber(id) ? map.get(id) : map.get(id.$implicit)) || 'Loading...',
+  //   )
+  // )
 
   onSearch(search: string | null): void {
     this.search$.next(search || '')

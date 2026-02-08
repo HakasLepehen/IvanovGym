@@ -10,52 +10,26 @@
   </div>
 
   <div class="tui-form__row">
-    <tui-multi-select *tuiLet="body_parts$ | async as body_parts" [editable]="true" [stringify]="(stringify$ | async)!"
-      [formControl]="body_parts_control" tuiTextfieldSize="m" [tuiTextfieldLabelOutside]="true"
-      (searchChange)="onSearch($event)">
+    <tui-select formControlName="muscle_group" class='trainingForm__exercise' size='s'>
       Выберите группу мышц
-      <span class="tui-required"></span>
-      <tui-data-list-wrapper *tuiDataList tuiMultiSelectGroup [items]="body_parts"
-        [itemContent]="(stringify$ | async)!">
-      </tui-data-list-wrapper>
-    </tui-multi-select>
-    <tui-error [formControl]="body_parts_control" [error]="[] | tuiFieldError | async"></tui-error>
+      <tui-data-list-wrapper *tuiDataList [items]="body_parts$ | async"></tui-data-list-wrapper>
+      <tui-error formControlName='muscle_group' [error]="[] | tuiFieldError | async"></tui-error>
+    </tui-select>
   </div>
-  <div formArrayName="exec_var">
-    <h4>Варианты выполнения</h4>
-    <div class="tui-form__row" *ngFor="let item of exec_var.controls; let i = index">
-      <div formGroupName="{{i}}">
-
-        <!-- НАИМЕНОВАНИЕ ВЫПОЛНЕНИЯ -->
-        <div class="tui-form__row">
-          <tui-input tuiTextfieldSize="m" formControlName="name" id="name-{{i}}">
-            Название
-            <input tuiTextfieldLegacy />
-            <span class="tui-required"></span>
-          </tui-input>
-          <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
-        </div>
-        <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
-        <div class="tui-form__row">
-          <tui-input tuiTextfieldSize="m" formControlName="url" id="url-{{i}}">
-            Ссылка на видео
-            <input tuiTextfieldLegacy />
-          </tui-input>
-        </div>
-        <!-- КОММЕНТАРИЙ -->
-        <div class="tui-form__row">
-          <tui-input tuiTextfieldSize="m" formControlName="comment" id="comment-{{i}}">
-            Комментарий
-            <input tuiTextfieldLegacy />
-          </tui-input>
-        </div>
-
-        <button tuiIconButton iconStart="@tui.trash" [size]="'m'" (click)="removeVariant(i)" type="button"> </button>
-
-      </div>
-    </div>
+  <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
+  <div class="tui-form__row">
+    <tui-input tuiTextfieldSize="m" formControlName="url">
+      Ссылка на видео
+      <input tuiTextfieldLegacy />
+    </tui-input>
+  </div>
+  <!-- КОММЕНТАРИЙ -->
+  <div class="tui-form__row">
+    <tui-input tuiTextfieldSize="m" formControlName="comment">
+      Комментарий
+      <input tuiTextfieldLegacy />
+    </tui-input>
   </div>
 </form>
-<button tuiButton [size]="'m'" (click)="addVariant($event)" type="button">Добавить вариант</button>
 
 <button tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>

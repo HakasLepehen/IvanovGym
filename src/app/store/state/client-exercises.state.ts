@@ -1,7 +1,7 @@
-import IClientExercise from 'src/app/interfaces/client_exercise';
+import { IExercise } from '../../interfaces/exercise';
 
 export interface IClientExercisesState {
-  clientExercises: IClientExercise[];
+  clientExercises: IExercise[];
 }
 
 export const initialClientExercisesState: IClientExercisesState = {

@@ -7,13 +7,11 @@ import { Subject, of, takeUntil, tap } from 'rxjs';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
-import { AddingExerciseComponent } from '../adding-exercise/adding-exercise.component';
 import { Store } from '@ngrx/store';
-import { ISelectBox } from '../../interfaces/selectbox';
 
 @Component({
   selector: 'app-exercises-list',
-  imports: [CommonModule, TuiAccordion, ExercisesFormModule, TuiButton, AddingExerciseComponent],
+  imports: [CommonModule, ExercisesFormModule, TuiButton],
   standalone: true,
   templateUrl: './exercises-list.component.html',
   styleUrls: ['./exercises-list.component.scss'],
@@ -42,7 +40,7 @@ export class ExercisesListComponent {
             return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
           }
 
-          this.title = (<any>this.exerciseConfigService.bodyParts.filter(el => el.id == params['part'])).name;
+          this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part'])).name;
           this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
           return of();
         }),

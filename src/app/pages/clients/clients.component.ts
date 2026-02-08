@@ -14,10 +14,10 @@ import { ClientsService } from '../../components/clients/clients.service';
 import { ClientsConfigService } from '../../components/clients/clients-config.service';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ExercisesConfigService } from '../../components/exercises-main/exercises-config.service';
-import IClientExercise from 'src/app/interfaces/client_exercise';
 import { clientsSelector } from 'src/app/store/selectors/client.selector';
 import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { IExercise } from '../../interfaces/exercise';
 
 @Component({
   selector: 'app-clients',
@@ -27,7 +27,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class ClientsComponent implements OnInit, OnDestroy {
   public clients: IClient[] = [];
-  private exercises: IClientExercise[] = [];
+  private exercises: IExercise[] = [];
   public isLoading: Signal<boolean>;
 
   constructor(

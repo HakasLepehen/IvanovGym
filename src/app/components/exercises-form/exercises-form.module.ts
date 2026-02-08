@@ -1,5 +1,5 @@
 import { TuiLet } from "@taiga-ui/cdk";
-import { TuiTextfieldControllerModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
+import { TuiTextfieldControllerModule, TuiMultiSelectModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -25,7 +25,7 @@ import { TaigaModule } from 'src/app/modules/taiga/taiga.module';
     TuiLet,
     TuiError,
     TuiFieldErrorPipe, TuiFieldErrorContentPipe,
-    AsyncPipe,
+    AsyncPipe, TuiSelectModule
   ]
 })
 export class ExercisesFormModule { }
