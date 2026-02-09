@@ -40,7 +40,6 @@ export class ExercisesService {
     params = params.append('muscle_group', `eq.${body_part}`);
     params = params.append('select', `*`);
     options.params = params;
-    options.headers.Range = '0-9'
     delete options.headers.Prefer;
 
     return this._http.get(`${ENV.supabaseUrl}/${this._exercisesAPIUrl}`, options);

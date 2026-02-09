@@ -1,18 +1,19 @@
 <form [formGroup]="exForm" (ngSubmit)="onSubmit()">
   <!-- Наименование упражнения -->
   <div class="tui-form__row">
-    <tui-input formControlName="exercise_name" tuiTextfieldSize="m">
+    <tui-input formControlName="name" tuiTextfieldSize="m">
       Наименование упражнения
       <input tuiTextfieldLegacy />
       <span class="tui-required"></span>
     </tui-input>
-    <tui-error formControlName="exercise_name" [error]="[] | tuiFieldError | async"></tui-error>
+    <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 
   <div class="tui-form__row">
-    <tui-select formControlName="muscle_group" class='trainingForm__exercise' size='s'>
+    <tui-select formControlName="muscle_group" class='trainingForm__exercise'>
       Выберите группу мышц
-      <tui-data-list-wrapper *tuiDataList [items]="body_parts$ | async"></tui-data-list-wrapper>
+      <span class="tui-required"></span>
+      <tui-data-list-wrapper *tuiDataList [items]="b_parts"></tui-data-list-wrapper>
       <tui-error formControlName='muscle_group' [error]="[] | tuiFieldError | async"></tui-error>
     </tui-select>
   </div>
@@ -32,4 +33,4 @@
   </div>
 </form>
 
-<button tuiButton [size]="'m'" (click)="onSubmit()" type="submit">Сохранить</button>
+<button tuiButton [size]="'m'" (click)="onSubmit()" [disabled]='exForm.invalid' type="submit">Сохранить</button>

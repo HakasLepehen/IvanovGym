@@ -18,14 +18,15 @@ import { BodyParts } from '../../../enums/body_parts';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     tuiItemsHandlersProvider({
-      stringify: (val: number | string) => {
+      stringify: (val: ISelectBox) => {
         // ну это пиздец вообще говно а не код. участвует как при указании выбранного значения,
         // так и при вызове списка элементов селекта
-        if (typeof val === 'string') {
-          return val;
-        }
-        const body_part: ISelectBox | undefined = BodyParts.find(part => val == part.id)
-        return body_part?.name ?? 'Часть тела не найдена'
+        // if (typeof val === 'string') {
+        //   return val;
+        // }
+        // const body_part: ISelectBox | undefined = BodyParts.find(part => val == part.id)
+        // return body_part?.name ?? 'Часть тела не найдена'
+        return val.name
       }
     }),
     {
@@ -59,7 +60,7 @@ export class ExercisesFormComponent {
 
     this.exForm = this.formBuilder.group({
       id: this.formBuilder.control(this.model?.id),
-      exercise_name: this.formBuilder.control(this.model?.name, [Validators.required]),
+      name: this.formBuilder.control(this.model?.name, [Validators.required]),
       muscle_group: this.formBuilder.control(this.model?.muscle_group, [Validators.required]),
       url: this.formBuilder.control(this.model?.url),
       comment: this.formBuilder.control(this.model?.comment),
@@ -69,29 +70,20 @@ export class ExercisesFormComponent {
   /**
    *  сделал по образу и подобию с версией Тинькофф
    **/
-  public readonly b_parts$ = of(this.exercisesConfigService.bodyParts);
-
-  public body_parts$ = this.search$
-    .pipe(
-      startWith(''),
-      switchMap(search =>
-        this.b_parts$.pipe(
-          map(items => {
-            return items
-              .filter(({ name }) => TUI_DEFAULT_MATCHER(name, search))
-              .map(({ id }) => items.find((item) => item.id === id)?.name);
-          }),
-        ),
-      ),
-      startWith(null)
-    );
+  public readonly b_parts = this.exercisesConfigService.bodyParts;
 
   public onSubmit(): void {
     if (this.exForm.valid) {
       if (!this.isEdit) {
-        this.exercisesConfigService.createExercise(this.exForm.value, this.context);
+        this.exercisesConfigService.createExercise(
+          {...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id},
+          this.context
+        );
       } else {
-        this.exercisesConfigService.editExercise(this.exForm.value, this.context)
+        this.exercisesConfigService.editExercise(
+          {...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id},
+          this.context
+        )
       }
       this.formSaved.emit();
       this.exForm.reset();

@@ -32,31 +32,15 @@ export class ExercisesConfigService {
 
   // тут руки тянутся в tap вызвать метод сохранения варианта выполнения
   createExercise(model: IExercise, context: TuiDialogContext<boolean, IExerciseDialog>) {
-    // this.exercisesService.saveExercise({ exercise_name: model.exercise_name, muscle_group: model.muscle_group })
-    //   .pipe(
-    //     take(1),
-    //     map(res => res[0].id),
-    //     tap(id => {
-    //       if (!id) {
-    //         return alert('Не удалось получить идентификатор упражнения при сохранении варианта выполнения. Обратитесь, пожалуйста, к разработчику');
-    //       }
-    //
-    //       // if (model?.exec_var?.length) {
-    //       //   model.exec_var.forEach(execution_variant => {
-    //       //     // удаляем идентификатор, поскольку нам не даст сохранить supabase
-    //       //     delete execution_variant.id;
-    //       //     // сохраняем идентификатор поскольку изначально его не будет в модели
-    //       //     execution_variant.exercise_id = id;
-    //       //     // надо каким то образом сделать последовательное сохранение варианта выполнения. или оно того не стоит?
-    //       //     // this.createExecutionVariant(execution_variant)
-    //       //   })
-    //       // }
-    //     }),
-    //     catchError((err: HttpErrorResponse) => {
-    //       return this.handleError(err.message);
-    //     }),
-    //   )
-    //   .subscribe()
+    this.exercisesService.saveExercise(model)
+      .pipe(
+        take(1),
+        tap((exercise) => exercise),
+        catchError((err: HttpErrorResponse) => {
+          return this.handleError(err.message);
+        }),
+      )
+      .subscribe()
   }
 
   editExercise(model: IExercise, context: TuiDialogContext<boolean, IExerciseDialog>): void {
@@ -156,9 +140,6 @@ export class ExercisesConfigService {
         tap((res) => {
           const result: IExercise[] = res as any;
 
-          // result.forEach(exercise => {
-            // this.loadExecutionVariants(exercise);
-          // })
           this.setClientExercises(result);
           this.loader.hide();
         })
