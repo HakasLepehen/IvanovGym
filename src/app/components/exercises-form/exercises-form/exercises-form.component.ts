@@ -18,15 +18,17 @@ import { BodyParts } from '../../../enums/body_parts';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     tuiItemsHandlersProvider({
-      stringify: (val: ISelectBox) => {
+      stringify: (val: ISelectBox | number) => {
+        
         // ну это пиздец вообще говно а не код. участвует как при указании выбранного значения,
         // так и при вызове списка элементов селекта
-        // if (typeof val === 'string') {
-        //   return val;
-        // }
+        if (typeof val === 'number') {
+          const body_part = BodyParts.find((part: ISelectBox) => part.id === val) as ISelectBox;
+          return body_part.name;
+        }
         // const body_part: ISelectBox | undefined = BodyParts.find(part => val == part.id)
         // return body_part?.name ?? 'Часть тела не найдена'
-        return val.name
+        return val.name as string
       }
     }),
     {

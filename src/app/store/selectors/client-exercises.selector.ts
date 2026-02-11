@@ -1,8 +1,8 @@
 import { createSelector, State } from "@ngrx/store";
-import { IClientExercisesState } from "../state/client-exercises.state";
+import { IExercisesState } from "../state/exercises.state";
 
 const selectClientExercisesState = (state: any) => state.clientExercisesState;
 
 export const clientExercisesSelector = createSelector(selectClientExercisesState,
-  (state: IClientExercisesState) => state.clientExercises
+  (state: IExercisesState) => state.exercises
 );

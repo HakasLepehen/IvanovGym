@@ -83,14 +83,12 @@ export class TrainingExerciseItemComponent implements OnChanges {
         take(1),
         map((exercises) => {
           const result: IExercise[][] = new Array(BodyParts.length);
-          // exercises.forEach((exercise: IExercise, index: number) => {
-          //   result[index] = [];
-          //   exercise.muscle_group?.forEach((id) => {
-          //     if (!result[id]) result[id] = [];
-          //
-          //     result[id].push(exercise);
-          //   });
-          // });
+          exercises.forEach((exercise: IExercise, index: number) => {
+            if (!result[exercise.muscle_group as number]) {
+              result[exercise.muscle_group as number] = [];
+            }
+            result[exercise.muscle_group as number].push(exercise)
+          });
           return result;
         })
       )

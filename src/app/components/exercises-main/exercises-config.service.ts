@@ -200,21 +200,9 @@ export class ExercisesConfigService {
       .pipe(
         take(1),
         map(([res1]) => {
-          // return (<any>res2).map((exec_var: IExecutionVariant) => {
-          //   const findEl: IExercise = (<any>res1).find((exercise: IExercise) => exercise.id === exec_var.exercise_id);
-          //   const clientExercise: IClientExercise = exec_var;
-          //
-          //   clientExercise.exercise_fullname = `${findEl.exercise_name} ${exec_var.name}`;
-          //   clientExercise.body_part_ids = findEl.muscle_group;
-          //
-          //   return clientExercise;
-          // });
-        }),
-        tap(result => {
-          // this.store.dispatch(setClientExercises({ clientExercises: result }))
-          //
-          // this.clientExercises$.next(result);
-          // this.loader.hide();
+          this.store.dispatch(setClientExercises({ clientExercises: res1 }))
+          this.clientExercises$.next(res1);
+          this.loader.hide();
         }),
       ).subscribe()
   }
