@@ -41,7 +41,7 @@ export class SchedulerConfigService {
       .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
         label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
         data: {
-          isPlanning: !!!training,
+          isPlanning: !training,
           selectedDay: selectedDay,
           training: training
         },
@@ -81,7 +81,7 @@ export class SchedulerConfigService {
           mappedExercises.push({
             id: exercise.id,
             training_id: exercise.training_id,
-            exec_var_id: exercise.exercise.id,
+            exercise_id: exercise.exercise.id,
             set_count: exercise.set_count,
             execution_number: exercise.execution_number,
             payload_weight: exercise.payload_weight,
@@ -91,7 +91,7 @@ export class SchedulerConfigService {
           mappedExercises.push({
             id: undefined,
             training_id: exercise.training_id,
-            exec_var_id: exercise.exercise.id,
+            exercise_id: exercise.exercise.id,
             set_count: exercise.set_count,
             execution_number: exercise.execution_number,
             payload_weight: exercise.payload_weight,

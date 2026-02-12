@@ -44,8 +44,6 @@ export class AuthService {
       .pipe(
         map((response: any) => {
           localStorage.setItem('token', JSON.stringify(response.access_token));
-          const jwt = jwtDecode(response.access_token);
-          const userRole = (<any>jwt).user_role;
           this.tokenSubject.next(response.access_token);
           return response.access_token
         }),
