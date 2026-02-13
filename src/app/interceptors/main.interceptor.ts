@@ -16,8 +16,10 @@ export class MainInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.token = this.readTokenFromStorage();
 
-    const jwt = jwtDecode(this.token);
-    const isAdmin = (<any>jwt).user_metadata.is_admin;
+    if (!!this.token) {
+      const jwt = jwtDecode(this.token);
+      const isAdmin = (<any>jwt).user_metadata.is_admin;
+    }
 
     const newReq: HttpRequest<any> = this.createAuthorizedRequest(req, this.token);
 

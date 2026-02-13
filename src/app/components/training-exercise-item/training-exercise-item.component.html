@@ -1,15 +1,21 @@
 <form [formGroup]='exForm'>
-
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <div class='tui-form__row' style='display: flex;'>
-    <!--    <tui-select formControlName='exercise' class='trainingForm__exercise'>-->
-    <!--      Выберите упражнение-->
-    <!--      <tui-data-list-wrapper *tuiDataList [items]='exec_vars'></tui-data-list-wrapper>-->
-    <!--    </tui-select>-->
-    <tui-select formControlName='exercise' class='trainingForm__exercise'>
-      Выберите упражнение
-      <tui-data-list-wrapper *tuiDataList [items]='exec_vars' [labels]='body_parts'></tui-data-list-wrapper>
-    </tui-select>
+  <div class='tui-form__row' style="display: flex;">
+    <tui-combo-box
+      formControlName="exercise"
+      style="flex-grow: 1;"
+    >
+      Выбранное упражнение
+      <input
+        placeholder="Введите текст и нажмите для выбора"
+        tuiTextfieldLegacy
+      />
+      <tui-data-list-wrapper
+        *tuiDataList
+        [itemContent]="stringify | tuiStringifyContent"
+        [items]="exercises | tuiFilterByInput"
+      />
+    </tui-combo-box>
     <button
       tuiIconButton
       size='l'
