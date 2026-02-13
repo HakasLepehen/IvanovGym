@@ -8,6 +8,10 @@ import { clientsSelector } from 'src/app/store/selectors/client.selector';
 
 import { IClient } from '../../interfaces/client';
 import { ITraining } from '../../interfaces/training';
+import { TuiMarkerHandler } from '@taiga-ui/core';
+import { ScheduleModeView } from '../../enums/schedule_mode_view';
+
+const ONE_DOT: [string] = ['var(--tui-status-positive)'];
 
 @Component({
   selector: 'app-scheduler',
@@ -21,7 +25,9 @@ export class SchedulerComponent implements OnInit {
   public isLoading!: boolean;
   private destroy$: Subject<boolean> = new Subject<boolean>();
   private clients!: IClient[];
+  public modeView: ScheduleModeView = ScheduleModeView.TRAININGS;
   public filteredTrainingsByDay!: ITraining[];
+  protected markerHandler!: TuiMarkerHandler;
 
   constructor(
     private _schedulerConfigService: SchedulerConfigService,
@@ -55,6 +61,7 @@ export class SchedulerComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap(([clients, trainings]) => {
+          const self = this;
           this.clients = clients;
           this.plannedTrainings = trainings;
 
@@ -75,6 +82,10 @@ export class SchedulerComponent implements OnInit {
             trainings,
             this.selectedDay as TuiDay
           );
+
+          this.markerHandler = (day: TuiDay) => {
+            return !!this._schedulerConfigService.getSameDayTrainings(trainings, day).length ?  ONE_DOT : [''];
+          };
           this.cd.detectChanges();
         })
       ).subscribe();
@@ -104,6 +115,10 @@ export class SchedulerComponent implements OnInit {
 
   public addTraining() {
     this._schedulerConfigService.openModal(this.selectedDay as TuiDay);
+  }
+
+  public filterByClient() {
+    this.modeView = ScheduleModeView.CLIENTS;
   }
 
   public onEditTraining(training: ITraining) {

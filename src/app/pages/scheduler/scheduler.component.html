@@ -1,15 +1,21 @@
-<div class="top-container">
-  <tui-calendar [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
+<div *ngIf="!isLoading;" class="top-container">
+  <tui-calendar [markerHandler]="markerHandler" [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
   <div class="container-buttons">
+    <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.filter'"
+            (click)='addTraining()'>
+    </button>
     <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.plus'"
-      (click)='addTraining()'>
+            (click)='filterByClient()'>
     </button>
   </div>
 </div>
-<div *ngIf="!isLoading; else loader" class="bottom-container">
-  <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
-    (onEditTraining)="onEditTraining($event)" (onRemoveTraining)="onRemoveTraining($event)" />
-</div>
+<ng-container *ngIf="!isLoading; else loader" class="bottom-container">
+  <div class="bottom-container">
+    <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
+                                (onEditTraining)="onEditTraining($event)"
+                                (onRemoveTraining)="onRemoveTraining($event)" />
+  </div>
+</ng-container>
 <ng-template #loader>
   <app-loader />
 </ng-template>
