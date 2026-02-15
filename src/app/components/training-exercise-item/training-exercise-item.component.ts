@@ -116,10 +116,12 @@ export class TrainingExerciseItemComponent implements OnChanges {
       if (el.id === this.exForm.get('exercise')?.value) {
         return el
       }
-      return el;
+      return null
     });
-    this.selectedExecVar = result;
-    this.exForm.get('exercise')?.setValue(this.selectedExecVar);
+    if (result) {
+      this.selectedExecVar = result;
+      this.exForm.get('exercise')?.setValue(this.selectedExecVar);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {}
