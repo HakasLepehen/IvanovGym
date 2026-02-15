@@ -77,6 +77,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   @Input({ required: true }) index!: number;
   @Output() messageSent = new EventEmitter<{ id: number | string; index: number }>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
+  version = 'test'
   store = inject(Store);
   selectedExecVar: any;
   exForm!: FormGroup;
