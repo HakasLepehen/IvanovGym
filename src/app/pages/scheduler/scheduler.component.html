@@ -2,10 +2,10 @@
   <tui-calendar [markerHandler]="markerHandler" [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
   <div class="container-buttons">
     <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.filter'"
-            (click)='addTraining()'>
+            (click)='filterByClient()'>
     </button>
     <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.plus'"
-            (click)='filterByClient()'>
+            (click)='addTraining()'>
     </button>
   </div>
 </div>
