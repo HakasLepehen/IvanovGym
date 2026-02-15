@@ -113,12 +113,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
     let exercisesFormArray: FormArray<any> = this.controlContainer.control?.get('exercises') as FormArray;
     this.exForm = exercisesFormArray.at(this.index) as FormGroup;
     // инициализация поля выбора упражнения через поиск
-    const result = this.exercises.find((el: IExercise) => {
-      if (el.id === this.exForm.get('exercise')?.value) {
-        return el
-      }
-      return this.exercises[0];
-    });
+    const result = this.exercises.find((el: IExercise) => el.id === this.exForm.get('exercise')?.value);
     if (result) {
       this.selectedExecVar = result;
       this.exForm.get('exercise')?.setValue(this.selectedExecVar);
