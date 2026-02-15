@@ -116,7 +116,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
       if (el.id === this.exForm.get('exercise')?.value) {
         return el
       }
-      return null
+      return this.exercises[0];
     });
     if (result) {
       this.selectedExecVar = result;
