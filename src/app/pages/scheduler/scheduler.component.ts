@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal, Signal, WritableSignal } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { TuiDay } from '@taiga-ui/cdk';
 import { combineLatest, distinctUntilChanged, filter, shareReplay, Subject, takeUntil, tap } from 'rxjs';
@@ -22,7 +22,7 @@ const ONE_DOT: [string] = ['var(--tui-status-positive)'];
 export class SchedulerComponent implements OnInit {
   public selectedDay: TuiDay | null = TuiDay.fromLocalNativeDate(new Date(Date.now()));
   public plannedTrainings!: ITraining[];
-  public isLoading!: boolean;
+  public isLoading: WritableSignal<boolean> = signal(false);
   private destroy$: Subject<boolean> = new Subject<boolean>();
   private clients!: IClient[];
   public modeView: ScheduleModeView = ScheduleModeView.TRAININGS;
@@ -93,10 +93,7 @@ export class SchedulerComponent implements OnInit {
     this.loaderService
       .getLoading()
       .pipe(
-        tap((val: boolean) => {
-          this.isLoading = val;
-          this.cd.detectChanges();
-        }),
+        tap((val: boolean) => this.isLoading.set(val)),
         takeUntil(this.destroy$)
       )
       .subscribe();

@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading;" class="top-container">
+<div *ngIf="!isLoading();" class="top-container">
   <tui-calendar [markerHandler]="markerHandler" [value]="selectedDay" (dayClick)="onDayClick($event)"></tui-calendar>
   <div class="container-buttons">
     <button tuiIconButton [size]="'m'" appearance='secondary' type='button' [iconStart]="'@tui.filter'"
@@ -9,7 +9,7 @@
     </button>
   </div>
 </div>
-<ng-container *ngIf="!isLoading; else loader" class="bottom-container">
+<ng-container *ngIf="!isLoading(); else loader" class="bottom-container">
   <div class="bottom-container">
     @if (modeView == 0) {
       <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
