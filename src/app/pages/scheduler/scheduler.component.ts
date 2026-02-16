@@ -84,7 +84,7 @@ export class SchedulerComponent implements OnInit {
           );
 
           this.markerHandler = (day: TuiDay) => {
-            return !!this._schedulerConfigService.getSameDayTrainings(trainings, day).length ?  ONE_DOT : [''];
+            return !!this._schedulerConfigService.getSameDayTrainings(trainings, day).length ? ONE_DOT : [''];
           };
           this.cd.detectChanges();
         })
@@ -118,7 +118,9 @@ export class SchedulerComponent implements OnInit {
   }
 
   public filterByClient() {
-    this.modeView = ScheduleModeView.CLIENTS;
+    this.modeView == ScheduleModeView.CLIENTS
+      ? this.modeView = ScheduleModeView.TRAININGS
+      : this.modeView = ScheduleModeView.CLIENTS;
   }
 
   public onEditTraining(training: ITraining) {
@@ -133,3 +135,5 @@ export class SchedulerComponent implements OnInit {
     this.destroy$.next(true);
   }
 }
+
+

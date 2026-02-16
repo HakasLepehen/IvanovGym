@@ -11,9 +11,12 @@
 </div>
 <ng-container *ngIf="!isLoading; else loader" class="bottom-container">
   <div class="bottom-container">
-    <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
-                                (onEditTraining)="onEditTraining($event)"
-                                (onRemoveTraining)="onRemoveTraining($event)" />
+    @if (modeView == 0) {
+      <app-training-calendar-list [selectedDay]="selectedDay" [plannedTrainings]="filteredTrainingsByDay | sortByTime"
+        (onEditTraining)="onEditTraining($event)" (onRemoveTraining)="onRemoveTraining($event)" />
+    } @else {
+      <h1>Hello world!</h1>
+    }
   </div>
 </ng-container>
 <ng-template #loader>
