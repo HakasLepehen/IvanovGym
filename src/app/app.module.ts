@@ -21,10 +21,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LoaderService } from './components/loader/loader.service';
 import { clientReducer } from './store/reducers/client.reducer';
 import { clientExercisesReducer } from './store/reducers/client-exercises.reducer';
+import { LoaderModule } from './components/loader/loader.module';
 
 
 @NgModule({
-  declarations: [AppComponent, MainComponent, NotFoundComponent, ChildComponent,],
+  declarations: [AppComponent, MainComponent, NotFoundComponent, ChildComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -39,6 +40,7 @@ import { clientExercisesReducer } from './store/reducers/client-exercises.reduce
     UserModule,
     AuthModule,
     TestModule,
+    LoaderModule
   ],
   providers: [
     {

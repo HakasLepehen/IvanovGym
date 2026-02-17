@@ -1,5 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { Component, inject, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit, signal, Signal, WritableSignal } from '@angular/core';
 import { Location } from '@angular/common';
 import { ClientsConfigService } from './components/clients/clients-config.service';
 import { ExercisesConfigService } from './components/exercises-main/exercises-config.service';
@@ -7,6 +7,9 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { clientExercisesSelector } from './store/selectors/client-exercises.selector';
 import { AuthService } from './services/auth/auth.service';
 import { IExercise } from './interfaces/exercise';
+import { LoaderService } from './components/loader/loader.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +19,7 @@ import { IExercise } from './interfaces/exercise';
 export class AppComponent implements OnInit {
   title = 'IvanovGym';
   apiLoaded: boolean = false;
+  isLoading!: Signal<boolean>;
 
   constructor(
     private location: Location,
@@ -23,8 +27,10 @@ export class AppComponent implements OnInit {
     private _authService: AuthService,
     private _exerciseConfigService: ExercisesConfigService,
     private authService: AuthService,
+    private loaderService: LoaderService,
     private store: Store
   ) {
+    this.isLoading = toSignal(this.loaderService.getLoading(), {initialValue: true})
   }
 
   back() {
@@ -36,14 +42,14 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._clientsConfigService.getClients();
-    this._exerciseConfigService.getExercisesForClient();
+    // this._clientsConfigService.getClients();
+    // this._exerciseConfigService.getExercisesForClient();
 
-    this.store.pipe(
-      select(clientExercisesSelector),
-      tap((exercises: IExercise[]) => {
-        this._clientsConfigService.setLimitNamesForClients(exercises)
-      })
-    ).subscribe()
+    // this.store.pipe(
+      // select(clientExercisesSelector),
+      // tap((exercises: IExercise[]) => {
+        // this._clientsConfigService.setLimitNamesForClients(exercises)
+      // })
+    // ).subscribe()
   }
 }

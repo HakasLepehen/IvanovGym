@@ -42,7 +42,7 @@ export class ClientsConfigService {
   }
 
   getClients(): void {
-    this.loader.show();
+    this.loader.show('Загружаю клиентов');
     this.cs.getClients()
       .pipe(
         tap((val) => {

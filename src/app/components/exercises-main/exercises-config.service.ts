@@ -132,7 +132,7 @@ export class ExercisesConfigService {
   }
 
   loadExercisesByBodypart(body_part: number): void {
-    this.loader.show();
+    this.loader.show(`Загружаю упражнения на: ${ BodyParts[body_part].name}`);
 
     this.exercisesService.loadExercises(body_part)
       .pipe(
@@ -140,7 +140,7 @@ export class ExercisesConfigService {
         tap((res) => {
           const result: IExercise[] = res as any;
 
-          this.setClientExercises(result);
+          this.setExercises(result);
           this.loader.hide();
         })
       ).subscribe()
@@ -162,7 +162,7 @@ export class ExercisesConfigService {
     return this.exercises$;
   }
 
-  setClientExercises(val: IExercise[]): void {
+  setExercises(val: IExercise[]): void {
     this.exercises$.next(val);
   }
 
@@ -195,7 +195,7 @@ export class ExercisesConfigService {
   }
 
   getExercisesForClient(): void {
-    this.loader.show();
+    this.loader.show('Загружаю информацию по упражнениям');
     forkJoin([this.exercisesService.loadAllExercises()])
       .pipe(
         take(1),

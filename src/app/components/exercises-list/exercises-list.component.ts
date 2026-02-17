@@ -42,13 +42,14 @@ export class ExercisesListComponent {
 
           this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part'])).name;
           this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
-          return of();
+          // return of();
         }),
-        tap(() => {
-          this.store.select('exercise').subscribe(() => {
-            this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId)
-          })
-        }),
+        // не пойму зачем я это делал
+        // tap(() => {
+        //   this.store.select('exercises').subscribe((val) => {
+        //     this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId)
+        //   })
+        // }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe()

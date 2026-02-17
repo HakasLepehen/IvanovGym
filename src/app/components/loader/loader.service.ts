@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -6,9 +6,12 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class LoaderService {
   private _loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public message: WritableSignal<string> = signal('Загрузка...');
+  
   constructor() {}
 
-  show(): void {
+  show(msg: string = 'Загрузка...'): void {
+    this.message.set(msg);
     this._loading$.next(true);
   }
 

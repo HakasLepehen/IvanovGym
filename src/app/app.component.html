@@ -4,5 +4,8 @@
     <a (click)="back1()">user</a>
     <a routerLink="/">домой</a>
   </div>
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+    @if (isLoading()) {
+      <app-loader [overlay]="true"></app-loader>
+    }
 </tui-root>
