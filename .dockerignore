@@ -1,32 +1,50 @@
-# Node modules
+# Dependencies
 node_modules
 npm-debug.log
 yarn-error.log
 
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
 # Build outputs
-dist
-.angular
-out-tsc
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-# Git
-.git
-.gitignore
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
 
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
+# System files
+.DS_Store
+Thumbs.db
 
 # Environment files
 .env
-.env.local
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
 
-# Testing
-coverage
-.nyc_output
-
-# Misc
-.DS_Store
-Thumbs.db
-*.log
+# Docker related
+docker-compose.override.yml
