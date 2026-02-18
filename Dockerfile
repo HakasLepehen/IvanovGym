@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
 # Копируем только package файлы для лучшего кэширования
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Копируем остальные файлы
 COPY . .
