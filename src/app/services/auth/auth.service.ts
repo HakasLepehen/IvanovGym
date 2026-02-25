@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ENV } from '../../../environment/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, Subscription, take, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { MainService } from '../main/main.service';
 
 type User = {
   access_token: string;
@@ -28,7 +29,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private _router: Router
+    private _router: Router,
+    private mainService: MainService,
   ) {
     this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
     this.token$ = this.tokenSubject.asObservable();
@@ -43,8 +45,8 @@ export class AuthService {
         map((response: any) => {
           localStorage.setItem('token', JSON.stringify(response.access_token));
           this.tokenSubject.next(response.access_token);
-          return response.access_token
         }),
+        tap(() => this.mainService.initInitializationData()) // не уверен, что тут корректно подгружать другие данные
       )
   }
 

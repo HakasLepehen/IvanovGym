@@ -38,10 +38,6 @@ export class AuthComponent implements OnInit {
     return this.authService.signIn(email, password)
       .pipe(first())
       .subscribe({
-        next: () => {
-          this.isLoading = false;
-          this.router.navigate(['']);
-        },
         error: (error: HttpErrorResponse) => {
           this.isLoading = false;
 
@@ -51,6 +47,10 @@ export class AuthComponent implements OnInit {
             this.error.set('Не удалось авторизоваться');
           }
           return;
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.router.navigate(['']);
         }
       });
   }

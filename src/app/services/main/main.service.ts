@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ClientsService } from '../../components/clients/clients.service';
 import { ExercisesService } from '../../components/exercises-main/exercises.service';
-import { forkJoin, take, tap } from 'rxjs';
+import { forkJoin, of, take, tap } from 'rxjs';
 import { IClient } from '../../interfaces/client';
 import { IExercise } from '../../interfaces/exercise';
 import { setClients } from '../../store/actions/client.action';
@@ -21,7 +21,7 @@ export class MainService {
   ) {}
 
   public initInitializationData(): void {
-    this.loaderService.show();
+    this.loaderService.show('Загрузка клиентов и упражнений');
     forkJoin([this.cs.getClients(), this.exercisesServise.loadAllExercises()])
       .pipe(
         take(1),
@@ -29,8 +29,9 @@ export class MainService {
           this.store.dispatch(setClients({ clients: clients }));
           this.store.dispatch(setClientExercises({ clientExercises: exersises }));
           this.loaderService.hide();
+          return null;
         })
       )
-      .subscribe();
+      .subscribe()
   }
 }

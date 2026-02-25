@@ -3,10 +3,12 @@ import { Component } from '@angular/core';
 import { ClientsConfigService } from 'src/app/components/clients/clients-config.service';
 import { ExercisesConfigService } from 'src/app/components/exercises-main/exercises-config.service';
 import { Store, select } from '@ngrx/store';
-import { tap } from 'rxjs';
+import { filter, pairwise, tap } from 'rxjs';
 import { IExercise } from 'src/app/interfaces/exercise';
 import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
 import { MainService } from 'src/app/services/main/main.service';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { clientsSelector } from '../../store/selectors/client.selector';
 
 type SectionType = {
   title: string;
@@ -43,17 +45,22 @@ export class MainComponent {
     private clientsConfigService: ClientsConfigService,
     private exerciseConfigService: ExercisesConfigService,
     private store: Store,
-    private mainService: MainService
+    private mainService: MainService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.clientsConfigService.getClients();
-    this.exerciseConfigService.getExercisesForClient();
+
+    // this.clientsConfigService.getClients();
+    // this.exerciseConfigService.getExercisesForClient();
 
     this.store.pipe(
-      select(clientExercisesSelector),
-      tap((exercises: IExercise[]) => {
-        this.clientsConfigService.setLimitNamesForClients(exercises)
+      select(clientsSelector),
+      tap((clients: IClient[]) => {
+        console.log(clients);
+        if (!clients.length) {
+          this.mainService.initInitializationData();
+        }
       })
     ).subscribe()
   }
