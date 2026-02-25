@@ -66,7 +66,7 @@ export class MainInterceptor implements HttpInterceptor {
         alert(`не удалось получить данные с сервера: ${error.error.message}`);
         return EMPTY;
       }
-      alert(`Не удалось выполнить запрос: ${error.error.message}`);
+      alert(`Не удалось выполнить запрос: ${error.error.message ?? error.error.msg}`);
     }
     return throwError(() => error as any);
   }

@@ -34,8 +34,6 @@ export class AuthService {
     this.token$ = this.tokenSubject.asObservable();
   }
 
-
-
   signIn(login: string | any, password: string | any) {
     return this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
       email: login,
@@ -47,9 +45,6 @@ export class AuthService {
           this.tokenSubject.next(response.access_token);
           return response.access_token
         }),
-        catchError((err: HttpErrorResponse) => {
-            return of(err);
-        })
       )
   }
 

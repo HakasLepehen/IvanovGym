@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
-import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth',
@@ -16,14 +16,13 @@ export class AuthComponent implements OnInit {
     login: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   });
-  error: any = '';
+  error: WritableSignal<string> = signal('')
   public isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private readonly authService: AuthService,
-    private store: Store,
-    private router: Router
+    private router: Router,
   ) {
   }
 
@@ -35,7 +34,7 @@ export class AuthComponent implements OnInit {
     const email: string = this.loginForm.value.login as string;
     const password: string = this.loginForm.value.password as string;
 
-    this.error = '';
+    // this.error = '';
     return this.authService.signIn(email, password)
       .pipe(first())
       .subscribe({
@@ -43,13 +42,13 @@ export class AuthComponent implements OnInit {
           this.isLoading = false;
           this.router.navigate(['']);
         },
-        error: error => {
+        error: (error: HttpErrorResponse) => {
           this.isLoading = false;
 
-          if (error.error.error === 'invalid_grant') {
-            this.error = 'Неверный логин или пароль';
+          if (error.error.error === 'invalid_grant' || error.error.error_code === 'invalid_credentials') {
+            this.error.set('Неверный логин или пароль');
           } else {
-            this.error = 'Не удалось авторизоваться';
+            this.error.set('Не удалось авторизоваться');
           }
           return;
         }

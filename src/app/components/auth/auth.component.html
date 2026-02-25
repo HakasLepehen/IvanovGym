@@ -5,7 +5,7 @@
       <h2>Войти</h2>
     </div>
 
-    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()' required>
+    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()'>
       <div class='tui-col_12'>
         <div class='auth_form tui-form__row'>
           <tui-input formControlName='login'>
@@ -31,7 +31,7 @@
       </div>
     </form>
     <div *ngIf='loginForm.valid' class='tui-col_12 tui-form__row'>
-      {{error}}
+      {{error()}}
     </div>
   </div>
 </div>
