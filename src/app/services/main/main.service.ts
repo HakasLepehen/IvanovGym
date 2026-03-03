@@ -18,7 +18,7 @@ export class MainService {
     private store: Store,
     private cs: ClientsService,
     private exercisesServise: ExercisesService
-  ) {}
+  ) { }
 
   public initInitializationData(): void {
     this.loaderService.show('Загрузка клиентов и упражнений');
