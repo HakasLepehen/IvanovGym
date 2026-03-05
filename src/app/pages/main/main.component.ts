@@ -54,14 +54,14 @@ export class MainComponent {
     // this.clientsConfigService.getClients();
     // this.exerciseConfigService.getExercisesForClient();
 
-    this.store.pipe(
-      select(clientsSelector),
-      tap((clients: IClient[]) => {
-        console.log(clients);
-        if (!clients.length) {
-          this.mainService.initInitializationData();
-        }
-      })
-    ).subscribe()
+    // this.store.pipe(
+    //   select(clientsSelector),
+    //   tap((clients: IClient[]) => {
+    //     console.log(clients);
+    //     if (!clients.length) {
+    //       this.mainService.initInitializationData();
+    //     }
+    //   })
+    // ).subscribe()
   }
 }

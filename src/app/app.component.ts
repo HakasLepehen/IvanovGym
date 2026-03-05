@@ -9,7 +9,11 @@ import { AuthService } from './services/auth/auth.service';
 import { IExercise } from './interfaces/exercise';
 import { LoaderService } from './components/loader/loader.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest } from 'rxjs';
+import { combineLatest, EMPTY, filter } from 'rxjs';
+import { MainService } from './services/main/main.service';
+import { IClient } from './interfaces/client';
+import { clientsSelector } from './store/selectors/client.selector';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -23,14 +27,33 @@ export class AppComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private _clientsConfigService: ClientsConfigService,
-    private _authService: AuthService,
-    private _exerciseConfigService: ExercisesConfigService,
     private authService: AuthService,
     private loaderService: LoaderService,
-    private store: Store
+    private mainService: MainService,
+    private store: Store,
+    private router: Router,
   ) {
-    this.isLoading = toSignal(this.loaderService.getLoading(), {initialValue: true})
+    this.isLoading = toSignal(this.loaderService.getLoading(), { initialValue: true });
+    router.events.pipe(
+      filter((event: any) => event instanceof NavigationStart),
+      tap((val) => {
+        if (val?.url != '/login') {
+          this.store.pipe(
+            select(clientsSelector),
+            tap((clients: IClient[]) => {
+              console.log(clients);
+              if (!clients.length) {
+                mainService.initData();
+                // this.mainService.initInitializationData();
+              }
+            })
+          ).subscribe()
+          // mainService.initData();
+        }
+
+        return EMPTY
+      })
+    ).subscribe()
   }
 
   back() {
@@ -42,14 +65,15 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this._clientsConfigService.getClients();
-    // this._exerciseConfigService.getExercisesForClient();
-
     // this.store.pipe(
-      // select(clientExercisesSelector),
-      // tap((exercises: IExercise[]) => {
-        // this._clientsConfigService.setLimitNamesForClients(exercises)
-      // })
+    //   select(clientsSelector),
+    //   tap((clients: IClient[]) => {
+    //     console.log(clients);
+    //     if (!clients.length) {
+    //       this.mainService.initData();
+    //       // this.mainService.initInitializationData();
+    //     }
+    //   })
     // ).subscribe()
   }
 }

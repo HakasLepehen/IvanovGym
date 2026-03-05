@@ -1,61 +1,34 @@
 <form [formGroup]='exForm'>
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
   <div class='tui-form__row' style="display: flex;">
-    <tui-combo-box
-      formControlName="exercise"
-      [tuiDropdownMinHeight]="200"
-      style="flex-grow: 1;"
-    >
+    <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" style="flex-grow: 1;">
       Выбранное упражнение
-      <input
-        placeholder="Введите текст и нажмите для выбора"
-        tuiTextfieldLegacy
-      />
-      <tui-data-list-wrapper
-        *tuiDataList
-        [itemContent]="stringify | tuiStringifyContent"
-        [items]="exercises | tuiFilterByInput"
-      />
+      <input placeholder="Введите текст и нажмите для выбора" tuiTextfieldLegacy />
+      <tui-data-list-wrapper *tuiDataList [itemContent]="stringify | tuiStringifyContent"
+        [items]="exercises | tuiFilterByInput" />
     </tui-combo-box>
-    <button
-      tuiIconButton
-      size='l'
-      appearance='accent'
-      tuiAppearanceMode='checked'
-      iconStart='trash'
-      type='button'
-      [loading]='isLoading$ | async'
-      [disabled]='isLoading$ | async'
-      (click)='removeExercise()'>
+    <button tuiIconButton size='l' appearance='accent' tuiAppearanceMode='checked' iconStart='trash' type='button'
+      [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='removeExercise()'>
     </button>
   </div>
 
   <div class='tui-form__row'></div>
   <tui-textfield class='tui-form__row_half-width'>
     <label tuiLabel>Количество подходов</label>
-    <input
-      tuiTextfield
-      formControlName='set_count'
-    />
+    <input tuiTextfield formControlName='set_count' />
   </tui-textfield>
   <!-- ВЕС -->
   <div class='tui-form__row' style='display: flex;'>
     <tui-textfield class='tui-form__row_half-width'>
       <label tuiLabel>Укажите вес, кг</label>
-      <input
-        tuiTextfield
-        formControlName='payload_weight'
-      />
+      <input tuiTextfield formControlName='payload_weight' />
     </tui-textfield>
 
 
     <!-- ПОВТОРЕНИЯ -->
     <tui-textfield class='tui-form__row_half-width'>
       <label tuiLabel>Повторения, шт</label>
-      <input
-        tuiTextfield
-        formControlName='execution_number'
-      />
+      <input tuiTextfield formControlName='execution_number' />
     </tui-textfield>
   </div>
 
