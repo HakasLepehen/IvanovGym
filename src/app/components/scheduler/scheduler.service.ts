@@ -70,4 +70,8 @@ export class SchedulerService {
     options.headers.Prefer = 'return=minimal';
     return this.httpClient.patch(`${ENV.supabaseUrl}/${this.exercisesURL}`, model, reqOptions);
   }
+
+  findLastExercise(clientGUID: string, exercise_id: number): Observable<Object> {
+    return this.httpClient.post(`${ENV.supabaseUrl}/functions/v1/getLastExercise/${exercise_id}`, {client: clientGUID})
+  }
 }

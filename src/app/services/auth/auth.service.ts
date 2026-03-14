@@ -1,9 +1,8 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ENV } from '../../../environment/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of, Subscription, take, tap } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
+import { BehaviorSubject, map, Observable, Subscription, take, tap } from 'rxjs';
+import { ENV } from '../../../environment/environment';
 
 type User = {
   access_token: string;
@@ -28,13 +27,11 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private _router: Router
+    private _router: Router,
   ) {
     this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
     this.token$ = this.tokenSubject.asObservable();
   }
-
-
 
   signIn(login: string | any, password: string | any) {
     return this.http.post(ENV.supabaseUrl + this.authUrl + '/token?grant_type=password', {
@@ -45,11 +42,7 @@ export class AuthService {
         map((response: any) => {
           localStorage.setItem('token', JSON.stringify(response.access_token));
           this.tokenSubject.next(response.access_token);
-          return response.access_token
         }),
-        catchError((err: HttpErrorResponse) => {
-            return of(err);
-        })
       )
   }
 

@@ -4,7 +4,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { catchError, concatMap, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, EMPTY, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import { ITraining } from 'src/app/interfaces/training';
 
@@ -14,6 +14,8 @@ import { TrainingExerciseItemComponent } from '../training-exercise-item/trainin
 import { TrainingComponent } from '../training/training.component';
 import { LoaderService } from './../loader/loader.service';
 import { SchedulerService } from './scheduler.service';
+import { OutputMessage } from 'src/app/interfaces/output-message';
+import { MessageTypes } from 'src/app/enums/message-types';
 
 @Injectable({
   providedIn: 'root'
@@ -175,28 +177,55 @@ export class SchedulerConfigService {
    * @param container
    * @param exercises
    */
-  public initializeExerciseComponent(container: ViewContainerRef, exercises: FormArray): void {
+  public initializeExerciseComponent(container: ViewContainerRef, exercises: FormArray, clientGUID: string): void {
     const trainingExerciseComponentRef: ComponentRef<TrainingExerciseItemComponent> =
       container.createComponent<TrainingExerciseItemComponent>(TrainingExerciseItemComponent);
 
     trainingExerciseComponentRef.setInput('index', exercises.length);
+    trainingExerciseComponentRef.setInput('clientGUID', clientGUID);
     trainingExerciseComponentRef.instance.messageSent.subscribe(
-      ({ id, index }: { id: number | string; index: number }): void => {
+      ({ id, index, type }: OutputMessage): void => {
         // if we haven't id - we are not saved this exercise
-        this.loaderService.show();
-        if (!id) {
-          exercises.removeAt(index);
-        } else {
-          this.schedulerService.deleteExercise(id)
-            .pipe(
-              take(1),
-              tap(() => {
-                this.loaderService.hide();
-                this.getTrainings();
-              })
-            ).subscribe();
+
+        switch (type) {
+          case MessageTypes.REMOVE_ITEM:
+            if (!id) {
+              exercises.removeAt(index);
+            } else {
+              this.loaderService.show();
+              this.schedulerService.deleteExercise(id)
+                .pipe(
+                  take(1),
+                  tap(() => {
+                    this.loaderService.hide();
+                    this.getTrainings();
+                  })
+                ).subscribe();
+            }
+            trainingExerciseComponentRef.destroy();
+            break;
+
+          case MessageTypes.PRELOAD_DATA:
+
+            this.schedulerService.findLastExercise(clientGUID, id as number)
+              .pipe(
+                take(1),
+                tap((res) => {
+                  if (!res) {
+                    alert('Не найдено данных по указанному упражнению');
+                    return EMPTY;
+                  }
+                  const resultData: any = (res as Array<any>).at(-1);
+                  exercises.controls[index].get('set_count')?.patchValue(resultData.set_count)
+                  exercises.controls[index].get('payload_weight')?.patchValue(resultData.payload_weight)
+                  exercises.controls[index].get('execution_number')?.patchValue(resultData.execution_number)
+                  return res;
+                  // exercises.controls
+                }),
+              )
+              .subscribe()
+
         }
-        trainingExerciseComponentRef.destroy();
       }
     );
   }
@@ -261,4 +290,6 @@ export class SchedulerConfigService {
       )
       .subscribe();
   }
+
+
 }

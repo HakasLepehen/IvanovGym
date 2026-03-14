@@ -1,4 +1,4 @@
-import { BodyParts } from '../enums/body_parts';
+import { BodyParts } from '../enums/body-parts';
 import { IExecutionVariant } from './execution_variant';
 
 /** using only for creating exercise in specific form */
