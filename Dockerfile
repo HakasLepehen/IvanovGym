@@ -46,9 +46,6 @@ RUN chown -R nginx: /usr/share/nginx/html && \
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost/ || exit 1
 
-# Открываем порт
-EXPOSE 80
-
 # Запускаем nginx без прав root
 USER nginx
 CMD ["nginx", "-g", "daemon off;"]
