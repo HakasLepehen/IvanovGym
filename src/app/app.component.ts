@@ -1,19 +1,15 @@
-import { select, Store } from '@ngrx/store';
-import { Component, OnInit, signal, Signal, WritableSignal } from '@angular/core';
 import { Location } from '@angular/common';
-import { ClientsConfigService } from './components/clients/clients-config.service';
-import { ExercisesConfigService } from './components/exercises-main/exercises-config.service';
-import { tap } from 'rxjs/internal/operators/tap';
-import { clientExercisesSelector } from './store/selectors/client-exercises.selector';
-import { AuthService } from './services/auth/auth.service';
-import { IExercise } from './interfaces/exercise';
-import { LoaderService } from './components/loader/loader.service';
+import { Component, OnInit, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, EMPTY, filter } from 'rxjs';
-import { MainService } from './services/main/main.service';
+import { NavigationStart, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { EMPTY, filter } from 'rxjs';
+import { tap } from 'rxjs/internal/operators/tap';
+import { LoaderService } from './components/loader/loader.service';
 import { IClient } from './interfaces/client';
+import { AuthService } from './services/auth/auth.service';
+import { MainService } from './services/main/main.service';
 import { clientsSelector } from './store/selectors/client.selector';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -41,10 +37,8 @@ export class AppComponent implements OnInit {
           this.store.pipe(
             select(clientsSelector),
             tap((clients: IClient[]) => {
-              console.log(clients);
               if (!clients.length) {
                 mainService.initData();
-                // this.mainService.initInitializationData();
               }
             })
           ).subscribe()

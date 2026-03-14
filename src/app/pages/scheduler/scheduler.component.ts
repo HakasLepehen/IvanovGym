@@ -9,7 +9,7 @@ import { clientsSelector } from 'src/app/store/selectors/client.selector';
 import { IClient } from '../../interfaces/client';
 import { ITraining } from '../../interfaces/training';
 import { TuiMarkerHandler } from '@taiga-ui/core';
-import { ScheduleModeView } from '../../enums/schedule_mode_view';
+import { ScheduleModeView } from '../../enums/schedule-mode-view';
 
 const ONE_DOT: [string] = ['var(--tui-status-positive)'];
 

@@ -37,7 +37,7 @@ import { LoaderService } from '../loader/loader.service';
     TuiDataList,
     TuiDataListWrapper,
     TuiInputDateModule,
-    TuiButtonLoading
+    TuiButtonLoading,
   ],
   templateUrl: './training.component.html',
   styleUrls: ['./training.component.scss'],
@@ -45,7 +45,7 @@ import { LoaderService } from '../loader/loader.service';
     tuiItemsHandlersProvider({
       stringify: (client: IClient) => `${client.fullName}`
     }),
-    tuiAutoFocusOptionsProvider({preventScroll: true})
+    tuiAutoFocusOptionsProvider({ preventScroll: true })
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -125,7 +125,7 @@ export class TrainingComponent {
    * @param exercise
    */
   public addExercise(exercise?: ITrainingExercise): void {
-    this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises);
+    this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises, this.editingTraining.clientGUID);
 
     this.exercises.push(
       new FormGroup({

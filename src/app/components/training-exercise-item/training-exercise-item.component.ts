@@ -11,7 +11,7 @@ import {
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
 import { BehaviorSubject, map, of, Subject, take } from 'rxjs';
-import { TuiComboBoxComponent, TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
+import { TuiComboBoxComponent, TuiComboBoxModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiButton, TuiDataList,
@@ -27,13 +27,15 @@ import {
   TuiFilterByInputPipe,
   tuiItemsHandlersProvider, TuiStringifyContentPipe
 } from '@taiga-ui/kit';
-import { BodyParts } from '../../enums/body_parts';
+import { BodyParts } from '../../enums/body-parts';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoaderService } from '../loader/loader.service';
 import { AsyncPipe } from '@angular/common';
 import { IExercise } from '../../interfaces/exercise';
 import { TuiFilterPipe } from '@taiga-ui/cdk';
 import { ISelectBox } from '../../interfaces/selectbox';
+import { OutputMessage } from 'src/app/interfaces/output-message';
+import { MessageTypes } from 'src/app/enums/message-types';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -75,11 +77,12 @@ import { ISelectBox } from '../../interfaces/selectbox';
 })
 export class TrainingExerciseItemComponent implements OnChanges {
   @Input({ required: true }) index!: number;
-  @Output() messageSent = new EventEmitter<{ id: number | string; index: number }>(); // EventEmitter для отправки данных
+  @Input({ required: false }) clientGUID!: string;
+  @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
   version = 'test'
   store = inject(Store);
-  selectedExecVar: any;
+  selectedExecVar!: number | IExercise;
   exForm!: FormGroup;
   body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
@@ -120,9 +123,26 @@ export class TrainingExerciseItemComponent implements OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {}
+  ngOnChanges(changes: SimpleChanges): void { }
 
   removeExercise(): void {
-    this.messageSent.emit({ id: this.exForm.get('id')?.value, index: this.index });
+    this.messageSent.emit({
+      id: this.exForm.get('id')?.value,
+      index: this.index,
+      type: MessageTypes.REMOVE_ITEM
+    });
+  }
+
+  focusExerciseChanged(e: boolean): void {
+    if (!e) {
+      const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
+      if (!!selectedExercise) {
+        this.messageSent.emit({
+          id: selectedExercise.id as number,
+          index: this.index,
+          type: MessageTypes.PRELOAD_DATA,
+        })
+      }
+    }
   }
 }

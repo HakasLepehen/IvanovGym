@@ -9,7 +9,7 @@ import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { ExercisesConfigService } from '../../exercises-main/exercises-config.service';
 import { TUI_VALIDATION_ERRORS, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { map, of, startWith, Subject, switchMap } from 'rxjs';
-import { BodyParts } from '../../../enums/body_parts';
+import { BodyParts } from '../../../enums/body-parts';
 
 @Component({
   selector: 'app-exercises-form',
@@ -19,7 +19,7 @@ import { BodyParts } from '../../../enums/body_parts';
   providers: [
     tuiItemsHandlersProvider({
       stringify: (val: ISelectBox | number) => {
-        
+
         // ну это пиздец вообще говно а не код. участвует как при указании выбранного значения,
         // так и при вызове списка элементов селекта
         if (typeof val === 'number') {
@@ -78,12 +78,12 @@ export class ExercisesFormComponent {
     if (this.exForm.valid) {
       if (!this.isEdit) {
         this.exercisesConfigService.createExercise(
-          {...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id},
+          { ...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id },
           this.context
         );
       } else {
         this.exercisesConfigService.editExercise(
-          {...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id},
+          { ...this.exForm.value, muscle_group: this.exForm.value.muscle_group.id },
           this.context
         )
       }

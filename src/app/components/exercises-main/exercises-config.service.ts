@@ -5,7 +5,7 @@ import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
-import { BodyParts } from 'src/app/enums/body_parts';
+import { BodyParts } from 'src/app/enums/body-parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesService } from './exercises.service';
@@ -116,9 +116,9 @@ export class ExercisesConfigService {
   deleteExercise(model: IExercise): void {
     this.loader.show();
     // if (model.exec_var?.length) {
-      // model.exec_var.map(exec_var => {
-      //   this.deleteExecutionVariant(exec_var.id as number)
-      // })
+    // model.exec_var.map(exec_var => {
+    //   this.deleteExecutionVariant(exec_var.id as number)
+    // })
     // }
 
     this.exercisesService.removeExercise(model.id as number)
@@ -132,7 +132,7 @@ export class ExercisesConfigService {
   }
 
   loadExercisesByBodypart(body_part: number): void {
-    this.loader.show(`Загружаю упражнения на: ${ BodyParts[body_part].name}`);
+    this.loader.show(`Загружаю упражнения на: ${BodyParts[body_part].name}`);
 
     this.exercisesService.loadExercises(body_part)
       .pipe(

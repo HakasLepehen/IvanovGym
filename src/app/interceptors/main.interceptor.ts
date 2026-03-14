@@ -52,6 +52,7 @@ export class MainInterceptor implements HttpInterceptor {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 401) {
         if (MainInterceptor.is401Handled) {
+          this.loader.hide();
           return EMPTY;
         }
         MainInterceptor.is401Handled = true;
