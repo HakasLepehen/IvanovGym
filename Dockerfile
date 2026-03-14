@@ -11,7 +11,6 @@ FROM nginx:alpine
 
 COPY --from=builder /myfiles/dist/ivanov-gym /usr/share/nginx/html
 RUN chown -R 101: /usr/share/nginx/html
-RUN chown -R 101: /var/cache/nginx/
 
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 
