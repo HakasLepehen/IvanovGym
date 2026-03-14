@@ -30,6 +30,7 @@ RUN npm run build
 # Используем более свежий и безопасный образ nginx
 FROM nginxinc/nginx-unprivileged:alpine-perl
 
+USER root
 # Копируем кастомный nginx конфиг
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 
@@ -37,7 +38,7 @@ FROM nginxinc/nginx-unprivileged:alpine-perl
 COPY --from=builder /myfiles/dist/ivanov-gym /usr/share/nginx/html
 
 # Устанавливаем правильные права доступа
-RUN chown -R nginx:nginx /usr/share/nginx/html && \
+RUN chown -R nginx: /usr/share/nginx/html && \
     chmod -R 755 /usr/share/nginx/html && \
     chown -R nginx: /var/cache/nginx/
 
