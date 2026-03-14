@@ -38,7 +38,8 @@ COPY --from=builder /myfiles/dist/ivanov-gym /usr/share/nginx/html
 
 # Устанавливаем правильные права доступа
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
-    chmod -R 755 /usr/share/nginx/html
+    chmod -R 755 /usr/share/nginx/html && \
+    chown -R nginx: /var/cache/nginx/
 
 # Добавляем healthcheck для мониторинга состояния контейнера
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
