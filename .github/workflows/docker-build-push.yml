@@ -7,7 +7,7 @@ on:
       - develop
       - feat/*
     tags:
-      - '0.0.1'
+      - '*'
   pull_request:
     branches:
       - main

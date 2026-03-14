@@ -28,7 +28,7 @@ USER appuser
 RUN npm run build
 
 # Используем более свежий и безопасный образ nginx
-FROM nginx:1.25-alpine
+FROM nginxinc/nginx-unprivileged:alpine-perl
 
 # Копируем кастомный nginx конфиг
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
