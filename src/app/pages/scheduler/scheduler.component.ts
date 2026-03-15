@@ -10,6 +10,7 @@ import { IClient } from '../../interfaces/client';
 import { ITraining } from '../../interfaces/training';
 import { TuiMarkerHandler } from '@taiga-ui/core';
 import { ScheduleModeView } from '../../enums/schedule-mode-view';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const ONE_DOT: [string] = ['var(--tui-status-positive)'];
 
@@ -33,6 +34,8 @@ export class SchedulerComponent implements OnInit {
     private _schedulerConfigService: SchedulerConfigService,
     private readonly loaderService: LoaderService,
     private readonly store: Store,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private cd: ChangeDetectorRef
   ) {
   }

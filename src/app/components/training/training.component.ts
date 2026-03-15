@@ -3,7 +3,7 @@ import { ITrainingExercise } from '../../interfaces/training_exercise';
 import { clientsSelector } from '../../store/selectors/client.selector';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, signal, ViewChild, ViewContainerRef, WritableSignal } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -19,10 +19,11 @@ import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-u
 import { TuiButtonLoading, tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { BehaviorSubject, map, take, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, map, take, tap } from 'rxjs';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITraining } from '../../interfaces/training';
 import { LoaderService } from '../loader/loader.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: true,
@@ -51,6 +52,8 @@ import { LoaderService } from '../loader/loader.service';
 })
 
 export class TrainingComponent {
+  @Input()
+  trainingId!: number;
   public isPlanning: boolean = false;
   private selectedDay!: TuiDay;
   public trainingForm!: FormGroup;
@@ -68,7 +71,6 @@ export class TrainingComponent {
     private fb: FormBuilder,
     private loaderService: LoaderService,
   ) {
-    if (!!context?.data?.training) this.editingTraining = context.data.training;
     this.isLoading$ = loaderService.getLoading();
 
     this.isPlanning = context?.data?.isPlanning;
@@ -82,6 +84,43 @@ export class TrainingComponent {
   }
 
   ngOnInit() {
+    if (!!this.context?.data) {
+      this.editingTraining = this.context.data.training;
+      this.initializeForm();
+    } else {
+      this.scheduleConfigService.editingTraining$
+        .pipe(
+          // takeUntilDestroyed(),
+          tap((training) => {
+            this.editingTraining = training;
+            this.initializeForm();
+            return EMPTY;
+          }),
+        )
+        .subscribe()
+    }
+    // this.trainingForm = this.fb.group({
+    //   time: new FormControl<string | null>(null, Validators.required),
+    //   planned_date: new FormControl<string | null>(null, Validators.required),
+    //   client: new FormControl<IClient | null>(null, Validators.required),
+    //   exercises: this.fb.array([])
+    // });
+    // if (!!this.editingTraining) {
+    //   // если в контексте было получено значение - инициализируем данные в форме
+    //   this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.id as number);
+    //   this.scheduleConfigService.trainingExercises$
+    //     .pipe(
+    //       take(1),
+    //       tap(val => {
+    //         val.forEach((trainingExercise: ITrainingExercise) => this.addExercise(trainingExercise));
+    //       })
+    //     )
+    //     .subscribe();
+    //   this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients);
+    // }
+  }
+
+  private initializeForm(): void {
     this.trainingForm = this.fb.group({
       time: new FormControl<string | null>(null, Validators.required),
       planned_date: new FormControl<string | null>(null, Validators.required),
@@ -125,6 +164,7 @@ export class TrainingComponent {
    * @param exercise
    */
   public addExercise(exercise?: ITrainingExercise): void {
+    // this.scheduleConfigService.openModal(this.selectedDay as TuiDay, this.editingTraining)
     this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises, this.editingTraining.clientGUID);
 
     this.exercises.push(

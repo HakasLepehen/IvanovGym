@@ -1,13 +1,25 @@
 <form [formGroup]='exForm'>
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
   <div class='tui-form__row' style="display: flex;">
-    <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" [tuiTextfieldCleaner]="false" (focusedChange)="focusExerciseChanged($event)"
+    <ng-container *ngIf="hasSelectedExercise">
+      <!-- <a [routerLink]=[''] >{{this.exForm.get('exercise')?.value?.name ?? ''}}</a> -->
+       <a [routerLink]="(exerciseURL())">{{this.exForm.get('exercise')?.value?.name ?? ''}}</a>
+
+      </ng-container>
+    <ng-container *ngIf="!hasSelectedExercise">
+      <button tuiButton size='l' appearance='secondary' tuiAppearanceMode='checked' type='button'
+      [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='selectExercise()'>
+      Выбрать упражнение
+    </button>
+    </ng-container>
+    <!-- <p>{{exForm.controls['exercise'] | json}}</p> -->
+    <!-- <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" [tuiTextfieldCleaner]="false" (focusedChange)="focusExerciseChanged($event)"
       style="flex-grow: 1;">
       Выбранное упражнение
       <input placeholder="Введите текст и нажмите для выбора" tuiTextfieldLegacy />
       <tui-data-list-wrapper *tuiDataList [itemContent]="stringify | tuiStringifyContent"
         [items]="exercises | tuiFilterByInput" />
-    </tui-combo-box>
+    </tui-combo-box> -->
     <button tuiIconButton size='l' appearance='accent' tuiAppearanceMode='checked' iconStart='trash' type='button'
       [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='removeExercise()'>
     </button>

@@ -51,8 +51,8 @@ export class MainInterceptor implements HttpInterceptor {
   private handleHttpError(error: unknown): Observable<never> {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 401) {
+        this.loader.hide();
         if (MainInterceptor.is401Handled) {
-          this.loader.hide();
           return EMPTY;
         }
         MainInterceptor.is401Handled = true;

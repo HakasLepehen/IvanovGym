@@ -6,12 +6,14 @@ import {
   Input,
   OnChanges,
   Output,
+  signal,
   SimpleChanges,
+  WritableSignal,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
-import { BehaviorSubject, map, of, Subject, take } from 'rxjs';
-import { TuiComboBoxComponent, TuiComboBoxModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { BehaviorSubject, map, of, take } from 'rxjs';
+import { TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiButton, TuiDataList,
@@ -23,25 +25,25 @@ import {
 import {
   TuiButtonLoading,
   TuiChevron, TuiDataListWrapper,
-  TuiDataListWrapperComponent,
   TuiFilterByInputPipe,
   tuiItemsHandlersProvider, TuiStringifyContentPipe
 } from '@taiga-ui/kit';
 import { BodyParts } from '../../enums/body-parts';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoaderService } from '../loader/loader.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { IExercise } from '../../interfaces/exercise';
-import { TuiFilterPipe } from '@taiga-ui/cdk';
 import { ISelectBox } from '../../interfaces/selectbox';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 
 @Component({
   selector: 'app-training-exercise-item',
   templateUrl: './training-exercise-item.component.html',
   styleUrls: ['./training-exercise-item.component.scss'],
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TuiComboBoxModule,
@@ -59,6 +61,7 @@ import { MessageTypes } from 'src/app/enums/message-types';
     TuiChevron,
     TuiFilterByInputPipe,
     TuiStringifyContentPipe,
+    JsonPipe
   ],
   standalone: true,
   providers: [
@@ -83,6 +86,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   version = 'test'
   store = inject(Store);
   selectedExecVar!: number | IExercise;
+  exerciseURL: WritableSignal<string> = signal('')
   exForm!: FormGroup;
   body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
@@ -93,7 +97,8 @@ export class TrainingExerciseItemComponent implements OnChanges {
   constructor(
     private fb: FormBuilder,
     private controlContainer: ControlContainer,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private scheduleConfigService: SchedulerConfigService,
   ) {
     this.isLoading$ = loaderService.getLoading();
     of(BodyParts)
@@ -125,6 +130,10 @@ export class TrainingExerciseItemComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void { }
 
+  get hasSelectedExercise(): boolean {
+    return !!this.exForm.get('exercise')?.value;
+  }
+
   removeExercise(): void {
     this.messageSent.emit({
       id: this.exForm.get('id')?.value,
@@ -144,5 +153,9 @@ export class TrainingExerciseItemComponent implements OnChanges {
         })
       }
     }
+  }
+
+  selectExercise(): void  {
+    this.scheduleConfigService.openExercisesList();
   }
 }

@@ -37,6 +37,7 @@ export class ExercisesListComponent {
 
           if (isNaN(this.bodyPartId)) {
             this.exercises.next([]);
+            this.exerciseConfigService.getExercisesForClient();
             return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
           }
 

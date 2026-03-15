@@ -4,7 +4,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { catchError, concatMap, EMPTY, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, EMPTY, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import { ITraining } from 'src/app/interfaces/training';
 
@@ -16,6 +16,7 @@ import { LoaderService } from './../loader/loader.service';
 import { SchedulerService } from './scheduler.service';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
+import { ExercisesListComponent } from '../exercises-list/exercises-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ import { MessageTypes } from 'src/app/enums/message-types';
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
   public trainings$: Subject<any[]> = new Subject<any>();
+  public editingTraining$: Subject<ITraining> = new Subject<ITraining>();
   public trainingExercises$: Subject<any[]> = new Subject<any>();
 
   constructor(
@@ -31,6 +33,10 @@ export class SchedulerConfigService {
     private schedulerService: SchedulerService,
     private loaderService: LoaderService
   ) {
+  }
+
+  setEditingTraining(training: ITraining) {
+    this.editingTraining$.next(training)
   }
 
   openModal(selectedDay: TuiDay, training?: ITraining) {
@@ -291,5 +297,19 @@ export class SchedulerConfigService {
       .subscribe();
   }
 
+  openExercisesList(): void {
+    this._dialogs
+      .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
+        label: 'Выбор упражнения для тренировки',
+        data: {
+          clientGUID: '123'
+        },
+        size: 'fullscreen',
+        closeable: true,
+        dismissible: false,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+  }
 
 }
