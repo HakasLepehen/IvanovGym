@@ -20,7 +20,8 @@ import {
   TuiDataListDirective,
   TuiLabel,
   TuiTextfield,
-  TuiTextfieldComponent
+  TuiTextfieldComponent,
+  TuiLink
 } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
@@ -64,6 +65,7 @@ import { RouterLink } from '@angular/router';
     TuiStringifyContentPipe,
     JsonPipe,
     RouterLink,
+    TuiLink,
   ],
   standalone: true,
   providers: [
@@ -88,7 +90,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   version = 'test';
   store = inject(Store);
   selectedExecVar!: number | IExercise;
-  exerciseURL: WritableSignal<string> = signal('');
+  exerciseData: WritableSignal<{name: string, url: string} | null> = signal(null);
   exForm!: FormGroup;
   body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
@@ -127,7 +129,10 @@ export class TrainingExerciseItemComponent implements OnChanges {
     if (result) {
       this.selectedExecVar = result;
       this.exForm.get('exercise')?.setValue(this.selectedExecVar);
-      this.exerciseURL.set(this.exForm.get('exercise')?.value.url);
+      this.exerciseData.set({
+        name: this.exForm.get('exercise')?.value.name,
+        url: this.exForm.get('exercise')?.value.url
+      });
     }
   }
 

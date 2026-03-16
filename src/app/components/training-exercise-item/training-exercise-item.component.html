@@ -1,16 +1,17 @@
 <form [formGroup]='exForm'>
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <div class='tui-form__row' style="display: flex;">
+  <div class='tui-form__row exercise'>
     <ng-container *ngIf="hasSelectedExercise">
-      <!-- <a [routerLink]=[''] >{{this.exForm.get('exercise')?.value?.name ?? ''}}</a> -->
-       <a [href]="exerciseURL()" target="_blank">{{this.exForm.get('exercise')?.value?.name ?? ''}}</a>
+      <a [href]="exerciseData()?.url" target="_blank" class="exercise_link">
+        {{exerciseData()?.name }}
+      </a>
 
-      </ng-container>
+    </ng-container>
     <ng-container *ngIf="!hasSelectedExercise">
       <button tuiButton size='l' appearance='secondary' tuiAppearanceMode='checked' type='button'
-      [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='selectExercise()'>
-      Выбрать упражнение
-    </button>
+        [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='selectExercise()'>
+        Выбрать упражнение
+      </button>
     </ng-container>
     <!-- <p>{{exForm.controls['exercise'] | json}}</p> -->
     <!-- <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" [tuiTextfieldCleaner]="false" (focusedChange)="focusExerciseChanged($event)"
