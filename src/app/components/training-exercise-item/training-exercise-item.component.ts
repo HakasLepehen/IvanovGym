@@ -37,6 +37,7 @@ import { ISelectBox } from '../../interfaces/selectbox';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -61,7 +62,8 @@ import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
     TuiChevron,
     TuiFilterByInputPipe,
     TuiStringifyContentPipe,
-    JsonPipe
+    JsonPipe,
+    RouterLink,
   ],
   standalone: true,
   providers: [
@@ -83,10 +85,10 @@ export class TrainingExerciseItemComponent implements OnChanges {
   @Input({ required: false }) clientGUID!: string;
   @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
-  version = 'test'
+  version = 'test';
   store = inject(Store);
   selectedExecVar!: number | IExercise;
-  exerciseURL: WritableSignal<string> = signal('')
+  exerciseURL: WritableSignal<string> = signal('');
   exForm!: FormGroup;
   body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
@@ -98,7 +100,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
     private fb: FormBuilder,
     private controlContainer: ControlContainer,
     private loaderService: LoaderService,
-    private scheduleConfigService: SchedulerConfigService,
+    private scheduleConfigService: SchedulerConfigService
   ) {
     this.isLoading$ = loaderService.getLoading();
     of(BodyParts)
@@ -125,10 +127,11 @@ export class TrainingExerciseItemComponent implements OnChanges {
     if (result) {
       this.selectedExecVar = result;
       this.exForm.get('exercise')?.setValue(this.selectedExecVar);
+      this.exerciseURL.set(this.exForm.get('exercise')?.value.url);
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
+  ngOnChanges(changes: SimpleChanges): void {}
 
   get hasSelectedExercise(): boolean {
     return !!this.exForm.get('exercise')?.value;
@@ -138,7 +141,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
     this.messageSent.emit({
       id: this.exForm.get('id')?.value,
       index: this.index,
-      type: MessageTypes.REMOVE_ITEM
+      type: MessageTypes.REMOVE_ITEM,
     });
   }
 
@@ -150,12 +153,12 @@ export class TrainingExerciseItemComponent implements OnChanges {
           id: selectedExercise.id as number,
           index: this.index,
           type: MessageTypes.PRELOAD_DATA,
-        })
+        });
       }
     }
   }
 
-  selectExercise(): void  {
+  selectExercise(): void {
     this.scheduleConfigService.openExercisesList();
   }
 }

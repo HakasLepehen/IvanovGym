@@ -3,7 +3,7 @@
   <div class='tui-form__row' style="display: flex;">
     <ng-container *ngIf="hasSelectedExercise">
       <!-- <a [routerLink]=[''] >{{this.exForm.get('exercise')?.value?.name ?? ''}}</a> -->
-       <a [routerLink]="(exerciseURL())">{{this.exForm.get('exercise')?.value?.name ?? ''}}</a>
+       <a [href]="exerciseURL()" target="_blank">{{this.exForm.get('exercise')?.value?.name ?? ''}}</a>
 
       </ng-container>
     <ng-container *ngIf="!hasSelectedExercise">

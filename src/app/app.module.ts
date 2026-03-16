@@ -22,6 +22,7 @@ import { LoaderService } from './components/loader/loader.service';
 import { clientReducer } from './store/reducers/client.reducer';
 import { clientExercisesReducer } from './store/reducers/client-exercises.reducer';
 import { LoaderModule } from './components/loader/loader.module';
+import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { LoaderModule } from './components/loader/loader.module';
       provide: POLYMORPHEUS_CONTEXT,
       useExisting: TuiDialogService
     },
+    NG_EVENT_PLUGINS,
     LoaderService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
