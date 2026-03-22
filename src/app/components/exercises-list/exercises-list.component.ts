@@ -52,20 +52,20 @@ export class ExercisesListComponent {
     this.route.params
       .pipe(
         tap(params => {
-          if (!this.context.data) {
-            this.bodyPartId = parseInt(params['part']);
+          // if (!this.context.data) {
+          //   this.bodyPartId = parseInt(params['part']);
 
-            if (isNaN(this.bodyPartId)) {
-              this.exercises.next([]);
-              return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
-            }
+          //   if (isNaN(this.bodyPartId)) {
+          //     this.exercises.next([]);
+          //     return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
+          //   }
 
-            this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part'])).name;
-            this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
-          } else {
+          //   this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part'])).name;
+          //   this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
+          // } else {
             this.modeView = 'Scheduler';
             this.initScheduleView();
-          }
+          // }
         }),
         takeUntil(this.unsubscribe$)
       )
