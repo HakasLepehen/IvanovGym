@@ -66,14 +66,7 @@ export class ExercisesListComponent {
             this.modeView = 'Scheduler';
             this.initScheduleView();
           }
-          // return of();
         }),
-        // не пойму зачем я это делал
-        // tap(() => {
-        //   this.store.select('exercises').subscribe((val) => {
-        //     this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId)
-        //   })
-        // }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe()
