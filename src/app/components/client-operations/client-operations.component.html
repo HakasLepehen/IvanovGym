@@ -3,38 +3,29 @@
   <tui-scrollbar>
     <!-- ФИО клиента -->
     <div class='tui-form__row'>
-      <tui-textfield>
+      <tui-textfield tuiTextfieldSize='m'>
         <label tuiLabel>Ф.И.О</label>
-        <input
-          tuiTextfield
-          formControlName='fullName'
-          placeholder='Введите ФИО клиента полностью'
-        />
+        <input tuiTextfield formControlName='fullName' placeholder='Введите ФИО клиента полностью' />
         <span class='tui-required'></span>
       </tui-textfield>
       <tui-error formControlName='fullName' [error]='[] | tuiFieldError | async'></tui-error>
     </div>
-    
+
     <!-- Возраст -->
     <div class='tui-form__row'>
-      <tui-textfield>
-        <input
-          tuiInputNumber
-          formControlName='age'
-          placeholder='Введите возраст'
-        />
+      <tui-textfield tuiTextfieldSize='m'>
+        <input tuiInputNumber formControlName='age' placeholder='Введите возраст' />
         <span class='tui-required'></span>
         <tui-error formControlName='age' [error]='[] | tuiFieldError | async'></tui-error>
       </tui-textfield>
     </div>
     <!-- Цель -->
     <div class='tui-form__row'>
-      <tui-input formControlName='target' tuiTextfieldSize='m'>
-        Цель
-        <input placeholder='Кратко опишите цели клиента' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='target' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Цель</label>
+        <input tuiTextfield formControlName='target' />
+        <tui-error formControlName='target' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <!-- Ограничения -->
     <div class='tui-form__row'>
@@ -42,70 +33,55 @@
     </div>
     <!-- Опыт тренировок -->
     <div class='tui-form__row'>
-      <tui-input formControlName='experience' tuiTextfieldSize='m'>
-        Опыт тренировок
-        <input placeholder='Имеется ли опыт тренировок?' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='experience' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Опыт тренировок</label>
+        <input tuiTextfield formControlName='experience' />
+        <tui-error formControlName='experience' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <!-- Режим сна и бодрствования -->
     <div class='tui-form__row'>
-      <tui-input formControlName='sleep' tuiTextfieldSize='m'>
-        Режим сна и бодрствования
-        <input placeholder='Сколько часов обычно спит?' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='sleep' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Режим сна и бодрствования</label>
+        <input tuiTextfield formControlName='sleep' placeholder='Сколько часов обычно спит?' />
+        <tui-error formControlName='sleep' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <!-- Режим питания -->
     <div class='tui-form__row'>
-      <tui-input formControlName='food' tuiTextfieldSize='m'>
-        Режим питания
-        <input placeholder='Какой режим питания?' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='food' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Режим питания</label>
+        <input tuiTextfield formControlName='food' placeholder='Какой режим питания?' />
+        <tui-error formControlName='food' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <!-- Фармакология -->
     <div class='tui-form__row'>
-      <tui-input formControlName='pharma' tuiTextfieldSize='m'>
-        Фармакология
-        <input placeholder='Имеются ли ограничения' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='pharma' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Фармакология</label>
+        <input tuiTextfield formControlName='pharma' placeholder='Имеются ли ограничения' />
+        <tui-error formControlName='pharma' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <!-- Повседневная активность -->
     <div class='tui-form__row'>
-      <tui-input formControlName='activity' tuiTextfieldSize='m'>
-        Ограничения
-        <input placeholder='Имеются ли ограничения' tuiTextfieldLegacy />
-        <span class='tui-required'></span>
-      </tui-input>
-      <tui-error formControlName='activity' [error]='[] | tuiFieldError | async'></tui-error>
+      <tui-textfield tuiTextfieldSize='m'>
+        <label tuiLabel>Физическая активность</label>
+        <input tuiTextfield formControlName='activity' placeholder='Какая физ. активность?' />
+        <tui-error formControlName='activity' [error]='[] | tuiFieldError | async'></tui-error>
+      </tui-textfield>
     </div>
     <div class='tui-form__row'>
       <label tuiLabel>
-        <input
-          tuiCheckbox
-          type='checkbox'
-          formControlName='isActive'
-        />
+        <input tuiCheckbox type='checkbox' formControlName='isActive' />
         Действующий
       </label>
     </div>
   </tui-scrollbar>
 
   <div class='tui-form__row'>
-    <button
-      tuiButton
-      [disabled]='!clientForm.valid'
-      size='m'
-      appearance='outline-grayscale'
-      tuiAppearanceMode='checked'
-      type='button'
-      (click)='onSubmit()'>
+    <button tuiButton [disabled]='!clientForm.valid' size='m' appearance='outline-grayscale' tuiAppearanceMode='checked'
+      type='button' (click)='onSubmit()'>
       Сохранить
     </button>
   </div>
