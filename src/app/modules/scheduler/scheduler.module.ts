@@ -10,7 +10,7 @@ import { SortByTimePipe } from '../../pipes/sort-by-time/sort-by-time.pipe';
 import { TransformMinutesPipe } from '../../pipes/transform-minutes/transform-minutes.pipe';
 import { ClientsFilterComponent } from 'src/app/components/clients-filter/clients-filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiGroup } from '@taiga-ui/core';
+import { TuiCalendar, TuiGroup } from '@taiga-ui/core';
 import { TuiBlock, TuiRadio, TuiRadioComponent } from '@taiga-ui/kit';
 
 @NgModule({
