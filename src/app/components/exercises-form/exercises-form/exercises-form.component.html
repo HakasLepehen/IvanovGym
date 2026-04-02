@@ -1,35 +1,40 @@
 <form [formGroup]="exForm" (ngSubmit)="onSubmit()">
   <!-- Наименование упражнения -->
   <div class="tui-form__row">
-    <tui-input formControlName="name" tuiTextfieldSize="m">
-      Наименование упражнения
-      <input tuiTextfieldLegacy />
+    <tui-textfield tuiTextfieldSize="m">
+      <label tuiLabel>Наименование упражнения</label>
+      <input tuiTextfield formControlName='name' />
       <span class="tui-required"></span>
-    </tui-input>
+    </tui-textfield>
     <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 
+  <!-- ГРУППА МЫШЦ -->
   <div class="tui-form__row">
-    <tui-select formControlName="muscle_group" class='trainingForm__exercise'>
-      Выберите группу мышц
-      <span class="tui-required"></span>
-      <tui-data-list-wrapper *tuiDataList [items]="b_parts"></tui-data-list-wrapper>
+    <tui-textfield tuiChevron tuiDropdownMobile class='trainingForm__exercise'>
+      <label tuiLabel>Выберите группу мышц</label>
+      <input tuiSelect formControlName="muscle_group" />
+
+      <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="b_parts" />
       <tui-error formControlName='muscle_group' [error]="[] | tuiFieldError | async"></tui-error>
-    </tui-select>
+    </tui-textfield>
   </div>
   <!-- ССЫЛКА НА ВИДЕОЗАПИСЬ -->
   <div class="tui-form__row">
-    <tui-input tuiTextfieldSize="m" formControlName="url">
-      Ссылка на видео
-      <input tuiTextfieldLegacy />
-    </tui-input>
+    <tui-textfield tuiTextfieldSize="m">
+      <label tuiLabel>Ссылка на видео</label>
+      <input tuiTextfield formControlName='url' />
+    </tui-textfield>
+    <tui-error formControlName="url" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
+
   <!-- КОММЕНТАРИЙ -->
   <div class="tui-form__row">
-    <tui-input tuiTextfieldSize="m" formControlName="comment">
-      Комментарий
-      <input tuiTextfieldLegacy />
-    </tui-input>
+    <tui-textfield tuiTextfieldSize="m">
+      <label tuiLabel>Комментарий</label>
+      <input tuiTextfield formControlName='comment' />
+    </tui-textfield>
+    <tui-error formControlName="comment" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 </form>
 

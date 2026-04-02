@@ -13,13 +13,14 @@ import {
   TuiCalendar,
   TuiTextfieldComponent,
   TuiScrollbar,
-  TuiTextfield
+  TuiTextfield,
 } from '@taiga-ui/core';
 import {
   TuiFieldErrorPipe,
   TuiFieldErrorContentPipe,
   TuiButtonLoading,
-  TuiAccordion
+  TuiAccordion,
+  TuiSelect
 } from '@taiga-ui/kit';
 import {TuiForm} from '@taiga-ui/layout'
 
@@ -41,6 +42,7 @@ import {TuiForm} from '@taiga-ui/layout'
     ...TuiAccordion,
     ...TuiTextfield,
     TuiForm,
+    ...TuiSelect,
   ],
   providers: [
     {
@@ -63,7 +65,8 @@ import {TuiForm} from '@taiga-ui/layout'
     TuiScrollbar,
     ...TuiAccordion,
     ...TuiTextfield,
-    TuiForm
+    TuiForm,
+    ...TuiSelect,
   ],
 })
 export class TaigaModule { }
