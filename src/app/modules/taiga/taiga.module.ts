@@ -1,25 +1,28 @@
-import { TuiInputModule, TuiMultiSelectModule } from "@taiga-ui/legacy";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 // TODO: (Taiga UI migration) TUI_DIALOG_CLOSES_ON_BACK is deleted, you can create your own approach based on window.history property
-import { TuiDayOfWeek, TuiLet } from '@taiga-ui/cdk';
+import { TuiDayOfWeek } from '@taiga-ui/cdk';
 import {
   TUI_FIRST_DAY_OF_WEEK,
   TuiRoot,
   TuiAlert,
-  TuiNotification,
-  TuiCalendar,
-  TuiDataList,
   TuiError,
-  TuiScrollbar,
-  TuiScrollable,
-  TuiIcon,
   TuiDialog,
   TuiButton,
+  TuiCalendar,
+  TuiTextfieldComponent,
+  TuiScrollbar,
   TuiTextfield,
 } from '@taiga-ui/core';
-import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorContentPipe, TuiButtonLoading, TuiInputNumber } from '@taiga-ui/kit';
+import {
+  TuiFieldErrorPipe,
+  TuiFieldErrorContentPipe,
+  TuiButtonLoading,
+  TuiAccordion,
+  TuiSelect
+} from '@taiga-ui/kit';
+import {TuiForm} from '@taiga-ui/layout'
 
 @NgModule({
   declarations: [],
@@ -33,18 +36,13 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     TuiFieldErrorContentPipe,
     TuiButton,
     TuiButtonLoading,
-    ...TuiAccordion,
-    TuiScrollbar, TuiScrollable,
     TuiCalendar,
-    TuiIcon,
-    TuiMultiSelectModule,
-    ...TuiDataList,
-    ...TuiDataListWrapper,
+    TuiTextfieldComponent,
+    TuiScrollbar,
+    ...TuiAccordion,
     ...TuiTextfield,
-    TuiNotification,
-    TuiInputNumber,
-    TuiLet,
-    TuiInputModule,
+    TuiForm,
+    ...TuiSelect,
   ],
   providers: [
     {
@@ -57,24 +55,18 @@ import { TuiDataListWrapper, TuiAccordion, TuiFieldErrorPipe, TuiFieldErrorConte
     TuiRoot,
     TuiDialog,
     TuiAlert,
-    TuiInputModule,
     TuiError,
-    TuiFieldErrorPipe, TuiFieldErrorContentPipe,
+    TuiFieldErrorPipe,
+    TuiFieldErrorContentPipe,
     TuiButton,
     TuiButtonLoading,
-    ...TuiAccordion,
-    TuiDialog,
-    TuiScrollbar,
-    TuiScrollable,
     TuiCalendar,
-    TuiIcon,
-    TuiMultiSelectModule,
-    ...TuiDataList,
-    ...TuiDataListWrapper,
-    TuiNotification,
-    TuiInputNumber,
-    TuiLet,
+    TuiTextfieldComponent,
+    TuiScrollbar,
+    ...TuiAccordion,
     ...TuiTextfield,
+    TuiForm,
+    ...TuiSelect,
   ],
 })
 export class TaigaModule { }
