@@ -1,32 +1,33 @@
-<tui-scrollbar class="container">
-  <ng-container *ngIf="modeView === 'Default'; else popup">
+<ng-container *ngIf="modeView == 'Default'; else popup">
+  <tui-scrollbar class="container">
     <h5 class='tui-text_h4' class="container__title">Упражнения на {{title}}</h5>
     <ul>
       <li *ngFor="let item of exercises | async">
-        <div>
-          <div class="title__block">
-            <h4 class="title">{{item.name}}</h4>
-            <div class="title__block_buttons">
-              <button (click)="editExercise(item)" tuiIconButton iconStart="@tui.pencil" size='s'></button>
-              <button (click)="deleteExercise(item)" tuiIconButton iconStart="@tui.trash" size='s' appearance="accent"
-                type="button"></button>
-            </div>
+        <div class="title__block">
+          <span class="title">{{item.name}}</span>
+          <div class="title__block_buttons">
+            <button (click)="editExercise(item)" tuiIconButton iconStart="@tui.pencil" size='s'></button>
+            <button (click)="deleteExercise(item)" tuiIconButton iconStart="@tui.trash" size='s' appearance="accent"
+              type="button"></button>
           </div>
         </div>
       </li>
     </ul>
-  </ng-container>
-  <ng-template #popup>
-    <div class="popup_body">
-      <app-search />
+  </tui-scrollbar>
+</ng-container>
+<ng-template #popup>
+  <!--  "блок создан для того чтобы сделать из нее флекс элемент"  -->
+  <div class="search container">
+    <app-search />
+    <tui-scrollbar class="popup_body">
       <form [formGroup]="exListForm">
         <tui-radio-list formControlName="exercise" [itemContent]="content" [items]="list" />
       </form>
-    </div>
-    <ng-template #content let-data>
-      <span>
-        <a [href]="data.url" target="_blank" tuiTitle>{{ data.name }}</a>
-      </span>
-    </ng-template>
+    </tui-scrollbar>
+  </div>
+  <ng-template #content let-data>
+    <span>
+      <a [href]="data.url" target="_blank" tuiTitle>{{ data.name }}</a>
+    </span>
   </ng-template>
-</tui-scrollbar>
+</ng-template>

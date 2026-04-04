@@ -1,13 +1,14 @@
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
 import { TuiDialogContext } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TUI_DEFAULT_MATCHER } from '@taiga-ui/cdk';
 import { IExercise } from 'src/app/interfaces/exercise';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
 import { ExercisesConfigService } from '../../exercises-main/exercises-config.service';
-import { TUI_VALIDATION_ERRORS, tuiItemsHandlersProvider } from '@taiga-ui/kit';
+import { tuiItemsHandlersProvider } from '@taiga-ui/core';
+import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit';
 import { map, of, startWith, Subject, switchMap } from 'rxjs';
 import { BodyParts } from '../../../enums/body-parts';
 
@@ -18,18 +19,17 @@ import { BodyParts } from '../../../enums/body-parts';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     tuiItemsHandlersProvider({
-      stringify: (val: ISelectBox | number) => {
-
-        // ну это пиздец вообще говно а не код. участвует как при указании выбранного значения,
-        // так и при вызове списка элементов селекта
-        if (typeof val === 'number') {
+      stringify: signal((val: ISelectBox | number) => {
+       if (typeof val === 'number') {
           const body_part = BodyParts.find((part: ISelectBox) => part.id === val) as ISelectBox;
           return body_part.name;
         }
-        // const body_part: ISelectBox | undefined = BodyParts.find(part => val == part.id)
-        // return body_part?.name ?? 'Часть тела не найдена'
+        
         return val.name as string
-      }
+        
+      }),
+      identityMatcher: signal((a: any, b: any) => a.id === b.id),
+      // Сгибание рук со штангой параллельный хват в скамье Скотта
     }),
     {
       provide: TUI_VALIDATION_ERRORS,
@@ -49,7 +49,8 @@ export class ExercisesFormComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    @Inject(ExercisesConfigService) private exercisesConfigService: ExercisesConfigService,
+    // @Inject(ExercisesConfigService) private exercisesConfigService: ExercisesConfigService,
+    private exercisesConfigService: ExercisesConfigService,
     @Inject(POLYMORPHEUS_CONTEXT)
     private context: TuiDialogContext<boolean, IExerciseDialog>
   ) { }

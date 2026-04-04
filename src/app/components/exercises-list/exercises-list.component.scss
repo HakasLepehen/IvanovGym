@@ -19,6 +19,12 @@
   gap: 5px;
 }
 
-.popup_body {
+.search {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.search .popup_body {
   height: 100%;
 }

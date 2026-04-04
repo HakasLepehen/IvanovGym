@@ -1,13 +1,14 @@
 import { AuthComponent } from '../../components/auth/auth.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaigaModule } from '../taiga/taiga.module';
 import { RouterLink } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     TaigaModule,
     RouterLink

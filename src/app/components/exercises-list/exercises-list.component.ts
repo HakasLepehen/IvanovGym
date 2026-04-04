@@ -3,7 +3,7 @@ import { TuiAccordion, TuiRadioList } from "@taiga-ui/kit";
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, of, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Subject, of, take, takeUntil, tap } from 'rxjs';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from './../../interfaces/exercise';
 import { ExercisesFormModule } from '../exercises-form/exercises-form.module';
@@ -52,41 +52,48 @@ export class ExercisesListComponent {
     this.route.params
       .pipe(
         tap(params => {
-          // if (!this.context.data) {
-          //   this.bodyPartId = parseInt(params['part']);
-
-          //   if (isNaN(this.bodyPartId)) {
-          //     this.exercises.next([]);
-          //     return alert('Поступил некорректный идентификатор группы мышц, обратитесь к разработчику');
-          //   }
-
-          //   this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part'])).name;
-          //   this.exerciseConfigService.loadExercisesByBodypart(this.bodyPartId);
-          // } else {
-            this.modeView = 'Scheduler';
-            this.initScheduleView();
-          // }
+          console.log(params);
+          
+          this.initView(params);
         }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe()
   }
 
-  get exercises(): Subject<IExercise[]> {
+  get exercises(): BehaviorSubject<IExercise[]> {
     return this.exerciseConfigService.exercises;
   }
 
-  initScheduleView(): void {
+  initView(params: any): void {
     this.exListForm = new FormGroup({
       exercise: new FormControl(null, Validators.required)
     });
     this.store.select(clientExercisesSelector)
-      .pipe(take(1))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (exercises) => {
-          console.log(exercises[0]);
+          console.log('exercises', exercises);
+          this.modeView = 'Scheduler';
+          if (!this.context.data) {
+            let filteredExercises: IExercise[] = []
 
-          // this.list = [...exercises];
+            // this.modeView = 'Default';
+            this.bodyPartId = parseInt(params['part']);
+            this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part']))?.name ?? '';
+            if (exercises.length) {
+              filteredExercises = exercises.filter(
+                (exercise: IExercise) => exercise.muscle_group == this.bodyPartId
+              )
+              console.log('filteredExercises', filteredExercises);
+              
+              this.exercises.next(filteredExercises);
+            }
+          } else {
+            // this.modeView = 'Scheduler';
+            this.list = [...exercises];
+          }
+          this.list = exercises;
         },
       })
   }

@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector, EventEmitter } from '@angular/core';
 import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body-parts';
 import { ISelectBox } from 'src/app/interfaces/selectbox';
@@ -17,7 +17,7 @@ import { Store } from '@ngrx/store';
   providedIn: 'root'
 })
 export class ExercisesConfigService {
-  private exercises$: Subject<IExercise[]> = new Subject();
+  private exercises$: BehaviorSubject<IExercise[]> = new BehaviorSubject<IExercise[]>([]);
   private savingId!: number;
   destroy$: Subject<boolean> = new Subject<boolean>();
   public clientExercises$: Subject<IExercise[]> = new Subject();
@@ -158,7 +158,7 @@ export class ExercisesConfigService {
   //     ).subscribe();
   // }
 
-  get exercises(): Subject<IExercise[]> {
+  get exercises(): BehaviorSubject<IExercise[]> {
     return this.exercises$;
   }
 
