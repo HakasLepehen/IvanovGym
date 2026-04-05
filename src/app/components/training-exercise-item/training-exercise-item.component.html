@@ -5,7 +5,6 @@
       <a [href]="exerciseData()?.url" target="_blank" class="exercise_link">
         {{exerciseData()?.name }}
       </a>
-
     </ng-container>
     <ng-container *ngIf="!hasSelectedExercise">
       <button tuiButton size='l' appearance='secondary' tuiAppearanceMode='checked' type='button'
@@ -47,6 +46,10 @@
   </div>
 
   <!-- КОММЕНТАРИЙ -->
-  <tui-textarea formControlName='comment' class='tui-form__row'>Комментарий</tui-textarea>
+  <!-- <tui-textarea formControlName='comment' class='tui-form__row'>Комментарий</tui-textarea> -->
+  <tui-textfield class='tui-form__row'>
+    <label tuiLabel>Комментарий</label>
+    <textarea formControlName='comment' tuiTextarea [min]=3></textarea>
+  </tui-textfield>
 </form>
 <hr style='margin: .5rem 0;'>

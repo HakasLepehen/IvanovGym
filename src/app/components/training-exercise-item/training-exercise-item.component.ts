@@ -27,7 +27,8 @@ import {
   TuiButtonLoading,
   TuiChevron, TuiDataListWrapper,
   TuiFilterByInputPipe,
-  tuiItemsHandlersProvider, TuiStringifyContentPipe
+  tuiItemsHandlersProvider, TuiStringifyContentPipe,
+  TuiTextarea
 } from '@taiga-ui/kit';
 import { BodyParts } from '../../enums/body-parts';
 import { tap } from 'rxjs/internal/operators/tap';
@@ -54,7 +55,7 @@ import { RouterLink } from '@angular/router';
     TuiTextfieldComponent,
     TuiLabel,
     TuiTextfield,
-    TuiTextareaModule,
+    TuiTextarea,
     TuiDataListDirective,
     TuiSelectModule,
     TuiButton,
@@ -92,7 +93,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   selectedExecVar!: number | IExercise;
   exerciseData: WritableSignal<{name: string, url: string} | null> = signal(null);
   exForm!: FormGroup;
-  body_parts!: string[];
+  // body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
   protected searchingExercise: string = '';
 
@@ -105,13 +106,13 @@ export class TrainingExerciseItemComponent implements OnChanges {
     private scheduleConfigService: SchedulerConfigService
   ) {
     this.isLoading$ = loaderService.getLoading();
-    of(BodyParts)
-      .pipe(
-        take(1),
-        map((body_parts) => body_parts.map((part) => part.name)),
-        tap((result) => (this.body_parts = result))
-      )
-      .subscribe();
+    // of(BodyParts)
+    //   .pipe(
+    //     take(1),
+    //     map((body_parts) => body_parts.map((part) => part.name)),
+    //     tap((result) => (this.body_parts = result))
+    //   )
+    //   .subscribe();
     this.store
       .select(clientExercisesSelector)
       .pipe(

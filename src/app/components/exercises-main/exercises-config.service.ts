@@ -142,7 +142,7 @@ export class ExercisesConfigService {
       ).subscribe()
   }
 
-    searchByIdentifiers(items: any[], searchString: string) {
+  searchByIdentifiers(items: any[], searchString: string) {
     if (!searchString || searchString.trim() === '') {
       return items; // возвращаем все, если строка пустая
     }
