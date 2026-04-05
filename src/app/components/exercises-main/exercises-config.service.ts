@@ -1,17 +1,17 @@
-import { setClientExercises } from './../../store/actions/client-exercises.action';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Injector, EventEmitter } from '@angular/core';
-import { TuiDialogService, TuiDialogContext } from '@taiga-ui/core';
+import { Injectable, Injector } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { BehaviorSubject, Observable, Subject, catchError, combineAll, combineLatestAll, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Subject, catchError, forkJoin, map, of, take, takeUntil, tap } from 'rxjs';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { BodyParts } from 'src/app/enums/body-parts';
-import { ISelectBox } from 'src/app/interfaces/selectbox';
-import { IExercise } from './../../interfaces/exercise';
-import { ExercisesService } from './exercises.service';
-import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
 import IExerciseDialog from 'src/app/interfaces/exercise-dialog';
-import { Store } from '@ngrx/store';
+import { ISelectBox } from 'src/app/interfaces/selectbox';
+import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercises-form.component';
+import { IExercise } from './../../interfaces/exercise';
+import { setClientExercises } from './../../store/actions/client-exercises.action';
+import { ExercisesService } from './exercises.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,19 +45,6 @@ export class ExercisesConfigService {
 
   editExercise(model: IExercise, context: TuiDialogContext<boolean, IExerciseDialog>): void {
     this.loader.show();
-    // if (model.exec_var?.length) {
-    //   model.exec_var.map(exec_var => {
-    //     if (exec_var?.id) {
-    //       // this.editExecutionVariant(exec_var)
-    //     } else {
-    //       exec_var.exercise_id = model.id as number;
-    //       // this.createExecutionVariant(exec_var);
-    //     }
-    //   })
-    // }
-
-    //remove field to save exercise
-    // delete model.exec_var;
 
     this.exercisesService.updateExercise(model)
       .pipe(
@@ -78,48 +65,8 @@ export class ExercisesConfigService {
     return of();
   }
 
-  // createExecutionVariant(model: IExecutionVariant) {
-  //   this.loader.show();
-  //   this.exercisesService
-  //     .saveExecVar(model)
-  //     .pipe(
-  //       take(1),
-  //       tap(() => this.loader.hide()),
-  //       catchError((err: HttpErrorResponse) => {
-  //         return this.handleError(err.message);
-  //       })
-  //     ).subscribe();
-  // }
-
-  // editExecutionVariant(model: IExecutionVariant) {
-  //   this.exercisesService
-  //     .updateExecVar(model)
-  //     .pipe(
-  //       take(1),
-  //       catchError((err: HttpErrorResponse) => {
-  //         return this.handleError(err.message);
-  //       })
-  //     ).subscribe();
-  // }
-
-  // deleteExecutionVariant(id: number) {
-  //   this.exercisesService
-  //     .removeExecVar(id)
-  //     .pipe(
-  //       take(1),
-  //       catchError((err: HttpErrorResponse) => {
-  //         return this.handleError(`${err.message}`);
-  //       })
-  //     ).subscribe();
-  // }
-
   deleteExercise(model: IExercise): void {
     this.loader.show();
-    // if (model.exec_var?.length) {
-    // model.exec_var.map(exec_var => {
-    //   this.deleteExecutionVariant(exec_var.id as number)
-    // })
-    // }
 
     this.exercisesService.removeExercise(model.id as number)
       .pipe(
@@ -145,18 +92,6 @@ export class ExercisesConfigService {
         })
       ).subscribe()
   }
-
-  // loadExecutionVariants(exercise: IExercise): void {
-  //   this.loader.show();
-  //
-  //   this.exercisesService.loadExecVars(<number>exercise.id)
-  //     .pipe(
-  //       take(1),
-  //       // в душе не чаю откуда такая конструкция. Предложил редактор для фикса ошибки [ts2352]
-  //       tap((res) => exercise.exec_var = res as unknown as Array<IExecutionVariant>
-  //       )
-  //     ).subscribe();
-  // }
 
   get exercises(): BehaviorSubject<IExercise[]> {
     return this.exercises$;
@@ -205,5 +140,17 @@ export class ExercisesConfigService {
           this.loader.hide();
         }),
       ).subscribe()
+  }
+
+    searchByIdentifiers(items: any[], searchString: string) {
+    if (!searchString || searchString.trim() === '') {
+      return items; // возвращаем все, если строка пустая
+    }
+
+    const searchLower = searchString.toLowerCase().trim();
+
+    return items.filter(item =>
+      item.name.toLowerCase().includes(searchLower)
+    );
   }
 }

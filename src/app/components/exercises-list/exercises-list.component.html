@@ -18,7 +18,7 @@
 <ng-template #popup>
   <!--  "блок создан для того чтобы сделать из нее флекс элемент"  -->
   <div class="search container">
-    <app-search />
+    <app-search (search)="searchOn($event)" (submit)="onSubmit()" [readOnly]="readOnlySubmit()" />
     <tui-scrollbar class="popup_body">
       <form [formGroup]="exListForm">
         <tui-radio-list formControlName="exercise" [itemContent]="content" [items]="list" />

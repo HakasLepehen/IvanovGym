@@ -1,1 +1,15 @@
-<p>search works!</p>
+<search tuiSearch>
+  <form [formGroup]="searchForm">
+    <fieldset tuiTextfieldSize="l">
+      <tui-textfield iconStart="@tui.search">
+        <label tuiLabel>Поиск упражнения по названию</label>
+        <input placeholder="Введите текст для поиска" tuiTextfield formControlName="query" />
+      </tui-textfield>
+      <button tuiButton (click)="searchClick()" appearance="flat">Найти</button>
+      <button tuiButton (click)="submitValue()" appearance="primary" [tuiAppearanceState]="readOnly() ? 'disabled' : null">Выбрать</button>
+    </fieldset>
+    <fieldset tuiTextfieldSize="m">
+      <tui-filter formControlName="body_parts" size="m" [items]="filters" />
+    </fieldset>
+  </form>
+</search>
