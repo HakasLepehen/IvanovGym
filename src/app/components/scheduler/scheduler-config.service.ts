@@ -17,6 +17,8 @@ import { SchedulerService } from './scheduler.service';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
 import { ExercisesListComponent } from '../exercises-list/exercises-list.component';
+import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
+import { IExercise } from 'src/app/interfaces/exercise';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +28,15 @@ export class SchedulerConfigService {
   public trainings$: Subject<any[]> = new Subject<any>();
   public editingTraining$: Subject<ITraining> = new Subject<ITraining>();
   public trainingExercises$: Subject<any[]> = new Subject<any>();
+  private popupExercisesRef: any;
+  private trainingPopupRef: any;
 
   constructor(
     private readonly _dialogs: TuiDialogService,
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private exercisesConfigService: ExercisesConfigService,
   ) {
   }
 
@@ -45,7 +50,7 @@ export class SchedulerConfigService {
       titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU');
     }
 
-    this._dialogs
+    this.trainingPopupRef = this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
         label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
         data: {
@@ -297,12 +302,13 @@ export class SchedulerConfigService {
       .subscribe();
   }
 
-  openExercisesList(): void {
-    this._dialogs
+  openExercisesList(exercise: IExercise | null): void {
+    this.popupExercisesRef = this._dialogs
       .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
         label: 'Выбор упражнения для тренировки',
         data: {
-          clientGUID: '123'
+          clientGUID: '123',
+          exercise: exercise,
         },
         size: 'fullscreen',
         closeable: true,
@@ -310,6 +316,11 @@ export class SchedulerConfigService {
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
+  }
+
+  closeExercisesListPopup(): void {
+    this.popupExercisesRef.complete();
+    this.popupExercisesRef = null;
   }
 
 }

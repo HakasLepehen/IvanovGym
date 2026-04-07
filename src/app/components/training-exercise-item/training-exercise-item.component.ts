@@ -40,6 +40,9 @@ import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { RouterLink } from '@angular/router';
+import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LinkComponent } from '../ui/link/link.component';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -67,6 +70,7 @@ import { RouterLink } from '@angular/router';
     JsonPipe,
     RouterLink,
     TuiLink,
+    LinkComponent,
   ],
   standalone: true,
   providers: [
@@ -91,11 +95,13 @@ export class TrainingExerciseItemComponent implements OnChanges {
   version = 'test';
   store = inject(Store);
   selectedExecVar!: number | IExercise;
-  exerciseData: WritableSignal<{name: string, url: string} | null> = signal(null);
+  exerciseData: WritableSignal<{ name: string, url: string } | null> = signal(null);
   exForm!: FormGroup;
   // body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
   protected searchingExercise: string = '';
+  linkText: string = '';
+  linkURL: string = '';
 
   protected readonly stringify = (item: IExercise): string => `${item.name}`;
 
@@ -103,16 +109,28 @@ export class TrainingExerciseItemComponent implements OnChanges {
     private fb: FormBuilder,
     private controlContainer: ControlContainer,
     private loaderService: LoaderService,
-    private scheduleConfigService: SchedulerConfigService
+    private scheduleConfigService: SchedulerConfigService,
+    private exerciseConfigService: ExercisesConfigService,
   ) {
     this.isLoading$ = loaderService.getLoading();
-    // of(BodyParts)
-    //   .pipe(
-    //     take(1),
-    //     map((body_parts) => body_parts.map((part) => part.name)),
-    //     tap((result) => (this.body_parts = result))
-    //   )
-    //   .subscribe();
+    this.exerciseConfigService.selectedExercise$
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: (value) => {
+          if (value) {
+            const arrExercises = controlContainer.control?.get('exercises') as FormArray;
+            arrExercises.at(this.index).get('exercise')?.patchValue(value);
+            this.linkText = value.name;
+            this.linkURL = value.url ?? '#';
+            // this.exForm.get('exercise')?.patchValue(value);
+            // this.exerciseData.set({
+            //   name: this.exForm.get('exercise')?.value.name,
+            //   url: this.exForm.get('exercise')?.value.url
+            // });
+            // this.focusExerciseChanged();
+          }
+        },
+      })
     this.store
       .select(clientExercisesSelector)
       .pipe(
@@ -125,6 +143,7 @@ export class TrainingExerciseItemComponent implements OnChanges {
   ngOnInit(): void {
     let exercisesFormArray: FormArray<any> = this.controlContainer.control?.get('exercises') as FormArray;
     this.exForm = exercisesFormArray.at(this.index) as FormGroup;
+
     // инициализация поля выбора упражнения через поиск
     const result = this.exercises.find((el: IExercise) => el.id === this.exForm.get('exercise')?.value);
     if (result) {
@@ -134,10 +153,11 @@ export class TrainingExerciseItemComponent implements OnChanges {
         name: this.exForm.get('exercise')?.value.name,
         url: this.exForm.get('exercise')?.value.url
       });
+      this.focusExerciseChanged();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {}
+  ngOnChanges(changes: SimpleChanges): void { }
 
   get hasSelectedExercise(): boolean {
     return !!this.exForm.get('exercise')?.value;
@@ -151,20 +171,20 @@ export class TrainingExerciseItemComponent implements OnChanges {
     });
   }
 
-  focusExerciseChanged(e: boolean): void {
-    if (!e) {
-      const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
-      if (!!selectedExercise) {
-        this.messageSent.emit({
-          id: selectedExercise.id as number,
-          index: this.index,
-          type: MessageTypes.PRELOAD_DATA,
-        });
-      }
+  focusExerciseChanged(): void {
+
+    const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
+    if (!!selectedExercise) {
+      this.messageSent.emit({
+        id: selectedExercise.id as number,
+        index: this.index,
+        type: MessageTypes.PRELOAD_DATA,
+      });
     }
+
   }
 
   selectExercise(): void {
-    this.scheduleConfigService.openExercisesList();
+    this.scheduleConfigService.openExercisesList(this.exForm.get('exercise')?.value);
   }
 }

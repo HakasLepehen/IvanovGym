@@ -6,7 +6,7 @@
         <input placeholder="Введите текст для поиска" tuiTextfield formControlName="query" />
       </tui-textfield>
       <button tuiButton (click)="searchClick()" appearance="flat">Найти</button>
-      <button tuiButton (click)="submitValue()" appearance="primary" [tuiAppearanceState]="readOnly() ? 'disabled' : null">Выбрать</button>
+      <button tuiButton (click)="submitValue()" appearance="primary" [tuiAppearanceState]="readOnly() ? 'disabled' : null" type="submit">Выбрать</button>
     </fieldset>
     <fieldset tuiTextfieldSize="m">
       <tui-filter formControlName="body_parts" size="m" [items]="filters" />

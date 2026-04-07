@@ -79,11 +79,10 @@ export class ExercisesListComponent {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (exercises) => {
-          this.modeView = 'Scheduler';
           if (!this.context.data) {
             let filteredExercises: IExercise[] = []
 
-            // this.modeView = 'Default';
+            this.modeView = 'Default';
             this.bodyPartId = parseInt(params['part']);
             this.title = (<any>this.exerciseConfigService.bodyParts.find(el => el.id == params['part']))?.name ?? '';
             if (exercises.length) {
@@ -94,7 +93,8 @@ export class ExercisesListComponent {
               this.exercises.next(filteredExercises);
             }
           } else {
-            // this.modeView = 'Scheduler';
+            this.modeView = 'Scheduler';
+            this.exListForm.get('exercise')?.patchValue(this.context.data.exercise)
             this.list = [...exercises];
           }
           this.list = exercises;
@@ -141,7 +141,9 @@ export class ExercisesListComponent {
   }
 
   onSubmit(): void {
-    this.exListForm.controls['exercise'].value
+    this.exerciseConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value);
+    // In this case context is not null. Now we are closing dialog
+    // this.context.completeWith(true);
   }
 
   ngOnDestroy() {
