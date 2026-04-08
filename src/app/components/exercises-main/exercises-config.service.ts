@@ -155,8 +155,4 @@ export class ExercisesConfigService {
       item.name.toLowerCase().includes(searchLower)
     );
   }
-
-  setSelectedExercise(exercise: IExercise): void {
-    this.selectedExercise$.next(exercise);
-  }
 }

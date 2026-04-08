@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
+import { ComponentRef, inject, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
@@ -30,9 +30,10 @@ export class SchedulerConfigService {
   public trainingExercises$: Subject<any[]> = new Subject<any>();
   private popupExercisesRef: any;
   private trainingPopupRef: any;
+  private _dialogs = inject(TuiDialogService);
 
   constructor(
-    private readonly _dialogs: TuiDialogService,
+    // private readonly _dialogs: TuiDialogService,
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
     private loaderService: LoaderService,
@@ -302,7 +303,9 @@ export class SchedulerConfigService {
       .subscribe();
   }
 
-  openExercisesList(exercise: IExercise | null): void {
+  openExercisesList(exercise: IExercise | null, index: number): void {
+    console.log('openExercisesList', index);
+
     this.popupExercisesRef = this._dialogs
       .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
         label: 'Выбор упражнения для тренировки',
@@ -319,8 +322,10 @@ export class SchedulerConfigService {
   }
 
   closeExercisesListPopup(): void {
-    this.popupExercisesRef.complete();
-    this.popupExercisesRef = null;
+    if (this.popupExercisesRef) {
+      this.popupExercisesRef.unsubscribe();
+      this.popupExercisesRef = null;
+    }
   }
 
 }

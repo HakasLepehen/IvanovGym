@@ -110,27 +110,8 @@ export class TrainingExerciseItemComponent implements OnChanges {
     private controlContainer: ControlContainer,
     private loaderService: LoaderService,
     private scheduleConfigService: SchedulerConfigService,
-    private exerciseConfigService: ExercisesConfigService,
   ) {
     this.isLoading$ = loaderService.getLoading();
-    this.exerciseConfigService.selectedExercise$
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: (value) => {
-          if (value) {
-            const arrExercises = controlContainer.control?.get('exercises') as FormArray;
-            arrExercises.at(this.index).get('exercise')?.patchValue(value);
-            this.linkText = value.name;
-            this.linkURL = value.url ?? '#';
-            // this.exForm.get('exercise')?.patchValue(value);
-            // this.exerciseData.set({
-            //   name: this.exForm.get('exercise')?.value.name,
-            //   url: this.exForm.get('exercise')?.value.url
-            // });
-            // this.focusExerciseChanged();
-          }
-        },
-      })
     this.store
       .select(clientExercisesSelector)
       .pipe(
@@ -185,6 +166,6 @@ export class TrainingExerciseItemComponent implements OnChanges {
   }
 
   selectExercise(): void {
-    this.scheduleConfigService.openExercisesList(this.exForm.get('exercise')?.value);
+    this.scheduleConfigService.openExercisesList(this.exForm.get('exercise')?.value, this.index);
   }
 }

@@ -15,6 +15,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { SearchComponent } from "../ui/search/search.component";
 import { BodyParts } from "src/app/enums/body-parts";
 import { ISelectBox } from "src/app/interfaces/selectbox";
+import { SchedulerConfigService } from "../scheduler/scheduler-config.service";
 
 @Component({
   selector: 'app-exercises-list',
@@ -48,6 +49,7 @@ export class ExercisesListComponent {
     private readonly context: TuiDialogContext<boolean, IExercisesListDialog>,
     private route: ActivatedRoute,
     private exerciseConfigService: ExercisesConfigService,
+    private schedulerConfigService: SchedulerConfigService,
     private store: Store<{ exercise: {} }>
   ) { }
 
@@ -141,9 +143,10 @@ export class ExercisesListComponent {
   }
 
   onSubmit(): void {
-    this.exerciseConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value);
+    this.schedulerConfigService.closeExercisesListPopup();
+    // this.exerciseConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value);
     // In this case context is not null. Now we are closing dialog
-    // this.context.completeWith(true);
+    this.context.completeWith(true);
   }
 
   ngOnDestroy() {
