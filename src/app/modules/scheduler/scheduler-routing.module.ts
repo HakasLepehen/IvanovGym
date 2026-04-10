@@ -7,7 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: SchedulerComponent,
-    pathMatch: 'full',
   },
   {
     path: 'training/:id',
