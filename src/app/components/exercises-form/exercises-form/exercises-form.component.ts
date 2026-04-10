@@ -20,13 +20,13 @@ import { BodyParts } from '../../../enums/body-parts';
   providers: [
     tuiItemsHandlersProvider({
       stringify: signal((val: ISelectBox | number) => {
-       if (typeof val === 'number') {
+        if (typeof val === 'number') {
           const body_part = BodyParts.find((part: ISelectBox) => part.id === val) as ISelectBox;
           return body_part.name;
         }
-        
+
         return val.name as string
-        
+
       }),
       identityMatcher: signal((a: any, b: any) => a.id === b.id),
       // Сгибание рук со штангой параллельный хват в скамье Скотта

@@ -10,7 +10,7 @@ import { IClient } from '../../interfaces/client';
 import { ITraining } from '../../interfaces/training';
 import { TuiMarkerHandler } from '@taiga-ui/core';
 import { ScheduleModeView } from '../../enums/schedule-mode-view';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 const ONE_DOT: [string] = ['var(--tui-status-positive)'];
 
@@ -34,7 +34,6 @@ export class SchedulerComponent implements OnInit {
     private _schedulerConfigService: SchedulerConfigService,
     private readonly loaderService: LoaderService,
     private readonly store: Store,
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private cd: ChangeDetectorRef
   ) {
@@ -124,7 +123,8 @@ export class SchedulerComponent implements OnInit {
   }
 
   public onEditTraining(training: ITraining) {
-    this._schedulerConfigService.openModal(this.selectedDay as TuiDay, training);
+    this._schedulerConfigService.editTraining(training);
+    // this._schedulerConfigService.openModal(this.selectedDay as TuiDay, training);
   }
 
   public onRemoveTraining(id: number) {

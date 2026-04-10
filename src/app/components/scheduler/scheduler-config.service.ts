@@ -19,6 +19,7 @@ import { MessageTypes } from 'src/app/enums/message-types';
 import { ExercisesListComponent } from '../exercises-list/exercises-list.component';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from 'src/app/interfaces/exercise';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -38,11 +39,14 @@ export class SchedulerConfigService {
     private schedulerService: SchedulerService,
     private loaderService: LoaderService,
     private exercisesConfigService: ExercisesConfigService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
   }
 
-  setEditingTraining(training: ITraining) {
+  editTraining(training: ITraining) {
     this.editingTraining$.next(training)
+    this.router.navigate(['/training', training.id],)
   }
 
   openModal(selectedDay: TuiDay, training?: ITraining) {
