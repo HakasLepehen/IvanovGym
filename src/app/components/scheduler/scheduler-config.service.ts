@@ -27,14 +27,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
   public trainings$: Subject<any[]> = new Subject<any>();
-  public editingTraining$: Subject<ITraining> = new Subject<ITraining>();
+  public editingTraining$: BehaviorSubject<ITraining | null> = new BehaviorSubject<ITraining | null>(null);
   public trainingExercises$: Subject<any[]> = new Subject<any>();
   private popupExercisesRef: any;
   private trainingPopupRef: any;
-  private _dialogs = inject(TuiDialogService);
 
   constructor(
-    // private readonly _dialogs: TuiDialogService,
+    private readonly _dialogs: TuiDialogService,
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
     private loaderService: LoaderService,
@@ -46,22 +45,22 @@ export class SchedulerConfigService {
 
   editTraining(training: ITraining) {
     this.editingTraining$.next(training)
-    this.router.navigate(['/training', training.id],)
+    this.router.navigate(['scheduler', 'training', training.id],)
   }
 
-  openModal(selectedDay: TuiDay, training?: ITraining) {
-    let titleEditingDate: string = '';
-    if (!!training) {
-      titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU');
-    }
+  // open when create training in scheduler
+  openModal(selectedDay: TuiDay) {
+    // let titleEditingDate: string = '';
+    // if (!!training) {
+    //   titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU');
+    // }
 
     this.trainingPopupRef = this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
-        label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
+        label: 'Создание тренировки',
         data: {
-          isPlanning: !training,
+          isPlanning: true,
           selectedDay: selectedDay,
-          training: training
         },
         size: 'fullscreen',
         closeable: true,
@@ -86,7 +85,7 @@ export class SchedulerConfigService {
     this.loaderService.show();
     // expand context data to map values to send server
     trainingModel = {
-      ...context.data.training,
+      // ...formValue,
       clientGUID: formValue.client.guid,
       planned_date: formValue.planned_date.toUtcNativeDate(),
       hour: formValue.time.hours,
@@ -94,6 +93,7 @@ export class SchedulerConfigService {
     };
 
     if (!isCreate) {
+      trainingModel.id = formValue.id;
       formValue.exercises.forEach((exercise: any) => {
         if (exercise?.id) {
           mappedExercises.push({
@@ -160,6 +160,7 @@ export class SchedulerConfigService {
   public initializeTrainingFormControls(form: FormGroup, model: ITraining, clients: any): void {
     let selectedClient: IClient | undefined;
 
+    form.controls['id'].setValue(model.id);
     form.controls['planned_date'].setValue(TuiDay.fromLocalNativeDate(new Date(model.planned_date)));
 
     form.controls['time'].setValue(
@@ -295,11 +296,15 @@ export class SchedulerConfigService {
         // Шаг 5: Завершаем операцию
         tap(() => {
           this.loaderService.hide();
-          context.completeWith(true);
+          if (context.data) {
+            context.completeWith(true);
+          }
         }),
         catchError((err: HttpErrorResponse) => {
           this.loaderService.hide();
-          context.completeWith(true);
+          if (context.data) {
+            context.completeWith(true);
+          }
           console.error('Ошибка при обновлении тренировки:', err);
           return of(null);
         })
@@ -330,6 +335,15 @@ export class SchedulerConfigService {
       this.popupExercisesRef.unsubscribe();
       this.popupExercisesRef = null;
     }
+  }
+
+  getTrainingById(id: number) {
+    return this.schedulerService.getTrainingById(id)
+      .pipe(
+        map((res: any) => {
+          return res[0];
+        })
+      );
   }
 
 }

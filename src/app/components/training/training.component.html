@@ -1,6 +1,6 @@
 <!-- Контент диалогового окна клиента -->
 @if (trainingForm) {
-<form [formGroup]="trainingForm" class="trainingForm">
+<form [formGroup]="trainingForm" class="trainingForm" style="padding: 2rem;">
   <tui-scrollbar>
 
     <tui-input-date formControlName="planned_date">
@@ -11,10 +11,13 @@
       [tuiDropdownMinHeight]="400">
       Время начала тренировки
     </tui-input-time>
+    @if (hasClients()) {
     <tui-select formControlName="client" class="trainingForm__client">
       Выберите клиента
       <tui-data-list-wrapper *tuiDataList [items]="clients"></tui-data-list-wrapper>
     </tui-select>
+    }
+
 
     <ng-container *ngIf="!!editingTraining">
       <h4>Упражнения</h4>
@@ -39,6 +42,4 @@
     </button>
   </div>
 </form>
-} @else {
-  <h3 style="text-align: center;">Список клиентов пуст</h3>
 }

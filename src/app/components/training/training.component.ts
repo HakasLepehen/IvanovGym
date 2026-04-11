@@ -3,7 +3,7 @@ import { ITrainingExercise } from '../../interfaces/training_exercise';
 import { clientsSelector } from '../../store/selectors/client.selector';
 import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, Input, signal, ViewChild, ViewContainerRef, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Inject, Input, OnDestroy, Optional, Signal, signal, ViewChild, ViewContainerRef, WritableSignal } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -19,11 +19,13 @@ import { TuiButton, TuiDataList, TuiDialogContext, TuiScrollbar } from '@taiga-u
 import { TuiButtonLoading, tuiCreateTimePeriods, TuiDataListWrapper, tuiItemsHandlersProvider } from '@taiga-ui/kit';
 import { TuiInputDateModule, TuiInputTimeModule, TuiSelectModule } from '@taiga-ui/legacy';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
-import { BehaviorSubject, EMPTY, map, take, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, filter, first, forkJoin, map, of, switchMap, take, tap } from 'rxjs';
 import { ITrainingDialog } from '../../interfaces/training_dialog';
 import { ITraining } from '../../interfaces/training';
 import { LoaderService } from '../loader/loader.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { any } from 'cypress/types/bluebird';
 
 @Component({
   standalone: true,
@@ -51,10 +53,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TrainingComponent {
+export class TrainingComponent implements OnDestroy {
   @Input()
   trainingId!: number;
-  public isPlanning: boolean = false;
+  public isCreate: boolean = false;
   private selectedDay!: TuiDay;
   public trainingForm!: FormGroup;
   public isLoading$: BehaviorSubject<boolean>;
@@ -62,83 +64,96 @@ export class TrainingComponent {
   clients!: IClient[];
   public editingTraining!: ITraining;
   @ViewChild('place', { read: ViewContainerRef }) placeContainer!: ViewContainerRef;
+  hasClients: WritableSignal<boolean> = signal(false);
 
   constructor(
-    @Inject(POLYMORPHEUS_CONTEXT)
+    @Optional() @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
     private scheduleConfigService: SchedulerConfigService,
     private fb: FormBuilder,
     private loaderService: LoaderService,
+    private readonly activatedRoute: ActivatedRoute,
   ) {
     this.isLoading$ = loaderService.getLoading();
-
-    this.isPlanning = context?.data?.isPlanning;
-    this.selectedDay = context?.data?.selectedDay;
-    store.select(clientsSelector)
-      .pipe(
-        take(1),
-        map((clients: IClient[]): IClient[] => clients.filter(client => client.isActive)),
-        tap(val => this.clients = val)
-      ).subscribe();
-  }
-
-  ngOnInit() {
-    if (!!this.context?.data) {
-      this.editingTraining = this.context.data.training;
-      this.initializeForm();
-    } else {
-      this.scheduleConfigService.editingTraining$
-        .pipe(
-          // takeUntilDestroyed(),
-          tap((training) => {
-            this.editingTraining = training;
-            this.initializeForm();
-            return EMPTY;
-          }),
-        )
-        .subscribe()
-    }
-    // this.trainingForm = this.fb.group({
-    //   time: new FormControl<string | null>(null, Validators.required),
-    //   planned_date: new FormControl<string | null>(null, Validators.required),
-    //   client: new FormControl<IClient | null>(null, Validators.required),
-    //   exercises: this.fb.array([])
-    // });
-    // if (!!this.editingTraining) {
-    //   // если в контексте было получено значение - инициализируем данные в форме
-    //   this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.id as number);
-    //   this.scheduleConfigService.trainingExercises$
-    //     .pipe(
-    //       take(1),
-    //       tap(val => {
-    //         val.forEach((trainingExercise: ITrainingExercise) => this.addExercise(trainingExercise));
-    //       })
-    //     )
-    //     .subscribe();
-    //   this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients);
-    // }
-  }
-
-  private initializeForm(): void {
+    this.isCreate = context.data != null;
     this.trainingForm = this.fb.group({
+      id: new FormControl<number | null>(null),
       time: new FormControl<string | null>(null, Validators.required),
       planned_date: new FormControl<string | null>(null, Validators.required),
       client: new FormControl<IClient | null>(null, Validators.required),
       exercises: this.fb.array([])
     });
+  }
+
+  ngOnInit() {
+    this.store.select(clientsSelector)
+      .pipe(
+        filter((clients: IClient[]) => clients.length > 0),
+        tap((clients: IClient[]) => {
+          this.clients = clients.filter(client => client.isActive && client.fullName?.trim());
+          this.hasClients.set(true);
+        }),
+        switchMap(() => {
+          return !this.isCreate ? this.scheduleConfigService.editingTraining$ : EMPTY
+        }),
+        switchMap((editingTraining: any): any => {
+          // будет работать при первоначальной загрузке страницы редактирования тренировки
+          if (editingTraining) {
+            this.isCreate = false;
+            return of(editingTraining);
+          } else {
+            // будет работать при перезагрузке страницы редактирования тренировки
+            // можно получить новым потоком через события роутера но при такой реализации все работает корректно
+            const strId = this.activatedRoute.snapshot.paramMap.get('id');
+            const id = parseInt(strId as string);
+
+            if (!isNaN(id)) {
+              return this.scheduleConfigService.getTrainingById(id);
+            }
+          }
+        }),
+        filter((editingTraining): editingTraining is ITraining => {
+          return editingTraining != null
+        }),
+        // not sure that need this operator, because i receive above editingTraining many times
+        first(),
+      )
+      .subscribe({
+        next: (editingTraining) => {
+          this.editingTraining = editingTraining;
+        },
+        complete: () => {
+          this.initView();
+        }
+      });
+  }
+
+  initView(): void {
+    const id = this.activatedRoute.snapshot.paramMap.get('id')
+    // если нет id то было открыто диалоговое окно создания тренировки
+    if (!id) {
+      this.isCreate = this.context?.data?.isPlanning;
+      this.selectedDay = this.context?.data?.selectedDay;
+    }
+    this.initializeForm();
+  }
+
+  private initializeForm(): void {
     if (!!this.editingTraining) {
       // если в контексте было получено значение - инициализируем данные в форме
+      this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients);
       this.scheduleConfigService.getTrainingExercisesByTraining(this.editingTraining.id as number);
       this.scheduleConfigService.trainingExercises$
         .pipe(
           take(1),
           tap(val => {
-            val.forEach((trainingExercise: ITrainingExercise) => this.addExercise(trainingExercise));
+            if (val.length) {
+              val.forEach((trainingExercise: ITrainingExercise) => this.addExercise(trainingExercise));
+            }
           })
         )
         .subscribe();
-      this.scheduleConfigService.initializeTrainingFormControls(this.trainingForm, this.editingTraining, this.clients);
     }
   }
 
@@ -153,7 +168,7 @@ export class TrainingComponent {
   public onSubmit(): void {
     const props = {
       formValue: this.trainingForm.value,
-      isCreate: this.isPlanning
+      isCreate: this.isCreate
     };
 
     this.scheduleConfigService.saveTraining(props, this.context);
@@ -164,7 +179,6 @@ export class TrainingComponent {
    * @param exercise
    */
   public addExercise(exercise?: ITrainingExercise): void {
-    // this.scheduleConfigService.openModal(this.selectedDay as TuiDay, this.editingTraining)
     this.scheduleConfigService.initializeExerciseComponent(this.placeContainer, this.exercises, this.editingTraining.clientGUID);
 
     this.exercises.push(
@@ -178,5 +192,10 @@ export class TrainingComponent {
         comment: new FormControl(exercise?.comment ?? '')
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    console.log('destroy');
+
   }
 }

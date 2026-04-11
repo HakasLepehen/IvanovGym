@@ -25,6 +25,14 @@ export class SchedulerService {
     return this.httpClient.get<any>(`${ENV.supabaseUrl}/${this.trainingURL}`);
   }
 
+  getTrainingById(id: number): Observable<ITraining> {
+    const reqOptions = {
+      ...options,
+      params: new HttpParams().set('id', `eq.${id}`)
+    };
+    return this.httpClient.get<any>(`${ENV.supabaseUrl}/${this.trainingURL}`, reqOptions);
+  }
+
   saveTraining(model: any): Observable<Object> {
     options.headers.Prefer = 'return=minimal';
     return this.httpClient.post(`${ENV.supabaseUrl}/${this.trainingURL}`, model, options)
@@ -72,6 +80,6 @@ export class SchedulerService {
   }
 
   findLastExercise(clientGUID: string, exercise_id: number): Observable<Object> {
-    return this.httpClient.post(`${ENV.supabaseUrl}/functions/v1/getLastExercise/${exercise_id}`, {client: clientGUID})
+    return this.httpClient.post(`${ENV.supabaseUrl}/functions/v1/getLastExercise/${exercise_id}`, { client: clientGUID })
   }
 }

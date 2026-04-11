@@ -113,6 +113,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   public addTraining() {
+    this._schedulerConfigService.editingTraining$.next(null);
     this._schedulerConfigService.openModal(this.selectedDay as TuiDay);
   }
 
