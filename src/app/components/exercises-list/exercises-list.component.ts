@@ -143,7 +143,7 @@ export class ExercisesListComponent {
   }
 
   onSubmit(): void {
-    this.schedulerConfigService.closeExercisesListPopup();
+    // this.schedulerConfigService.closeExercisesListPopup();
     // this.exerciseConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value);
     // In this case context is not null. Now we are closing dialog
     this.context.completeWith(true);

@@ -200,6 +200,7 @@ export class SchedulerConfigService {
 
     trainingExerciseComponentRef.setInput('index', exercises.length);
     trainingExerciseComponentRef.setInput('clientGUID', clientGUID);
+    trainingExerciseComponentRef.setInput('titleExercise', 'asdasd');
     trainingExerciseComponentRef.instance.messageSent.subscribe(
       ({ id, index, type }: OutputMessage): void => {
         // if we haven't id - we are not saved this exercise

@@ -90,6 +90,7 @@ import { LinkComponent } from '../ui/link/link.component';
 export class TrainingExerciseItemComponent implements OnChanges {
   @Input({ required: true }) index!: number;
   @Input({ required: false }) clientGUID!: string;
+  @Input({ required: true }) titleExercise!: string;
   @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
   version = 'test';
