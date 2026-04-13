@@ -53,7 +53,7 @@ import { any } from 'cypress/types/bluebird';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TrainingComponent implements OnDestroy {
+export class TrainingComponent {
   @Input()
   trainingId!: number;
   public isCreate: boolean = false;
@@ -192,10 +192,5 @@ export class TrainingComponent implements OnDestroy {
         comment: new FormControl(exercise?.comment ?? '')
       })
     );
-  }
-
-  ngOnDestroy(): void {
-    console.log('destroy');
-
   }
 }

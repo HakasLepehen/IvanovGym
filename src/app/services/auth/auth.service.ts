@@ -48,13 +48,8 @@ export class AuthService {
 
   getUser(): Subscription {
     return this.http.get(`${ENV.supabaseUrl}${this.authUrl}/user`)
-      .pipe(
-        take(1),
-        tap(res => {
-          console.log(res);
-          return res;
-        })
-      ).subscribe();
+      .pipe(take(1))
+      .subscribe();
   }
 
   signOut() {

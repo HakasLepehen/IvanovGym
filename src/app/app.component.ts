@@ -59,15 +59,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.store.pipe(
-    //   select(clientsSelector),
-    //   tap((clients: IClient[]) => {
-    //     console.log(clients);
-    //     if (!clients.length) {
-    //       this.mainService.initData();
-    //       // this.mainService.initInitializationData();
-    //     }
-    //   })
-    // ).subscribe()
   }
 }

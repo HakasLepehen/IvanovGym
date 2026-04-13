@@ -316,19 +316,26 @@ export class SchedulerConfigService {
   openExercisesList(exercise: IExercise | null, index: number): void {
     console.log('openExercisesList', index);
 
-    this.popupExercisesRef = this._dialogs
-      .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
-        label: 'Выбор упражнения для тренировки',
-        data: {
-          clientGUID: '123',
-          exercise: exercise,
-        },
+    // this.popupExercisesRef = this._dialogs
+    //   .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
+    //     label: 'Выбор упражнения для тренировки',
+    //     data: {
+    //       clientGUID: '123',
+    //       exercise: exercise,
+    //     },
+    //     size: 'fullscreen',
+    //     closeable: true,
+    //     dismissible: false,
+    //   })
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe();
+    this._dialogs.open('<div>This is a plain string dialog.</div>It supports basic <strong>HTML</strong>',
+      {
+        label: 'Heading',
         size: 'fullscreen',
         closeable: true,
         dismissible: false,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      },).subscribe()
   }
 
   closeExercisesListPopup(): void {
