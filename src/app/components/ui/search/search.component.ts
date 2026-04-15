@@ -29,6 +29,6 @@ export class SearchComponent {
   }
 
   public submitValue(): void {
-    this.submit.emit(true);
+    // this.submit.emit(true);
   }
 }
