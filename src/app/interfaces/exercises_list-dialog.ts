@@ -4,4 +4,5 @@ import { IExercise } from "./exercise";
 export default interface IExercisesListDialog extends TuiDialog<any> {
   clientGUID: string;
   exercise: IExercise;
+  index: number;
 }

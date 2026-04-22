@@ -87,27 +87,23 @@ import { LinkComponent } from '../ui/link/link.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrainingExerciseItemComponent implements OnChanges {
+export class TrainingExerciseItemComponent {
   @Input({ required: true }) index!: number;
   @Input({ required: false }) clientGUID!: string;
   @Input({ required: true }) titleExercise!: string;
   @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
-  version = 'test';
   store = inject(Store);
   selectedExecVar!: number | IExercise;
   exerciseData: WritableSignal<{ name: string, url: string } | null> = signal(null);
   exForm!: FormGroup;
-  // body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
-  protected searchingExercise: string = '';
   linkText: string = '';
   linkURL: string = '';
 
   protected readonly stringify = (item: IExercise): string => `${item.name}`;
 
   constructor(
-    private fb: FormBuilder,
     private controlContainer: ControlContainer,
     private loaderService: LoaderService,
     private scheduleConfigService: SchedulerConfigService,
@@ -137,12 +133,20 @@ export class TrainingExerciseItemComponent implements OnChanges {
       });
       this.focusExerciseChanged();
     }
+    this.exForm.valueChanges.subscribe({
+      next: (value) => {
+      console.log('repaint');
+      this.linkText = value.exercise.name;
+      this.linkURL = value.exercise.url;
+    },})
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
-
   get hasSelectedExercise(): boolean {
-    return !!this.exForm.get('exercise')?.value;
+    if (!!!this.exForm.get('exercise')?.value) {
+      return false;
+    } else {
+      return !!this.exForm.get('exercise')?.value.id
+    }
   }
 
   removeExercise(): void {

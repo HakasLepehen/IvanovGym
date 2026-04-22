@@ -26,6 +26,7 @@ import { LoaderService } from '../loader/loader.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { any } from 'cypress/types/bluebird';
+import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 
 @Component({
   standalone: true,
@@ -71,6 +72,7 @@ export class TrainingComponent {
     private readonly context: TuiDialogContext<boolean, ITrainingDialog>,
     private store: Store,
     private scheduleConfigService: SchedulerConfigService,
+    private exerciseConfigService: ExercisesConfigService,
     private fb: FormBuilder,
     private loaderService: LoaderService,
     private readonly activatedRoute: ActivatedRoute,
@@ -127,6 +129,15 @@ export class TrainingComponent {
           this.initView();
         }
       });
+    
+    this.exerciseConfigService.selectedExercise$
+      .subscribe({
+        next: ({ exercise, index }) => {
+          // this.exercises[index].patchValue({});
+          this.exercises.at(index).get('exercise')?.patchValue(exercise)
+          console.log(this.exercises.at(index).getRawValue());
+          
+      }})
   }
 
   initView(): void {

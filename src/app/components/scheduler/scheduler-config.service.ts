@@ -322,6 +322,7 @@ export class SchedulerConfigService {
         data: {
           clientGUID: '123',
           exercise: exercise,
+          index: index,
         },
         size: 'fullscreen',
         closeable: true,
