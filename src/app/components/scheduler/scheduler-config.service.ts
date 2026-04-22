@@ -200,7 +200,6 @@ export class SchedulerConfigService {
 
     trainingExerciseComponentRef.setInput('index', exercises.length);
     trainingExerciseComponentRef.setInput('clientGUID', clientGUID);
-    trainingExerciseComponentRef.setInput('titleExercise', 'asdasd');
     trainingExerciseComponentRef.instance.messageSent.subscribe(
       ({ id, index, type }: OutputMessage): void => {
         // if we haven't id - we are not saved this exercise
@@ -314,8 +313,6 @@ export class SchedulerConfigService {
   }
 
   openExercisesList(exercise: IExercise | null, index: number): void {
-    console.log('openExercisesList', index);
-
     this.popupExercisesRef = this._dialogs
       .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
         label: 'Выбор упражнения для тренировки',

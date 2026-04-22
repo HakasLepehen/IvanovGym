@@ -133,10 +133,7 @@ export class TrainingComponent {
     this.exerciseConfigService.selectedExercise$
       .subscribe({
         next: ({ exercise, index }) => {
-          // this.exercises[index].patchValue({});
           this.exercises.at(index).get('exercise')?.patchValue(exercise)
-          console.log(this.exercises.at(index).getRawValue());
-          
       }})
   }
 

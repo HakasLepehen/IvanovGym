@@ -90,7 +90,6 @@ import { LinkComponent } from '../ui/link/link.component';
 export class TrainingExerciseItemComponent {
   @Input({ required: true }) index!: number;
   @Input({ required: false }) clientGUID!: string;
-  @Input({ required: true }) titleExercise!: string;
   @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
   store = inject(Store);
@@ -135,18 +134,14 @@ export class TrainingExerciseItemComponent {
     }
     this.exForm.valueChanges.subscribe({
       next: (value) => {
-      console.log('repaint');
-      this.linkText = value.exercise.name;
-      this.linkURL = value.exercise.url;
-    },})
-  }
-
-  get hasSelectedExercise(): boolean {
-    if (!!!this.exForm.get('exercise')?.value) {
-      return false;
-    } else {
-      return !!this.exForm.get('exercise')?.value.id
-    }
+        this.exerciseData.set({
+          name: value.exercise.name,
+          url: value.exercise.url,
+        });
+        this.linkText = value.exercise.name;
+        this.linkURL = value.exercise.url
+      },
+    })
   }
 
   removeExercise(): void {

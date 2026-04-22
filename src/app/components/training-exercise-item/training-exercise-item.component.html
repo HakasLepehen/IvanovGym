@@ -1,18 +1,18 @@
 <form [formGroup]='exForm'>
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
   <div class='tui-form__row exercise'>
-    <ng-container *ngIf="hasSelectedExercise">
+    <ng-container *ngIf="!!exerciseData()">
       <div>
-        <app-link [text]="linkText" [url]="linkURL" />
-        <a [href]="exerciseData()?.url" target="_blank" class="exercise_link">
+        <app-link [text]="exerciseData()?.name ?? ''" [url]="exerciseData()?.url ?? ''" />
+        <!-- <a [href]="exerciseData()?.url" target="_blank" class="exercise_link">
           {{exerciseData()?.name }}
-        </a>
+        </a> -->
         <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
           (click)='selectExercise()'>
         </button>
       </div>
     </ng-container>
-    <ng-container *ngIf="!hasSelectedExercise">
+    <ng-container *ngIf="!!!exerciseData()">
       <button tuiButton size='l' appearance='secondary' tuiAppearanceMode='checked' type='button'
         [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='selectExercise()'>
         Выбрать упражнение

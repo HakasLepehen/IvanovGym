@@ -1,3 +1,10 @@
-<a tuiLink [href]="url">
+@if (!!url) {
+<a iconEnd="@tui.link" tuiLink [href]="url" target="_blank">
   {{text}}
 </a>
+}
+@else {
+<span>
+  {{text}}
+</span>
+}
