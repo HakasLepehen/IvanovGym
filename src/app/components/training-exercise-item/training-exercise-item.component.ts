@@ -97,8 +97,6 @@ export class TrainingExerciseItemComponent {
   exerciseData: WritableSignal<{ name: string, url: string } | null> = signal(null);
   exForm!: FormGroup;
   public isLoading$: BehaviorSubject<boolean>;
-  linkText: string = '';
-  linkURL: string = '';
 
   protected readonly stringify = (item: IExercise): string => `${item.name}`;
 
@@ -130,7 +128,7 @@ export class TrainingExerciseItemComponent {
         name: this.exForm.get('exercise')?.value.name,
         url: this.exForm.get('exercise')?.value.url
       });
-      this.focusExerciseChanged();
+      // this.focusExerciseChanged();
     }
     this.exForm.valueChanges.subscribe({
       next: (value) => {
@@ -138,8 +136,6 @@ export class TrainingExerciseItemComponent {
           name: value.exercise.name,
           url: value.exercise.url,
         });
-        this.linkText = value.exercise.name;
-        this.linkURL = value.exercise.url
       },
     })
   }

@@ -4,9 +4,6 @@
     <ng-container *ngIf="!!exerciseData()">
       <div>
         <app-link [text]="exerciseData()?.name ?? ''" [url]="exerciseData()?.url ?? ''" />
-        <!-- <a [href]="exerciseData()?.url" target="_blank" class="exercise_link">
-          {{exerciseData()?.name }}
-        </a> -->
         <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
           (click)='selectExercise()'>
         </button>
