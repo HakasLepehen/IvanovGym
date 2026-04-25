@@ -12,7 +12,6 @@ import { ExercisesFormComponent } from '../exercises-form/exercises-form/exercis
 import { IExercise } from './../../interfaces/exercise';
 import { setClientExercises } from './../../store/actions/client-exercises.action';
 import { ExercisesService } from './exercises.service';
-import IExercisesListDialog from 'src/app/interfaces/exercises_list-dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,6 @@ export class ExercisesConfigService {
   private savingId!: number;
   destroy$: Subject<boolean> = new Subject<boolean>();
   public clientExercises$: Subject<IExercise[]> = new Subject();
-  public selectedExercise$: Subject<{ exercise: IExercise, index: number }> = new Subject();
 
   constructor(
     private loader: LoaderService,
@@ -154,12 +152,5 @@ export class ExercisesConfigService {
     return items.filter(item =>
       item.name.toLowerCase().includes(searchLower)
     );
-  }
-
-  setSelectedExercise(model: any, index: number) {
-    this.selectedExercise$.next({
-      exercise: model,
-      index: index,
-    })
   }
 }

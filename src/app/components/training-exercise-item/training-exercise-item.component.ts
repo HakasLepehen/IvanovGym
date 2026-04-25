@@ -94,7 +94,7 @@ export class TrainingExerciseItemComponent {
   exercises: IExercise[] = [];
   store = inject(Store);
   selectedExecVar!: number | IExercise;
-  exerciseData: WritableSignal<{ name: string, url: string } | null> = signal(null);
+  exerciseData: WritableSignal<{ id?: number, name: string, url: string } | null> = signal(null);
   exForm!: FormGroup;
   public isLoading$: BehaviorSubject<boolean>;
 
@@ -125,6 +125,7 @@ export class TrainingExerciseItemComponent {
       this.selectedExecVar = result;
       this.exForm.get('exercise')?.setValue(this.selectedExecVar);
       this.exerciseData.set({
+        id: this.exForm.get('exercise')?.value.id,
         name: this.exForm.get('exercise')?.value.name,
         url: this.exForm.get('exercise')?.value.url
       });
@@ -133,6 +134,7 @@ export class TrainingExerciseItemComponent {
     this.exForm.valueChanges.subscribe({
       next: (value) => {
         this.exerciseData.set({
+          id: value.exercise?.id,
           name: value.exercise.name,
           url: value.exercise.url,
         });
@@ -148,6 +150,7 @@ export class TrainingExerciseItemComponent {
     });
   }
 
+  // стоит переписать под закрытие окна выбора упражнения
   focusExerciseChanged(): void {
 
     const selectedExercise: IExercise = this.exForm.get('exercise')?.value;

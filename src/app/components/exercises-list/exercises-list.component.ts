@@ -144,7 +144,7 @@ export class ExercisesListComponent {
 
   onSubmit(): void {
     // this.schedulerConfigService.closeExercisesListPopup();
-    this.exerciseConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value, this.context?.data?.index);
+    this.schedulerConfigService.setSelectedExercise(this.exListForm.controls['exercise'].value, this.context?.data?.index);
     // In this case context is not null. Now we are closing dialog
     this.context.completeWith(true);
   }
@@ -152,5 +152,6 @@ export class ExercisesListComponent {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.exerciseConfigService.destroy$.next(true);
+    this.schedulerConfigService.destroy$.next(true);
   }
 }

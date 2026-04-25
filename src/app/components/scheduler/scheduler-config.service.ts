@@ -17,7 +17,6 @@ import { SchedulerService } from './scheduler.service';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
 import { ExercisesListComponent } from '../exercises-list/exercises-list.component';
-import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { IExercise } from 'src/app/interfaces/exercise';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -29,15 +28,13 @@ export class SchedulerConfigService {
   public trainings$: Subject<any[]> = new Subject<any>();
   public editingTraining$: BehaviorSubject<ITraining | null> = new BehaviorSubject<ITraining | null>(null);
   public trainingExercises$: Subject<any[]> = new Subject<any>();
-  private popupExercisesRef: any;
-  private trainingPopupRef: any;
+  public selectedExercise$: Subject<{ exercise: IExercise, index: number }> = new Subject();
 
   constructor(
     private readonly _dialogs: TuiDialogService,
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
     private loaderService: LoaderService,
-    private exercisesConfigService: ExercisesConfigService,
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {
@@ -50,12 +47,8 @@ export class SchedulerConfigService {
 
   // open when create training in scheduler
   openModal(selectedDay: TuiDay) {
-    // let titleEditingDate: string = '';
-    // if (!!training) {
-    //   titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU');
-    // }
 
-    this.trainingPopupRef = this._dialogs
+    this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
         label: 'Создание тренировки',
         data: {
@@ -228,7 +221,7 @@ export class SchedulerConfigService {
               .pipe(
                 take(1),
                 tap((res) => {
-                  if (!res) {
+                  if (!res || (<Array<any>>res).length == 0) {
                     alert('Не найдено данных по указанному упражнению');
                     return EMPTY;
                   }
@@ -313,7 +306,7 @@ export class SchedulerConfigService {
   }
 
   openExercisesList(exercise: IExercise | null, index: number): void {
-    this.popupExercisesRef = this._dialogs
+    this._dialogs
       .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
         label: 'Выбор упражнения для тренировки',
         data: {
@@ -336,13 +329,6 @@ export class SchedulerConfigService {
     //   },).subscribe()
   }
 
-  closeExercisesListPopup(): void {
-    if (this.popupExercisesRef) {
-      this.popupExercisesRef.unsubscribe();
-      this.popupExercisesRef = null;
-    }
-  }
-
   getTrainingById(id: number) {
     return this.schedulerService.getTrainingById(id)
       .pipe(
@@ -350,6 +336,13 @@ export class SchedulerConfigService {
           return res[0];
         })
       );
+  }
+
+  setSelectedExercise(model: any, index: number) {
+    this.selectedExercise$.next({
+      exercise: model,
+      index: index,
+    })
   }
 
 }

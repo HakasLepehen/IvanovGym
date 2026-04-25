@@ -130,7 +130,7 @@ export class TrainingComponent {
         }
       });
     
-    this.exerciseConfigService.selectedExercise$
+    this.scheduleConfigService.selectedExercise$
       .subscribe({
         next: ({ exercise, index }) => {
           this.exercises.at(index).get('exercise')?.patchValue(exercise)
