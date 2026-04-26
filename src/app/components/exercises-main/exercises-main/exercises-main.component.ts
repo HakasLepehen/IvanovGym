@@ -38,6 +38,5 @@ export class ExercisesMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('меня удалили');
   }
 }

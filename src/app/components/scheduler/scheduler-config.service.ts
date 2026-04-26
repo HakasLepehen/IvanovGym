@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ComponentRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
+import { ComponentRef, inject, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { catchError, concatMap, EMPTY, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, EMPTY, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IClient } from 'src/app/interfaces/client';
 import { ITraining } from 'src/app/interfaces/training';
 
@@ -16,6 +16,9 @@ import { LoaderService } from './../loader/loader.service';
 import { SchedulerService } from './scheduler.service';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
+import { ExercisesListComponent } from '../exercises-list/exercises-list.component';
+import { IExercise } from 'src/app/interfaces/exercise';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -23,29 +26,34 @@ import { MessageTypes } from 'src/app/enums/message-types';
 export class SchedulerConfigService {
   public destroy$: Subject<boolean> = new Subject<boolean>();
   public trainings$: Subject<any[]> = new Subject<any>();
+  public editingTraining$: BehaviorSubject<ITraining | null> = new BehaviorSubject<ITraining | null>(null);
   public trainingExercises$: Subject<any[]> = new Subject<any>();
+  public selectedExercise$: Subject<{ exercise: IExercise, index: number }> = new Subject();
 
   constructor(
     private readonly _dialogs: TuiDialogService,
     private readonly _injector: Injector,
     private schedulerService: SchedulerService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
   }
 
-  openModal(selectedDay: TuiDay, training?: ITraining) {
-    let titleEditingDate: string = '';
-    if (!!training) {
-      titleEditingDate = new Date(training.planned_date).toLocaleDateString('ru-RU');
-    }
+  editTraining(training: ITraining) {
+    this.editingTraining$.next(training)
+    this.router.navigate(['scheduler', 'training', training.id],)
+  }
+
+  // open when create training in scheduler
+  openModal(selectedDay: TuiDay) {
 
     this._dialogs
       .open(new PolymorpheusComponent(TrainingComponent, this._injector), {
-        label: training ? `Тренировка от ${titleEditingDate}` : 'Создание тренировки',
+        label: 'Создание тренировки',
         data: {
-          isPlanning: !training,
+          isPlanning: true,
           selectedDay: selectedDay,
-          training: training
         },
         size: 'fullscreen',
         closeable: true,
@@ -70,7 +78,7 @@ export class SchedulerConfigService {
     this.loaderService.show();
     // expand context data to map values to send server
     trainingModel = {
-      ...context.data.training,
+      // ...formValue,
       clientGUID: formValue.client.guid,
       planned_date: formValue.planned_date.toUtcNativeDate(),
       hour: formValue.time.hours,
@@ -78,6 +86,7 @@ export class SchedulerConfigService {
     };
 
     if (!isCreate) {
+      trainingModel.id = formValue.id;
       formValue.exercises.forEach((exercise: any) => {
         if (exercise?.id) {
           mappedExercises.push({
@@ -144,6 +153,7 @@ export class SchedulerConfigService {
   public initializeTrainingFormControls(form: FormGroup, model: ITraining, clients: any): void {
     let selectedClient: IClient | undefined;
 
+    form.controls['id'].setValue(model.id);
     form.controls['planned_date'].setValue(TuiDay.fromLocalNativeDate(new Date(model.planned_date)));
 
     form.controls['time'].setValue(
@@ -184,7 +194,7 @@ export class SchedulerConfigService {
     trainingExerciseComponentRef.setInput('index', exercises.length);
     trainingExerciseComponentRef.setInput('clientGUID', clientGUID);
     trainingExerciseComponentRef.instance.messageSent.subscribe(
-      ({ id, index, type }: OutputMessage): void => {
+      ({ id, index, type, execution_number }: OutputMessage): void => {
         // if we haven't id - we are not saved this exercise
 
         switch (type) {
@@ -211,7 +221,7 @@ export class SchedulerConfigService {
               .pipe(
                 take(1),
                 tap((res) => {
-                  if (!res) {
+                  if (!res || (<Array<any>>res).length == 0) {
                     alert('Не найдено данных по указанному упражнению');
                     return EMPTY;
                   }
@@ -223,8 +233,27 @@ export class SchedulerConfigService {
                   // exercises.controls
                 }),
               )
-              .subscribe()
-
+              .subscribe();
+            break;
+          
+          case MessageTypes.PRELOAD_DATA_EXECUTION_NUMBER:
+            this.schedulerService.findLastExercise(clientGUID, id as number)
+              .pipe(
+                take(1),
+                tap((res) => {
+                  if (!res || (<Array<any>>res).length == 0) { 
+                    alert('Не найдено данных по указанному упражнению');
+                    return EMPTY;
+                  }
+                  const resultData: any = (res as Array<any>).find((training) => training.execution_number == execution_number);
+                  exercises.controls[index].get('set_count')?.patchValue(resultData.set_count)
+                  exercises.controls[index].get('payload_weight')?.patchValue(resultData.payload_weight)
+                  exercises.controls[index].get('execution_number')?.patchValue(resultData.execution_number)
+                  return res;
+                }),
+              )
+              .subscribe();
+            break;
         }
       }
     );
@@ -279,11 +308,15 @@ export class SchedulerConfigService {
         // Шаг 5: Завершаем операцию
         tap(() => {
           this.loaderService.hide();
-          context.completeWith(true);
+          if (context.data) {
+            context.completeWith(true);
+          }
         }),
         catchError((err: HttpErrorResponse) => {
           this.loaderService.hide();
-          context.completeWith(true);
+          if (context.data) {
+            context.completeWith(true);
+          }
           console.error('Ошибка при обновлении тренировки:', err);
           return of(null);
         })
@@ -291,5 +324,41 @@ export class SchedulerConfigService {
       .subscribe();
   }
 
+  openExercisesList(exercise: IExercise | null, index: number): void {
+    this._dialogs
+      .open(new PolymorpheusComponent(ExercisesListComponent, this._injector), {
+        label: 'Выбор упражнения для тренировки',
+        data: {
+          clientGUID: '123',
+          exercise: exercise,
+          index: index,
+        },
+        size: 'fullscreen',
+        closeable: true,
+        dismissible: false,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+  }
+
+  getTrainingById(id: number) {
+    return this.schedulerService.getTrainingById(id)
+      .pipe(
+        map((res: any) => {
+          return res[0];
+        })
+      );
+  }
+
+  setSelectedExercise(model: any, index: number) {
+    this.selectedExercise$.next({
+      exercise: model,
+      index: index,
+    })
+  }
+
+  goToScheduler(): void {
+    this.router.navigate(['/scheduler'])
+  }
 
 }

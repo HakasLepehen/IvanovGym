@@ -1,13 +1,27 @@
 <form [formGroup]='exForm'>
   <!-- НАИМЕНОВАНИЕ УПРАЖНЕНИЯ -->
-  <div class='tui-form__row' style="display: flex;">
-    <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" [tuiTextfieldCleaner]="false"
-      (focusedChange)="focusExerciseChanged($event)" style="flex-grow: 1;">
-      Выбранное упражнение
-      <input placeholder="Введите текст и нажмите для выбора" tuiTextfieldLegacy />
-      <tui-data-list-wrapper *tuiDataList [itemContent]="stringify | tuiStringifyContent"
-        [items]="exercises | tuiFilterByInput" />
-    </tui-combo-box>
+  <div class='tui-form__row exercise'>
+    <ng-container *ngIf="!!exerciseData()">
+      <div>
+        <app-link [text]="exerciseData()?.name ?? ''" [url]="exerciseData()?.url ?? ''" />
+        <div class="container_btns">
+
+          <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.file-search'"
+            (click)='preloadExerciseData()'>
+          </button>
+
+          <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
+            (click)='selectExercise()'>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!!!exerciseData()">
+      <button tuiButton size='l' appearance='secondary' tuiAppearanceMode='checked' type='button'
+        [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='selectExercise()'>
+        Выбрать упражнение
+      </button>
+    </ng-container>
     <button tuiIconButton size='l' appearance='accent' tuiAppearanceMode='checked' iconStart='trash' type='button'
       [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='removeExercise()'>
     </button>
@@ -25,6 +39,9 @@
       <label tuiLabel>Повторения, шт</label>
       <input tuiTextfield formControlName='execution_number' />
     </tui-textfield>
+    <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.file-search'"
+      (click)='preloadExerciseDataByExecNumber()'>
+    </button>
 
     <!-- Вес -->
     <tui-textfield class='tui-form__row_half-width'>
@@ -34,6 +51,10 @@
   </div>
 
   <!-- КОММЕНТАРИЙ -->
-  <tui-textarea formControlName='comment' class='tui-form__row'>Комментарий</tui-textarea>
+  <!-- <tui-textarea formControlName='comment' class='tui-form__row'>Комментарий</tui-textarea> -->
+  <tui-textfield class='tui-form__row'>
+    <label tuiLabel>Комментарий</label>
+    <textarea formControlName='comment' tuiTextarea [min]=3></textarea>
+  </tui-textfield>
 </form>
 <hr style='margin: .5rem 0;'>

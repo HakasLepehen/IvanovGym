@@ -6,42 +6,52 @@ import {
   Input,
   OnChanges,
   Output,
+  signal,
   SimpleChanges,
+  WritableSignal,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { clientExercisesSelector } from '../../store/selectors/client-exercises.selector';
-import { BehaviorSubject, map, of, Subject, take } from 'rxjs';
-import { TuiComboBoxComponent, TuiComboBoxModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { BehaviorSubject, map, of, take } from 'rxjs';
+import { TuiComboBoxModule, TuiSelectModule, TuiTextareaModule } from '@taiga-ui/legacy';
 import { ControlContainer, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiButton, TuiDataList,
   TuiDataListDirective,
   TuiLabel,
   TuiTextfield,
-  TuiTextfieldComponent
+  TuiTextfieldComponent,
+  TuiLink
 } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
   TuiChevron, TuiDataListWrapper,
-  TuiDataListWrapperComponent,
   TuiFilterByInputPipe,
-  tuiItemsHandlersProvider, TuiStringifyContentPipe
+  tuiItemsHandlersProvider, TuiStringifyContentPipe,
+  TuiTextarea
 } from '@taiga-ui/kit';
 import { BodyParts } from '../../enums/body-parts';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoaderService } from '../loader/loader.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { IExercise } from '../../interfaces/exercise';
-import { TuiFilterPipe } from '@taiga-ui/cdk';
 import { ISelectBox } from '../../interfaces/selectbox';
 import { OutputMessage } from 'src/app/interfaces/output-message';
 import { MessageTypes } from 'src/app/enums/message-types';
+import { SchedulerConfigService } from '../scheduler/scheduler-config.service';
+import { RouterLink } from '@angular/router';
+import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LinkComponent } from '../ui/link/link.component';
+import { ITrainingExercise } from 'src/app/interfaces/training_exercise';
+import { ITraining } from 'src/app/interfaces/training';
 
 @Component({
   selector: 'app-training-exercise-item',
   templateUrl: './training-exercise-item.component.html',
   styleUrls: ['./training-exercise-item.component.scss'],
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TuiComboBoxModule,
@@ -50,7 +60,7 @@ import { MessageTypes } from 'src/app/enums/message-types';
     TuiTextfieldComponent,
     TuiLabel,
     TuiTextfield,
-    TuiTextareaModule,
+    TuiTextarea,
     TuiDataListDirective,
     TuiSelectModule,
     TuiButton,
@@ -59,6 +69,10 @@ import { MessageTypes } from 'src/app/enums/message-types';
     TuiChevron,
     TuiFilterByInputPipe,
     TuiStringifyContentPipe,
+    JsonPipe,
+    RouterLink,
+    TuiLink,
+    LinkComponent,
   ],
   standalone: true,
   providers: [
@@ -75,34 +89,25 @@ import { MessageTypes } from 'src/app/enums/message-types';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrainingExerciseItemComponent implements OnChanges {
+export class TrainingExerciseItemComponent {
   @Input({ required: true }) index!: number;
   @Input({ required: false }) clientGUID!: string;
   @Output() messageSent = new EventEmitter<OutputMessage>(); // EventEmitter для отправки данных
   exercises: IExercise[] = [];
-  version = 'test'
   store = inject(Store);
   selectedExecVar!: number | IExercise;
+  exerciseData: WritableSignal<{ id?: number, name: string, url: string } | null> = signal(null);
   exForm!: FormGroup;
-  body_parts!: string[];
   public isLoading$: BehaviorSubject<boolean>;
-  protected searchingExercise: string = '';
 
   protected readonly stringify = (item: IExercise): string => `${item.name}`;
 
   constructor(
-    private fb: FormBuilder,
     private controlContainer: ControlContainer,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private scheduleConfigService: SchedulerConfigService,
   ) {
     this.isLoading$ = loaderService.getLoading();
-    of(BodyParts)
-      .pipe(
-        take(1),
-        map((body_parts) => body_parts.map((part) => part.name)),
-        tap((result) => (this.body_parts = result))
-      )
-      .subscribe();
     this.store
       .select(clientExercisesSelector)
       .pipe(
@@ -115,34 +120,65 @@ export class TrainingExerciseItemComponent implements OnChanges {
   ngOnInit(): void {
     let exercisesFormArray: FormArray<any> = this.controlContainer.control?.get('exercises') as FormArray;
     this.exForm = exercisesFormArray.at(this.index) as FormGroup;
+
     // инициализация поля выбора упражнения через поиск
     const result = this.exercises.find((el: IExercise) => el.id === this.exForm.get('exercise')?.value);
     if (result) {
       this.selectedExecVar = result;
       this.exForm.get('exercise')?.setValue(this.selectedExecVar);
+      this.exerciseData.set({
+        id: this.exForm.get('exercise')?.value.id,
+        name: this.exForm.get('exercise')?.value.name,
+        url: this.exForm.get('exercise')?.value.url
+      });
+      // this.focusExerciseChanged();
     }
+    this.exForm.valueChanges.subscribe({
+      next: (value) => {
+        this.exerciseData.set({
+          id: value.exercise?.id,
+          name: value.exercise.name,
+          url: value.exercise.url,
+        });
+      },
+    })
   }
-
-  ngOnChanges(changes: SimpleChanges): void { }
 
   removeExercise(): void {
     this.messageSent.emit({
       id: this.exForm.get('id')?.value,
       index: this.index,
-      type: MessageTypes.REMOVE_ITEM
+      type: MessageTypes.REMOVE_ITEM,
     });
   }
 
-  focusExerciseChanged(e: boolean): void {
-    if (!e) {
-      const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
-      if (!!selectedExercise) {
-        this.messageSent.emit({
-          id: selectedExercise.id as number,
-          index: this.index,
-          type: MessageTypes.PRELOAD_DATA,
-        })
-      }
+  // стоит переписать под закрытие окна выбора упражнения
+  preloadExerciseData(): void {
+
+    const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
+    if (!!selectedExercise) {
+      this.messageSent.emit({
+        id: selectedExercise.id as number,
+        index: this.index,
+        type: MessageTypes.PRELOAD_DATA,
+      });
     }
+
+  }
+
+  preloadExerciseDataByExecNumber(): void { 
+    const training: any = this.exForm.getRawValue();
+    if (!!training) {
+      this.messageSent.emit({
+        id: training.exercise.id as number,
+        index: this.index,
+        type: MessageTypes.PRELOAD_DATA_EXECUTION_NUMBER,
+        execution_number: training.execution_number
+      });
+    }
+  }
+
+  selectExercise(): void {
+    this.scheduleConfigService.openExercisesList(this.exForm.get('exercise')?.value, this.index);
   }
 }

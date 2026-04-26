@@ -7,8 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 export class LoaderService {
   private _loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public message: WritableSignal<string> = signal('Загрузка...');
-  
-  constructor() {}
+
+  constructor() { }
 
   show(msg: string = 'Загрузка...'): void {
     this.message.set(msg);
@@ -16,9 +16,7 @@ export class LoaderService {
   }
 
   hide(): void {
-    setTimeout(() => {
-      this._loading$.next(false);
-    }, 300);
+    this._loading$.next(false);
   }
 
   getLoading(): BehaviorSubject<boolean> {
