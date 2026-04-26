@@ -194,7 +194,7 @@ export class SchedulerConfigService {
     trainingExerciseComponentRef.setInput('index', exercises.length);
     trainingExerciseComponentRef.setInput('clientGUID', clientGUID);
     trainingExerciseComponentRef.instance.messageSent.subscribe(
-      ({ id, index, type }: OutputMessage): void => {
+      ({ id, index, type, execution_number }: OutputMessage): void => {
         // if we haven't id - we are not saved this exercise
 
         switch (type) {
@@ -233,8 +233,27 @@ export class SchedulerConfigService {
                   // exercises.controls
                 }),
               )
-              .subscribe()
-
+              .subscribe();
+            break;
+          
+          case MessageTypes.PRELOAD_DATA_EXECUTION_NUMBER:
+            this.schedulerService.findLastExercise(clientGUID, id as number)
+              .pipe(
+                take(1),
+                tap((res) => {
+                  if (!res || (<Array<any>>res).length == 0) { 
+                    alert('Не найдено данных по указанному упражнению');
+                    return EMPTY;
+                  }
+                  const resultData: any = (res as Array<any>).find((training) => training.execution_number == execution_number);
+                  exercises.controls[index].get('set_count')?.patchValue(resultData.set_count)
+                  exercises.controls[index].get('payload_weight')?.patchValue(resultData.payload_weight)
+                  exercises.controls[index].get('execution_number')?.patchValue(resultData.execution_number)
+                  return res;
+                }),
+              )
+              .subscribe();
+            break;
         }
       }
     );
@@ -320,13 +339,6 @@ export class SchedulerConfigService {
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
-    // this._dialogs.open('<div>This is a plain string dialog.</div>It supports basic <strong>HTML</strong>',
-    //   {
-    //     label: 'Heading',
-    //     size: 'fullscreen',
-    //     closeable: true,
-    //     dismissible: false,
-    //   },).subscribe()
   }
 
   getTrainingById(id: number) {
@@ -343,6 +355,10 @@ export class SchedulerConfigService {
       exercise: model,
       index: index,
     })
+  }
+
+  goToScheduler(): void {
+    this.router.navigate(['/scheduler'])
   }
 
 }

@@ -201,4 +201,8 @@ export class TrainingComponent {
       })
     );
   }
+
+  public goBack(): void { 
+    this.scheduleConfigService.goToScheduler();
+  }
 }

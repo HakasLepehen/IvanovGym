@@ -4,4 +4,5 @@ export type OutputMessage = {
   id: number | string;
   type: MessageTypes;
   index: number;
+  execution_number?: number;
 }

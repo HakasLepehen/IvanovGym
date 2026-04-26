@@ -7,7 +7,7 @@
         <div class="container_btns">
 
           <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.file-search'"
-            (click)='focusExerciseChanged()'>
+            (click)='preloadExerciseData()'>
           </button>
 
           <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.pencil'"
@@ -22,14 +22,6 @@
         Выбрать упражнение
       </button>
     </ng-container>
-    <!-- <p>{{exForm.controls['exercise'] | json}}</p> -->
-    <!-- <tui-combo-box formControlName="exercise" [tuiDropdownMinHeight]="200" [tuiTextfieldCleaner]="false" (focusedChange)="focusExerciseChanged($event)"
-      style="flex-grow: 1;">
-      Выбранное упражнение
-      <input placeholder="Введите текст и нажмите для выбора" tuiTextfieldLegacy />
-      <tui-data-list-wrapper *tuiDataList [itemContent]="stringify | tuiStringifyContent"
-        [items]="exercises | tuiFilterByInput" />
-    </tui-combo-box> -->
     <button tuiIconButton size='l' appearance='accent' tuiAppearanceMode='checked' iconStart='trash' type='button'
       [loading]='isLoading$ | async' [disabled]='isLoading$ | async' (click)='removeExercise()'>
     </button>
@@ -47,6 +39,9 @@
       <label tuiLabel>Повторения, шт</label>
       <input tuiTextfield formControlName='execution_number' />
     </tui-textfield>
+    <button tuiIconButton size="l" appearance='outline' type='button' [iconStart]="'@tui.file-search'"
+      (click)='preloadExerciseDataByExecNumber()'>
+    </button>
 
     <!-- Вес -->
     <tui-textfield class='tui-form__row_half-width'>

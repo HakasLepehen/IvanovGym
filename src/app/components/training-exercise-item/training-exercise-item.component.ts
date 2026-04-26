@@ -43,6 +43,8 @@ import { RouterLink } from '@angular/router';
 import { ExercisesConfigService } from '../exercises-main/exercises-config.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LinkComponent } from '../ui/link/link.component';
+import { ITrainingExercise } from 'src/app/interfaces/training_exercise';
+import { ITraining } from 'src/app/interfaces/training';
 
 @Component({
   selector: 'app-training-exercise-item',
@@ -151,7 +153,7 @@ export class TrainingExerciseItemComponent {
   }
 
   // стоит переписать под закрытие окна выбора упражнения
-  focusExerciseChanged(): void {
+  preloadExerciseData(): void {
 
     const selectedExercise: IExercise = this.exForm.get('exercise')?.value;
     if (!!selectedExercise) {
@@ -162,6 +164,18 @@ export class TrainingExerciseItemComponent {
       });
     }
 
+  }
+
+  preloadExerciseDataByExecNumber(): void { 
+    const training: any = this.exForm.getRawValue();
+    if (!!training) {
+      this.messageSent.emit({
+        id: training.exercise.id as number,
+        index: this.index,
+        type: MessageTypes.PRELOAD_DATA_EXECUTION_NUMBER,
+        execution_number: training.execution_number
+      });
+    }
   }
 
   selectExercise(): void {
