@@ -51,6 +51,7 @@ export class MainInterceptor implements HttpInterceptor {
   private handleHttpError(error: unknown): Observable<never> {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 401) {
+        this.loader.hide();
         if (MainInterceptor.is401Handled) {
           return EMPTY;
         }
@@ -66,7 +67,7 @@ export class MainInterceptor implements HttpInterceptor {
         alert(`не удалось получить данные с сервера: ${error.error.message}`);
         return EMPTY;
       }
-      alert(`Не удалось выполнить запрос: ${error.error.message}`);
+      alert(`Не удалось выполнить запрос: ${error.error.message ?? error.error.msg}`);
     }
     return throwError(() => error as any);
   }

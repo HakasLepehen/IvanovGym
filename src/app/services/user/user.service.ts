@@ -29,11 +29,6 @@ export class UserService {
   }
 
   async getAllUsers() {
-    const {data, error} = await supabase.auth.admin.listUsers()
-    of(data)
-      .subscribe((response: any) => {
-        console.log(response);
-      })
   }
 
   getUser(login: string | any, password: string | any) {

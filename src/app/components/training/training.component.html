@@ -1,5 +1,6 @@
 <!-- Контент диалогового окна клиента -->
-<form [formGroup]="trainingForm" class="trainingForm">
+@if (trainingForm) {
+<form [formGroup]="trainingForm" class="trainingForm" style="padding: 2rem;">
   <tui-scrollbar>
 
     <tui-input-date formControlName="planned_date">
@@ -7,13 +8,16 @@
       <input tuiTextfieldLegacy class='trainingForm__date_slot' />
     </tui-input-date>
     <tui-input-time formControlName="time" [items]="timeSlots" class="trainingForm__time_slot"
-                    [tuiDropdownMinHeight]="400">
+      [tuiDropdownMinHeight]="400">
       Время начала тренировки
     </tui-input-time>
+    @if (hasClients()) {
     <tui-select formControlName="client" class="trainingForm__client">
       Выберите клиента
       <tui-data-list-wrapper *tuiDataList [items]="clients"></tui-data-list-wrapper>
     </tui-select>
+    }
+
 
     <ng-container *ngIf="!!editingTraining">
       <h4>Упражнения</h4>
@@ -23,11 +27,8 @@
         <div *ngIf="!exercises.length;">
           <p style="text-align: center;">Упражнения не заданы</p>
         </div>
-        <button tuiButton size='m'
-                appearance="outline-grayscale"
-                tuiAppearanceMode="checked"
-                type='button'
-                (click)='addExercise()'>
+        <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+          (click)='addExercise()'>
           Добавить упражнение
         </button>
       </div>
@@ -35,19 +36,16 @@
   </tui-scrollbar>
 
   <div class="tui-form__row">
-    <button tuiButton
-            size='m'
-            appearance="outline-grayscale"
-            tuiAppearanceMode="checked"
-            type='button'
-            [disabled]="!trainingForm.valid || (isLoading$ | async)"
-            [loading]='isLoading$ | async'
-            (click)='onSubmit()'>
-      Сохранить
-    </button>
+    <div class="bottom_block">
+      <button tuiButton size='m' appearance="outline-grayscale" tuiAppearanceMode="checked" type='button'
+        [disabled]="!trainingForm.valid || (isLoading$ | async)" [loading]='isLoading$ | async' (click)='onSubmit()'>
+        Сохранить
+      </button>
+      <button tuiButton size="m" appearance='outline-grayscale' tuiAppearanceMode="checked" type='button'
+        (click)='goBack()'>
+        К календарю
+      </button>
+    </div>
   </div>
 </form>
-
-<ng-template #empty>
-  <h3 style="text-align: center;">Список клиентов пуст</h3>
-</ng-template>
+}

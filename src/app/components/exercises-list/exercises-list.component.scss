@@ -1,10 +1,30 @@
+:host {
+  display: block;
+  height: calc(var(--tui-viewport-height) - 5rem);
+  overflow: hidden;
+
+  .container {
+    height: 100%;
+  }
+}
+
 .title__block {
   display: flex;
   justify-content: space-between;
-  padding: .25em 0;
+  padding: .25em 1rem;
 }
 
 .title__block_buttons {
   display: flex;
   gap: 5px;
+}
+
+.search {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.search .popup_body {
+  height: 100%;
 }

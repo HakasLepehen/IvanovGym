@@ -1,3 +1,25 @@
 .tui-form__row .trainingForm__exercise {
   flex: 1;
 }
+
+.tui-form__row.exercise {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+
+    & > .container_btns {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+}
+
+.tui-form__row .exercise_link {
+  text-decoration: none;
+  align-self: center;
+}

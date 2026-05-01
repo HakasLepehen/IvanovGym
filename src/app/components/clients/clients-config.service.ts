@@ -78,33 +78,6 @@ export class ClientsConfigService {
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
-    //   .subscribe({
-    //   next: (data: any) => {
-    //     console.info(`Dialog emitted data = ${data}`);
-    //   },
-    //   complete: () => {
-    //     console.info('Dialog closed');
-    //   },
-    // });
-    // this.dialogs
-    //   .open(new PolymorpheusComponent(ClientOperationsComponent, this.injector), {
-    //     label: props.client?.fullName ? `Редактирование клиента: ${props.client.fullName}` : 'Новый клиент',
-    //     data: {
-    //       client: props.client
-    //         ? props.client
-    //         : {
-    //           fullName: '',
-    //           created_at: new Date(),
-    //           age: 0,
-    //         },
-    //       isEdit: !!props.client,
-    //       exercises: props.exercises
-    //     },
-    //     closeable: true,
-    //     dismissible: false,
-    //   })
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe();
   }
 
   addClient(data: IClient, context: TuiDialogContext<boolean, IClientDialog>) {

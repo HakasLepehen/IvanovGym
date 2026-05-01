@@ -1,22 +1,20 @@
-import { select, Store } from '@ngrx/store';
-import { IClient } from 'src/app/interfaces/client';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
-  signal,
-  Signal, WritableSignal
+  Signal
 } from '@angular/core';
-import { Subject, tap } from 'rxjs';
-import { ClientsService } from '../../components/clients/clients.service';
-import { ClientsConfigService } from '../../components/clients/clients-config.service';
-import { LoaderService } from 'src/app/components/loader/loader.service';
-import { ExercisesConfigService } from '../../components/exercises-main/exercises-config.service';
-import { clientsSelector } from 'src/app/store/selectors/client.selector';
-import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { select, Store } from '@ngrx/store';
+import { tap } from 'rxjs';
+import { LoaderService } from 'src/app/components/loader/loader.service';
+import { IClient } from 'src/app/interfaces/client';
+import { clientExercisesSelector } from 'src/app/store/selectors/client-exercises.selector';
+import { clientsSelector } from 'src/app/store/selectors/client.selector';
+import { ClientsConfigService } from '../../components/clients/clients-config.service';
+import { ClientsService } from '../../components/clients/clients.service';
+import { ExercisesConfigService } from '../../components/exercises-main/exercises-config.service';
 import { IExercise } from '../../interfaces/exercise';
 
 @Component({

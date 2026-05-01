@@ -5,22 +5,22 @@
       <h2>Войти</h2>
     </div>
 
-    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()' required>
+    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()'>
       <div class='tui-col_12'>
         <div class='auth_form tui-form__row'>
-          <tui-input formControlName='login'>
-            Введите e-mail
+          <tui-textfield>
+            <label tuiLabel>Введите e-mail</label>
             <!-- <input tuiTextfield role='presentation' type='email' autocomplete='on' /> -->
-            <input tuiTextfieldLegacy autocomplete="email" translate="no" type="email" class='login-input'/>
-          </tui-input>
+            <input tuiTextfield formControlName='login' autocomplete="email" translate="no" type="email" class='login-input'/>
+          </tui-textfield>
           <tui-error formControlName='login' [error]='[] | tuiFieldError | async'></tui-error>
         </div>
 
         <div class='auth_form tui-form__row'>
-          <tui-input formControlName='password' class='password-input b-form'>
-              Введите пароль
-              <input tuiTextfieldLegacy autocomplete='on' type='password' />
-            </tui-input>
+          <tui-textfield class='password-input b-form'>
+            <label tuiLabel>Введите пароль</label>
+              <input tuiTextfield formControlName='password' autocomplete='on' type='password' />
+            </tui-textfield>
           <tui-error formControlName='password' [error]='[] | tuiFieldError | async'></tui-error>
         </div>
       </div>
@@ -31,7 +31,7 @@
       </div>
     </form>
     <div *ngIf='loginForm.valid' class='tui-col_12 tui-form__row'>
-      {{error}}
+      {{error()}}
     </div>
   </div>
 </div>
